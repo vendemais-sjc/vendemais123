@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rádio Vende+ - 24h Automático</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* RESET E ESTILOS GLOBAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 8px;
+        }
+
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* GLASSMORPHISM */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        /* HEADER */
+        .main-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            padding: 10px 18px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6ec4, #7873f5);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #e0e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .live-badge {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+
+        /* MENU */
+        .main-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-share-nav {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* DROPDOWN MENU - AGORA COM ANÚNCIO */
+        .dropdown-menu {
+            display: none;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .dropdown-menu.show { display: block; }
+
+        .dropdown-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .dropdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 16px 8px;
+            border-radius: 18px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* CARD DE ANÚNCIO NO DROPDOWN */
+        .ad-card-dropdown {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border-radius: 20px;
+            padding: 16px;
+            margin-top: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ad-header-dropdown {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .ad-header-dropdown h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .ad-wave-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .ad-wave-dropdown span {
+            width: 3px;
+            height: 12px;
+            background: white;
+            border-radius: 2px;
+            animation: wave 1s infinite ease-in-out;
+        }
+
+        .ad-wave-dropdown span:nth-child(2) { animation-delay: 0.2s; height: 16px; }
+        .ad-wave-dropdown span:nth-child(3) { animation-delay: 0.4s; height: 20px; }
+        .ad-wave-dropdown span:nth-child(4) { animation-delay: 0.6s; height: 16px; }
+        .ad-wave-dropdown span:nth-child(5) { animation-delay: 0.8s; height: 12px; }
+
+        @keyframes wave {
+            0%, 100% { transform: scaleY(0.8); }
+            50% { transform: scaleY(1.2); }
+        }
+
+        .ad-timer-dropdown {
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            font-family: monospace;
+            margin: 8px 0;
+        }
+
+        .ad-status-dropdown {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            margin: 8px 0;
+            border: 1px dashed rgba(255,255,255,0.5);
+        }
+
+        .ad-buttons-dropdown {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-ad-dropdown {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* STATUS BAR */
+        .stats-bar {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .listener-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 12px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a5b4ff;
+        }
+
+        .stat-info h4 {
+            font-size: 0.65rem;
+            opacity: 0.7;
+        }
+        .stat-info span {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        /* INDICADOR DE PERÍODO */
+        .period-indicator {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid #ff6ec4;
+            font-size: 0.9rem;
+        }
+
+        .period-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* TICKER */
+        .ticker-modern {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #ff6ec4;
+        }
+
+        .ticker-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .ticker-text {
+            flex: 1;
+            overflow: hidden;
+        }
+        .ticker-text marquee {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.85rem;
+        }
+        .ticker-edit {
+            opacity: 0.6;
+            cursor: pointer;
+        }
+
+        /* PLAYER */
+        .player-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .video-container {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .player-controls {
+            padding: 20px;
+        }
+
+        .track-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .track-info h2 {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+        .track-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .progress-modern { margin-bottom: 20px; }
+        .progress-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-bottom: 6px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6ec4, #7873f5);
+            border-radius: 10px;
+            width: 0%;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .control-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6ec4, #7873f5);
+            font-size: 1.4rem;
+            border-radius: 24px;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 16px;
+            border-radius: 40px;
+        }
+        .volume-slider {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            background: linear-gradient(90deg, #ff6ec4, #7873f5);
+            border-radius: 2px;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* PLAYLIST */
+        .playlist-card {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .playlist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            cursor: pointer;
+        }
+        .item-number {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .item-info {
+            flex: 1;
+        }
+        .item-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .item-artist {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+        .item-duration {
+            font-size: 0.7rem;
+            opacity: 0.5;
+        }
+
+        /* SEÇÕES */
+        .hidden-section {
+            display: none;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hidden-section.show { display: block; }
+
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .program-item {
+            background: linear-gradient(135deg, #ff6ec4, #7873f5);
+            padding: 16px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        /* WHATSAPP COMPACTO */
+        .contact-mini {
+            background: rgba(37, 211, 102, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            border: 1px solid rgba(37, 211, 102, 0.2);
+            margin-bottom: 12px;
+        }
+        .contact-mini i { 
+            color: #25D366; 
+            font-size: 1.2rem;
+        }
+        .contact-mini span {
+            flex: 1;
+            font-size: 0.85rem;
+        }
+
+        /* NOTIFICAÇÃO */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            transition: 0.3s;
+            z-index: 1000;
+            border-left: 4px solid #ff6ec4;
+            font-size: 0.85rem;
+        }
+        .notification.show { transform: translateX(-50%) translateY(0); }
+
+        .main-footer {
+            text-align: center;
+            padding: 20px 10px 10px;
+            opacity: 0.6;
+            font-size: 0.75rem;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="main-header">
+            <div class="logo-wrapper">
+                <div class="logo-icon"><i class="fas fa-broadcast-tower"></i></div>
+                <div class="logo-text"><h1>Rádio Vende+</h1></div>
+            </div>
+            <div class="live-badge"><i class="fas fa-circle"></i> AO VIVO</div>
+        </header>
+
+        <!-- MENU COM COMPARTILHAR -->
+        <nav class="main-nav">
+            <div class="nav-left">
+                <a href="#" class="nav-item" onclick="window.location.reload(); return false;">
+                    <i class="fas fa-home"></i>
+                </a>
+                <button class="btn-share-nav" id="shareBtnNav">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+
+        <!-- DROPDOWN MENU COM ANÚNCIO DE ÁUDIO -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <div class="dropdown-grid">
+                <a href="#" class="dropdown-item" onclick="toggleSection('programacao'); return false;">
+                    <i class="fas fa-calendar-alt"></i> Programação
+                </a>
+                <a href="#" class="dropdown-item" onclick="toggleSection('eventos'); return false;">
+                    <i class="fas fa-star"></i> Eventos
+                </a>
+                <a href="#" class="dropdown-item" onclick="document.getElementById('musicas').scrollIntoView({behavior:'smooth'}); dropdownMenu.classList.remove('show');">
+                    <i class="fas fa-music"></i> Músicas
+                </a>
+                <a href="#" class="dropdown-item" onclick="window.open('https://wa.me/5512988461978', '_blank');">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+
+            <!-- CARD DE ANÚNCIO DE ÁUDIO NO DROPDOWN -->
+            <div class="ad-card-dropdown">
+                <div class="ad-header-dropdown">
+                    <h3><i class="fas fa-microphone-alt"></i> ANÚNCIO</h3>
+                    <div class="ad-wave-dropdown">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+                
+                <div class="ad-timer-dropdown" id="adTimerDropdown">10</div>
+                
+                <div class="ad-status-dropdown" id="adStatusDropdown">
+                    <i class="fas fa-compact-disc"></i> Aguardando...
+                </div>
+                
+                <div class="ad-buttons-dropdown">
+                    <button class="btn-ad-dropdown" id="toggleAdsBtnDropdown">
+                        <i class="fas fa-toggle-on"></i> Ativo
+                    </button>
+                    <button class="btn-ad-dropdown" id="testAdBtnDropdown">
+                        <i class="fas fa-play"></i> Testar
+                    </button>
+                    <button class="btn-ad-dropdown" id="skipAdBtnDropdown" style="display: none;">
+                        <i class="fas fa-forward"></i> Pular
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS BAR -->
+        <div class="stats-bar">
+            <div class="listener-stats">
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-headphones"></i></div>
+                    <div class="stat-info"><h4>Ouvintes</h4><span id="listenerCount">1.2k</span></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-music"></i></div>
+                    <div class="stat-info"><h4>Tocadas</h4><span id="playedCount">0</span></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info"><h4>No Ar</h4><span id="uptime">00:00</span></div>
+                </div>
+            </div>
+            
+            <!-- INDICADOR DE PERÍODO -->
+            <div class="period-indicator">
+                <span><i class="fas fa-sun"></i> <span id="periodName">Carregando...</span></span>
+                <span class="period-badge" id="periodHours">--h às --h</span>
+            </div>
+        </div>
+
+        <!-- TICKER -->
+        <div class="ticker-modern">
+            <div class="ticker-content">
+                <div class="ticker-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="ticker-text">
+                    <marquee id="ticker" scrollamount="4">🎵 RÁDIO VENDE+ - 24H AUTOMÁTICA • MADRUGADA • MANHÃ • TARDE • NOITE •</marquee>
+                </div>
+                <div class="ticker-edit" onclick="editTicker()"><i class="fas fa-pencil-alt"></i></div>
+            </div>
+        </div>
+
+        <!-- PLAYER -->
+        <div class="player-card">
+            <div class="video-container">
+                <video autoplay loop muted playsinline>
+                    <source src="6995d87e653782dfa4035483-4.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="player-controls">
+                <div class="track-info">
+                    <h2 id="trackTitleBig">Rádio Vende+</h2>
+                    <p id="trackArtistBig">Sistema Automático</p>
+                </div>
+                <div class="progress-modern">
+                    <div class="progress-time">
+                        <span id="currentTime">0:00</span>
+                        <span id="totalTime">0:00</span>
+                    </div>
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="control-btn" id="shuffleBtn"><i class="fas fa-random"></i></button>
+                    <button class="control-btn" id="prevBtn"><i class="fas fa-step-backward"></i></button>
+                    <button class="control-btn play-btn" id="playPauseBtn"><i class="fas fa-play"></i></button>
+                    <button class="control-btn" id="nextBtn"><i class="fas fa-step-forward"></i></button>
+                    <button class="control-btn" id="repeatBtn"><i class="fas fa-redo-alt"></i></button>
+                </div>
+                <div class="volume-control">
+                    <i class="fas fa-volume-up" id="volumeIcon"></i>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80">
+                    <span id="volumePercent">80%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAYLIST ATUAL -->
+        <div class="playlist-card" id="musicas">
+            <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-music" style="color:#ff6ec4;"></i> Playlist 
+                <span style="font-size:0.7rem; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 40px;" id="playlistPeriodTag">Manhã</span>
+            </h3>
+            <div class="playlist-items" id="playlistContainer"></div>
+        </div>
+
+        <!-- PROGRAMAÇÃO -->
+        <div class="hidden-section" id="programacao-section">
+            <h3 style="margin-bottom: 12px;"><i class="fas fa-calendar-alt" style="color:#ff6ec4;"></i> Programação</h3>
+            <div class="program-grid">
+                <div class="program-item"><i class="fas fa-moon"></i><h4>Madrugada</h4><div style="font-size:0.65rem;">00h - 06h</div></div>
+                <div class="program-item"><i class="fas fa-sun"></i><h4>Manhã</h4><div style="font-size:0.65rem;">06h - 12h</div></div>
+                <div class="program-item"><i class="fas fa-cloud-sun"></i><h4>Tarde</h4><div style="font-size:0.65rem;">12h - 18h</div></div>
+                <div class="program-item"><i class="fas fa-star"></i><h4>Noite</h4><div style="font-size:0.65rem;">18h - 00h</div></div>
+            </div>
+        </div>
+
+        <!-- EVENTOS -->
+        <div class="hidden-section" id="eventos-section">
+            <h3 style="margin-bottom: 12px;"><i class="fas fa-star" style="color:#ff6ec4;"></i> Eventos</h3>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 12px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div style="text-align:center; min-width:50px;"><div style="font-size:1.3rem; font-weight:700; color:#ff6ec4;">15</div><div style="font-size:0.6rem;">JUN</div></div>
+                    <div><h4>Show Ao Vivo</h4><p style="font-size:0.7rem;"><i class="fas fa-clock"></i> 20h</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WHATSAPP COMPACTO -->
+        <div class="contact-mini" onclick="window.open('https://wa.me/5512988461978', '_blank')">
+            <i class="fab fa-whatsapp"></i>
+            <span>Fale conosco</span>
+        </div>
+
+        <footer class="main-footer">
+            <p>Rádio Vende+ &copy; 2025 • 24h Automático</p>
+        </footer>
+    </div>
+
+    <audio id="musicPlayer" preload="auto"></audio>
+    <audio id="adPlayer" preload="auto"></audio>
+    <div class="notification" id="notification"><i class="fas fa-check-circle"></i> <span id="notificationText">Bem-vindo!</span></div>
+
+    <script>
+        // ============================================
+        // PLAYLISTS ORGANIZADAS POR PERÍODO
+        // ============================================
+        
+        // Função para gerar 50 músicas
+        function gerarPlaylist(prefixo, artistaBase, inicioId) {
+            const playlist = [];
+            for (let i = 0; i < 50; i++) {
+                playlist.push({
+                    id: inicioId + i,
+                    title: `${prefixo} ${i+1}`,
+                    artist: artistaBase,
+                    src: `${prefixo.toLowerCase()}${i+1}.m4a`,
+                    duration: "3:45",
+                    ouvida: false
+                });
+            }
+            return playlist;
+        }
+
+        // ===== MADRUGADA (00h - 06h) =====
+        const madrugadaTracks = [
+            // Músicas específicas da madrugada
+            { id: 101, title: "Sexual Healing", artist: "Healing", src: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00", ouvida: false },
+            { id: 102, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", src: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45", ouvida: false },
+            { id: 103, title: "", artist: "Mauricio Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15", ouvida: false },
+            { id: 104, title: "", artist: "Simply Red", src: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50", ouvida: false },
+            { id: 105, title: "Forever Young", artist: "Alfaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05", ouvida: false },
+            { id: 106, title: "Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55", ouvida: false },
+            { id: 107, title: "Everytime You Go Away", artist: "Dino Fonseca", src:"Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a" , duration:"4.20" , ouvida:false},
+            { id: 108, title:"A tal Canção" , artist:"Vitor Kley Samuel Rosa" , src:"Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a" , duration:"3.40" , ouvida:false},
+            { id: 109, title:"HAT_S_UP" , artist:"Non Blondes" , src:"WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a" , duration:"4.10" , ouvida:false},
+            { id: 110, title:"Thank You" , artist:"Dido" , src:"Dido_Thank_You_muzzik.m4a" , duration:"3.55" , ouvida:false},
+            { id: 111, title:"Madrugada de Relaxamento Profundo" , artist:"Relaxing Sounds e Ambient (RSA)" , src:"madrugada11.m4a" , duration:"4.25" , ouvida:false},
+            { id: 112, title:"Madrugada de Lua Cheia e Estrelas" , artist:"Ambient e Chillout (AC)" , src:"madrugada12.m4a" , duration:"4.15" , ouvida:false},
+            { id: 113, title:"Madrugada de Silêncio e Paz" , artist:"Piano Solo e Relaxing Sounds (PRS)" , src:"madrugada13.m4a" , duration:"3.50" , ouvida:false},
+            { id: 114, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+            { id: 115, title: "Madrugada de Céu Azul", artist: "Pop", src: "madrugada15.m4a", duration: "4:00", ouvida: false },
+            { id: 116, title: "Madrugada de Vida", artist: "Pop", src: "madrugada16.m4a", duration: "3:50", ouvida: false },
+            { id: 117, title: "Madrugada de Esperança", artist: "Pop", src: "madrugada17.m4a", duration: "4:25", ouvida: false },
+            { id: 118, title:"Madrugada de Cenário" , artist:"Romântico" , src:"madrugada18.m4a" , duration:"4.20" , ouvida:false},
+            { id: 119, title:"Madrugada de Valsa" , artist:"Romântico" , src:"madrugada19.m4a" , duration:"4.15" , ouvida:false},
+            { id: 120, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+            { id: 102, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 121, title:"Madrugada de Amor" , artist:"Romântico" , src:"madrugada20.m4a" , duration:"4.25" , ouvida:false},
+                { id: 122, title:"Madrugada de Lua" , artist:"Romântico" , src:"madrugada21.m4a" , duration:"4.15" , ouvida:false},
+                { id: 123, title:"Madrugada de Sonhos" , artist:"Romântico" , src:"madrugada22.m4a" , duration:"4.30" , ouvida:false},
+                { id: 124, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                { id: 125, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 126, title: "Madrugada de Céu Azul", artist: "Pop", src: "madrugada15.m4a", duration: "4:00", ouvida: false },
+                { id: 127, title: "Madrugada de Vida", artist: "Pop", src: "madrugada16.m4a", duration: "3:50", ouvida: false },
+                { id: 128, title: "Madrugada de Esperança", artist: "Pop", src: "madrugada17.m4a", duration: "4:25", ouvida: false },
+                { id: 129, title:"Madrugada de Cenário" , artist:"Romântico" , src:"madrugada18.m4a" , duration:"4.20" , ouvida:false},
+                { id: 130, title:"Madrugada de Valsa" , artist:"Romântico" , src:"madrugada19.m4a" , duration:"4.15" , ouvida:false},
+                { id: 131, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 132, title:"Madrugada de Amor" , artist:"Romântico" , src:"madrugada20.m4a" , duration:"4.25" , ouvida:false},
+                { id: 133, title:"Madrugada de Lua" , artist:"Romântico" , src:"madrugada21.m4a" , duration:"4.15" , ouvida:false},
+                { id: 134, title:"Madrugada de Sonhos" , artist:"Romântico" , src:"madrugada22.m4a" , duration:"4.30" , ouvida:false},
+                { id: 135, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                { id: 136, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+            { id: 137, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 138, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 139, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 140, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                { id: 141, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 142, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 143, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 144, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                 { id: 145, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                 { id: 146, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                 { id: 147, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                 { id: 148, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                 { id: 149, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+            { id: 102, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                { id: 150, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                 { id: 151, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                 { id: 152, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                 { id: 153, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                 { id: 154, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                 { id: 155, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                 { id: 156, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                 { id: 157, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                 { id: 158, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+                 { id: 159, title: "Noite Silenciosa", artist: "Piano", src: "madrugada2.m4a", duration: "3:45", ouvida: false },
+                 { id: 160, title:"Madrugada de Rêverie" , artist:"Romântico" , src:"madrugada23.m4a" , duration:"4.05" , ouvida:false},
+
+            // ... até completar 50
+        ];
+
+        // Completar madrugada com 48 músicas genéricas
+        for (let i = 103; i < 150; i++) {
+            madrugadaTracks.push({
+                id: i,
+                title: `Madrugada Relax ${i-102}`,
+                artist: "Ambient",
+                src: `madrugada${i-102}.m4a`,
+                duration: "4:15",
+                ouvida: false
+            });
+        }
+
+        // ===== MANHÃ (06h - 12h) =====
+        const manhaTracks = [
+            { id: 201, title: "Sorriso Maroto", artist: "Srriso Maroto", src: "soriso maroto.mp3", duration: "3:30", ouvida: false },
+            { id: 202, title: "Lá Na Rôa", artist: "Felipe e Murillo ft Ana Castela", src: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15", ouvida: false },
+            { id: 203, title: "Sorriso Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45", ouvida: false },
+            { id: 204, title: "VaRIADAS", artist: "Xand Avião", src: "Seu Olhar Não MenteMe Diz AmorTareco e Mariola - Xand Avião - O Forró É Pop (turnê 2024)_1768865610472.mp3", duration: "4:00", ouvida: false },
+            { id: 205, title: "Mina do Condômino", artist: "Seu Jorge", src: "Mina_do_Mina_do_Condom_nio_muzzik.m4a", duration: "3:55", ouvida: false },
+            { id: 206, title: "Die With A Smile", artist: "Lady Gaga", src: "Lady_Gaga_Bruno_Mars_Die_With_A_Smile_muzzik.m4a", duration: "4:10", ouvida: false },
+            { id: 207, title: "", artist: "Diego e Victor Hugo", src: "Diego _ Victor Hugo - Desbloqueado (Ao Vivo)(MP3_160K).mp3", duration: "3:50", ouvida: false },
+            { id: 208, title: "Piano Dreams, PDA", artist: "John Legend", src: "John_Legend_P_D_A_muzzik.m4a", duration: "4:25", ouvida: false },
+            { id: 209, title: "Anunciação", artist: "Alceu Valença", src:"Anunciação(MP3_160K).mp3" , duration:"4.20" , ouvida:false},
+            { id: 210, title: "Manhã de Valsa", artist:"Romântico" , src:"manha10.m4a" , duration:"4.15" , ouvida:false},
+            { id: 211, title:"Manhã de Amor" , artist:"Romântico" , src:"manha11.m4a" , duration:"4.25" , ouvida:false},
+            { id: 212, title:"Manhã de Lua" , artist:"Romântico" , src:"manha12.m4a" , duration:"4.15" , ouvida:false},
+            { id: 213, title:"Manhã de Sonhos" , artist:"Romântico" , src:"manha13.m4a" , duration:"4.30" , ouvida:false},
+            { id: 214, title:"Manhã de Rêverie" , artist:"Romântico" , src:"manha14.m4a" , duration:"4.05" , ouvida:false},
+            { id: 215, title:"Manhã de Música Populosa" , artist:"Populoso Pop Musician Group (PPMG)" , src:"manha15.m4a" , duration:"3.55" , ouvida:false},
+            { id: 216, title:"Manhã de Cenário Romântico (Parte II)" , artist:"Romântico e Sincero (RS)" , src:"manha16.m4a" , duration:"3.30" , ouvida:false},
+            { id: 217, title :"Manhã de Valsa Romântica (Parte II)"  	,artist :"Romântico e Sincero (RS)"  	,src :"manha17.m4a"
+      	,duration :"4.15"  	,ouvida :false},
+            { id: 218, title :"Manhã de Amor Romântico (Parte II)"  	,artist :"Romântico e Sincero (RS)"  	,src :"manha18.m4a"  	,duration :"4.25"  	,ouvida :false},
+            { id: 219, title :"Manhã de Lua Romântica (Parte II)"  	,artist :"Romântico e Sincero (RS)"  	,src :"manha19.m4a"  	,duration :"4.15"  	,ouvida :false},
+            { id: 220, title :"Manhã de Sonhos Romântica (Parte II)"  	,artist :"Romântico e Sincero (RS)"  	,src :"manha20.m4a"  	,duration :"4.30"  	,ouvida :false},
+             { id: 221, title:"Manhã de Rêverie Romântica (Parte II)" , artist:"Romântico e Sincero (RS)" , src:"manha21.m4a" , duration:"4.05" , ouvida:false},
+	         { id: 222, title: "Acordar Feliz", artist: "Pop", src: "manha2.m4a", duration: "4:15", ouvida: false },
+            { id: 223, title: "Manhã de Céu Azul", artist: "Pop", src: "manha3.m4a", duration: "3:45", ouvida: false },
+            { id: 224, title: "Manhã de Vida", artist: "Pop", src: "manha4.m4a", duration: "4:00", ouvida: false },
+            { id: 225, title: "Manhã de Esperança", artist: "Pop", src: "manha5.m4a", duration: "3:55", ouvida: false },
+            { id: 226, title: "Manhã de Música", artist: "Pop", src: "manha6.m4a", duration: "4:10", ouvida: false },
+            { id: 227, title: "Manhã de Amor", artist: "Pop", src: "manha7.m4a", duration: "3:50", ouvida: false },
+            { id: 228, title:"Manhã de Cenário Romântico (Parte III)" , artist:"Romântico e Sincero (RS)" , src:"manha8.m4a" , duration:"4.20" , ouvida:false},
+            { id: 229, title:"Manhã de Valsa Romântica (Parte III)" , artist:"Romântico e Sincero (RS)" , src:"manha9.m4a" , duration:"4.15" , ouvida:false},
+            { id: 230, title:"Manhã de Amor Romântico (Parte III)" , artist:"Romântico e Sincero (RS)" , src:"manha10.m4a" , duration:"4.25" , ouvida:false},
+            { id: 231, title:"Manhã de Lua Romântica (Parte III)" , artist:"Romântico e Sincero (RS)" , src:"manha11.m4a" , duration:"4.15" , ouvida:false},
+            { id: 232, title:"Manhã de Sonhos Romântica (Parte III)" , artist:"Romântico e Sincero (RS)" , src:"manha12.m4a" , duration:"4.30" , ouvida:false},
+            { id: 233, title :"Manhã de Rêverie Romântica (Parte III)"  	,artist :"Romântico e Sincero (RS)"  	,src :"manha13.m4a"
+      	,duration :"4.05"  	,ouvida :false},
+            { id: 234, title: "Acordar Feliz", artist: "Pop", src: "manha2.m4a", duration: "4:15", ouvida: false },
+            { id: 235, title: "Manhã de Céu Azul", artist: "Pop", src: "manha3.m4a", duration: "3:45", ouvida: false },
+            { id: 236, title: "Manhã de Vida", artist: "Pop", src: "manha4.m4a", duration: "4:00", ouvida: false },
+            { id: 237, title: "Manhã de Esperança", artist: "Pop", src: "manha5.m4a", duration: "3:55", ouvida: false },
+            { id: 238, title: "Manhã de Música", artist: "Pop", src: "manha6.m4a", duration: "4:10", ouvida: false },
+            { id: 239, title: "Manhã de Amor", artist: "Pop", src: "manha7.m4a", duration: "3:50", ouvida: false },
+            { id: 240, title:"Manhã de Cenário Romântico (Parte IV)" , artist:"Romântico e Sincero (RS)" , src:"manha8.m4a" , duration:"4.20" , ouvida:false},
+            { id: 241, title:"Manhã de Valsa Romântica (Parte IV)" , artist:"Romântico e Sincero (RS)" , src:"manha9.m4a" , duration:"4.15" , ouvida:false},
+            { id: 242, title:"Manhã de Amor Romântico (Parte IV)" , artist:"Romântico e Sincero (RS)" , src:"manha10.m4a" , duration:"4.25" , ouvida:false},
+            { id: 243, title:"Manhã de Lua Romântica (Parte IV)" , artist:"Romântico e Sincero (RS)" , src:"manha11.m4a" , duration:"4.15" , ouvida:false},
+            { id: 244, title:"Manhã de Sonhos Romântica (Parte IV)" , artist:"Romântico e Sincero (RS)" , src:"manha12.m4a" , duration:"4.30" , ouvida:false},
+            { id : 245, title :"Manhã de Rêverie Romântica (Parte IV)",artist :"Romântico e Sincero (RS)",src :"manha13.m4a"
+      	,duration :"4.05"  	,ouvida :false},
+                { id: 246, title: "Acordar Feliz", artist: "Pop", src: "manha2.m4a", duration: "4:15", ouvida: false },
+                { id: 247, title: "Manhã de Céu Azul", artist: "Pop", src: "manha3.m4a", duration: "3:45", ouvida: false },
+                { id: 248, title: "Manhã de Vida", artist: "Pop", src: "manha4.m4a", duration: "4:00", ouvida: false },
+                { id: 249, title: "Manhã de Esperança", artist: "Pop", src: "manha5.m4a", duration: "3:55", ouvida: false },
+             { id: 250, title: "Acordar Feliz", artist: "Pop", src: "manha2.m4a", duration: "4:15", ouvida: false },
+            { id: 251, title: "Manhã de Céu Azul", artist: "Pop", src: "manha3.m4a", duration: "3:45", ouvida: false },
+
+
+
+
+            // ... até completar 50
+        ];
+
+        for (let i = 203; i < 250; i++) {
+            manhaTracks.push({
+                id: i,
+                title: `Manhã Animada ${i-202}`,
+                artist: "Pop",
+                src: `manha${i-202}.m4a`,
+                duration: "3:50",
+                ouvida: false
+            });
+        }
+
+        // ===== TARDE (12h - 18h) =====
+        const tardeTracks = [
+            { id: 301, title: "P D A", artist: "John Legend", src: "John_Legend_P_D_A_muzzik.m4a", duration: "4:55", ouvida: false },
+            { id: 302, title: "Let Me Love You", artist: "DJ Snake ft. Justin Bieber", src: "DJ_Snake_Let_Me_Love_You_muzzik.m4a", duration: "4:55", ouvida: false },
+            { id: 303, title: "More Than a Woman", artist: "Bee Gees", src: "Bee_Gees_More_Than_A_Woman_muzzik.m4a", duration: "4:31", ouvida: false },
+            { id: 304, title: "I Feel It Coming", artist: "The Weeknd", src: "The_Weeknd_I_Feel_It_Coming_muzzik.m4a", duration: "5:11", ouvida: false },
+            { id: 305, title: "Stars", artist: "Simply Red", src: "Simply_Red_Stars_muzzik.m4a", duration: "4:32", ouvida: false },
+            { id: 306, title: "Valerie", artist: "Amy Winehouse", src: "Valerie_Live_muzzik.m4a", duration: "4:32", ouvida: false },
+            { id: 307, title: "Torn", artist: "Natalie Imbruglia", src: "Natalie_Imbruglia_Torn_muzzik.m4a", duration: "4:59", ouvida: false },
+            { id: 308, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybodys_Changing_muzzik.m4a", duration: "5:12", ouvida: false },
+             { id: 308, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybodys_Changing_muzzik.m4a", duration: "5:12", ouvida: false },
+                { id: 309, title: "Tarde de Música", artist: "Pop", src: "tarde1.m4a", duration: "3:45", ouvida: false },
+                { id: 310, title: "Tarde de Cenário", artist: "Romântico", src: "tarde2.m4a", duration: "4:20", ouvida: false },
+                { id: 311, title: "Tarde de Valsa", artist: "Romântico", src: "tarde3.m4a", duration: "4:15", ouvida: false },
+                { id: 312, title: "Tarde de Amor", artist: "Romântico", src: "tarde4.m4a", duration: "4:25", ouvida: false },
+                { id: 313, title: "Tarde de Lua", artist: "Romântico", src: "tarde5.m4a", duration: "4:15", ouvida: false },
+                { id: 314, title: "Tarde de Sonhos", artist: "Romântico", src: "tarde6.m4a", duration: "4:30", ouvida: false },
+                { id: 315, title: "Tarde de Rêverie", artist: "Romântico", src: "tarde7.m4a", duration: "4:05", ouvida: false },
+                { id: 316, title: "Tarde de Música", artist: "Pop", src: "tarde8.m4a", duration: "3:55", ouvida: false },
+                { id: 317, title: "Tarde de Cenário", artist: "Romântico", src: "tarde9.m4a", duration: "4:20", ouvida: false },
+                { id: 318, title: "Tarde de Valsa", artist: "Romântico", src: "tarde10.m4a", duration: "4:15", ouvida: false },
+                { id: 319, title: "Tarde de Amor", artist: "Romântico", src:"tarde11.m4a" , duration:"4.25" , ouvida:false},
+                { id: 320, title: "Tarde de Lua", artist: "Romântico", src:"tarde12.m4a" , duration:"4.15" , ouvida:false},
+                 { id: 321, title: "Tarde de Sonhos", artist: "Romântico", src:"tarde13.m4a" , duration:"4.30" , ouvida:false},
+                  { id: 322, title: "Tarde de Rêverie", artist: "Romântico", src:"tarde14.m4a" , duration:"4.05" , ouvida:false},
+                   { id: 323, title: "Tarde de Música", artist: "Pop", src:"tarde15.m4a" , duration:"3.55" , ouvida:false},
+                    { id: 324, title: "Tarde de Cenário", artist: "Romântico", src:"tarde16.m4a" , duration:"4.20" , ouvida:false},
+                     { id: 325, title: "Tarde de Valsa", artist: "Romântico", src:"tarde17.m4a" , duration:"4.15" , ouvida:false},
+                      { id: 326, title: "Tarde de Amor", artist: "Romântico", src:"tarde18.m4a" , duration:"4.25" , ouvida:false},
+                       { id: 327, title: "Tarde de Lua", artist: "Romântico", src:"tarde19.m4a" , duration:"4.15" , ouvida:false},
+                        { id: 328, title: "Tarde de Sonhos", artist: "Romântico", src:"tarde20.m4a" , duration:"4.30" , ouvida:false},
+                         { id: 329, title: "Tarde de Rêverie", artist: "Romântico", src:"tarde21.m4a" , duration:"4.05" , ouvida:false},
+                          { id: 330, title: "Tarde de Música", artist: "Pop", src:"tarde22.m4a" , duration:"3.55" , ouvida:false},
+                           { id: 331, title: "Tarde de Cenário", artist: "Romântico", src:"tarde23.m4a" , duration:"4.20" , ouvida:false},
+                            { id: 332, title: "Tarde de Valsa", artist: "Romântico", src:"tarde24.m4a" , duration:"4.15" , ouvida:false},
+                             { id: 333, title: "Tarde de Amor", artist: "Romântico", src:"tarde25.m4a" , duration:"4.25" , ouvida:false},
+                              { id: 334, title: "Tarde de Lua", artist: "Romântico", src:"tarde26.m4a" , duration:"4.15" , ouvida:false},
+                               { id: 335, title: "Tarde de Sonhos", artist: "Romântico", src:"tarde27.m4a" , duration:"4.30" , ouvida:false},
+                                { id: 336, title: "Tarde de Rêverie", artist: "Romântico", src:"tarde28.m4a" , duration:"4.05" , ouvida:false},
+                                 { id: 337, title: "Tarde de Música", artist: "Pop", src:"tarde29.m4a" , duration:"3.55" , ouvida:false},
+                                  { id: 338, title: "Tarde de Cenário", artist: "Romântico", src:"tarde30.m4a" , duration:"4.20" , ouvida:false},
+                                   { id: 339, title: "Tarde de Valsa", artist: "Romântico", src:"tarde31.m4a" , duration:"4.15" , ouvida:false},
+                                    { id: 340, title: "Tarde de Amor", artist: "Romântico", src:"tarde32.m4a" , duration:"4.25" , ouvida:false},
+                                     { id: 341, title: "Tarde de Lua", artist: "Romântico", src:"tarde33.m4a" , duration:"4.15" , ouvida:false},
+                                      { id: 342, title: "Tarde de Sonhos", artist: "Romântico", src:"tarde34.m4a" , duration:"4.30" , ouvida:false},
+                                       { id: 343, title: "Tarde de Rêverie", artist: "Romântico", src:"tarde35.m4a" , duration:"4.05" , ouvida:false},
+                                        { id: 344, title: "Tarde de Música", artist: "Pop", src:"tarde36.m4a" , duration:"3.55" , ouvida:false},
+                                         { id: 345, title: "Tarde de Cenário", artist: "Romântico", src:"tarde37.m4a" , duration:"4.20" , ouvida:false},
+                                          { id: 346, title: "Tarde de Valsa", artist: "Romântico", src:"tarde38.m4a" , duration:"4.15" , ouvida:false},
+                                           { id: 347, title: "Tarde de Amor", artist: "Romântico", src:"tarde39.m4a" , duration:"4.25" , ouvida:false},
+                                            { id: 348, title: "Tarde de Lua", artist: "Romântico", src:"tarde40.m4a" , duration:"4.15" , ouvida:false},
+                                             { id: 349, title: "Tarde de Sonhos", artist: "Romântico", src:"tarde41.m4a" , duration:"4.30" , ouvida:false}
+        ];
+
+        // Completar tarde até 50
+        for (let i = 309; i < 350; i++) {
+            tardeTracks.push({
+                id: i,
+                title: `Tarde Romântica ${i-308}`,
+                artist: "Romântico",
+                src: `tarde${i-308}.m4a`,
+                duration: "4:00",
+                ouvida: false
+            });
+        }
+
+        // ===== NOITE (18h - 00h) =====
+        const noiteTracks = [
+            { id: 401, title: "LINDA JUVENTUDE", artist: "Flávio Venturini & Jota Quest", src: "9Flavio_Venturini_Flavio_Venturini_Feat_Jota_muzzik.m4a", duration: "4:20", ouvida: false },
+            { id: 402, title: "Ainda bem", artist: "Xande de Pilares", src: "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", duration: "3:55", ouvida: false },
+            { id: 403, title: "More Than a Woman", artist: "Bee Gees", src: "Bee_Gees_More_Than_A_Woman_muzzik.m4a", duration: "4:10", ouvida: false },
+            { id: 404, title: "Toda Forma de Amor", artist: "Lulu Santos", src: "Lulu_Santos_Toda_Forma_de_Amor_Um_Certo_Algu_m_O_ltimo_Rom_ntico_muzzik.m4a", duration: "3:45", ouvida: false },
+            { id: 405, title: "Sorri, Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "4:25", ouvida: false },
+            { id: 406, title: "Send It Back", artist: "Don West", src: "DON_WEST_Send_It_Back_muzzik.m4a", duration: "4:15", ouvida: false },
+            { id: 407, title: "I've Had the Time of My Life", artist: "Maurício Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "3:50", ouvida: false },
+            { id: 408, title: "Is This Love", artist: "Bob Marley", src: "Bob_Marley_Is_This_Love_muzzik.m4a", duration: "4:30", ouvida: false },
+            { id: 409, title: "Foi Bom, Mas Foi Ontem", artist: "Grupo Menos é Mais e João Gomes", src: "Grupo Menos é Mais e João Gomes - Foi Bom_ Mas Foi Ontem (Clipe Oficial)(MP3_160K).mp3", duration: "4:05", ouvida: false },
+            { id: 410, title: "Noite de Música", artist: "Pop", src: "noite10.m4a", duration: "3:55", ouvida: false },
+            { id: 411, title: "Noite de Cenário", artist: "Romântico", src: "noite11.m4a", duration: "4:20", ouvida: false },
+            { id: 412, title: "Noite de Valsa", artist: "Romântico", src: "noite12.m4a", duration: "4:15", ouvida: false },
+            { id: 413, title: "Noite de Amor", artist: "Romântico", src: "noite5.m4a", duration: "4:25", ouvida: false },
+                { id: 414, title: "Noite de Lua", artist: "Romântico", src: "noite6.m4a", duration: "4:15", ouvida: false },
+                { id: 415, title: "Noite de Música", artist: "Pop", src: "noite7.m4a", duration: "3:50", ouvida: false },
+                { id: 416, title: "Noite de Sonhos", artist: "Romântico", src: "noite8.m4a", duration: "4:30", ouvida: false },
+                { id: 417, title: "Noite de Rêverie", artist: "Romântico", src: "noite9.m4a", duration: "4:05", ouvida: false },
+                { id: 418, title: "Noite de Música", artist: "Pop", src: "noite10.m4a", duration: "3:55", ouvida: false },
+                { id: 419, title: "Noite de Cenário", artist: "Romântico", src: "noite11.m4a", duration: "4:20", ouvida: false },
+                { id: 420, title: "Noite de Valsa", artist: "Romântico", src: "noite12.m4a", duration: "4:15", ouvida: false },
+            { id: 421, title: "Noite de Amor", artist: "Romântico", src: "noite5.m4a", duration: "4:25", ouvida: false },
+                { id: 422, title: "Noite de Lua", artist: "Romântico", src: "noite6.m4a", duration: "4:15", ouvida: false },
+                { id: 423, title: "Noite de Música", artist: "Pop", src: "noite7.m4a", duration: "3:50", ouvida: false },
+                { id: 424, title: "Noite de Sonhos", artist: "Romântico", src: "noite8.m4a", duration: "4:30", ouvida: false },
+                { id: 425, title: "Noite de Rêverie", artist: "Romântico", src: "noite9.m4a", duration: "4:05", ouvida: false },
+                { id: 426, title: "Noite de Música", artist: "Pop", src: "noite10.m4a", duration: "3:55", ouvida: false },
+                { id: 427, title: "Noite de Cenário", artist: "Romântico", src: "noite11.m4a", duration: "4:20", ouvida: false },
+                { id: 428, title: "Noite de Valsa", artist: "Romântico", src: "noite12.m4a", duration: "4:15", ouvida: false },
+                { id: 429, title: "Noite de Amor", artist: "Romântico", src: "noite5.m4a", duration: "4:25", ouvida: false },
+{ id: 405, title: "Noite de Amor", artist: "Romântico", src: "noite5.m4a", duration: "4:25", ouvida: false },
+                { id: 430, title: "Noite de Lua", artist: "Romântico", src: "noite6.m4a", duration: "4:15", ouvida: false },
+                { id: 431, title: "Noite de Música", artist: "Pop", src: "noite7.m4a", duration: "3:50", ouvida: false },
+                { id: 432, title: "Noite de Sonhos", artist: "Romântico", src: "noite8.m4a", duration: "4:30", ouvida: false },
+                { id: 433, title: "Noite de Rêverie", artist: "Romântico", src: "noite9.m4a", duration: "4:05", ouvida: false },
+                { id: 434, title: "Noite de Música", artist: "Pop", src: "noite10.m4a", duration: "3:55", ouvida: false },
+                { id: 435, title: "Noite de Cenário", artist: "Romântico", src: "noite11.m4a", duration: "4:20", ouvida: false },
+                { id: 436, title: "Noite de Valsa", artist: "Romântico", src: "noite12.m4a", duration: "4:15", ouvida: false },
+                { id: 437, title: "Noite de Amor", artist: "Romântico", src: "noite5.m4a", duration: "4:25", ouvida: false },
+                { id: 438, title: "Noite de Lua", artist: "Romântico", src: "noite6.m4a", duration: "4:15", ouvida: false },
+                { id: 439, title: "Noite de Música", artist: "Pop", src: "noite7.m4a", duration: "3:50", ouvida: false },
+                { id: 440, title: "Noite de Sonhos", artist: "Romântico", src: "noite8.m4a", duration: "4:30", ouvida: false },
+                { id: 441, title: "Noite de Rêverie", artist: "Romântico", src: "noite9.m4a", duration: "4:05", ouvida: false },
+                { id: 442, title: "Noite de Música", artist: "Pop", src: "noite10.m4a", duration: "3:55", ouvida: false },
+                { id: 443, title: "Noite de Cenário", artist: "Romântico", src: "noite11.m4a", duration: "4:20", ouvida: false },
+                { id: 444, title: "Noite de Valsa", artist: "Romântico", src: "noite12.m4a", duration: "4:15", ouvida: false },
+                { id: 445, title: "Noite de Amor", artist: "Romântico", src: "noite5.m4a", duration: "4:25", ouvida: false },
+                { id: 446, title: "Noite de Lua", artist: "Romântico", src: "noite6.m4a", duration: "4:15", ouvida: false },
+                { id: 447, title: "Noite de Música", artist: "Pop", src: "noite7.m4a", duration: "3:50", ouvida: false },
+                { id: 448, title: "Noite de Sonhos", artist: "Romântico", src: "noite8.m4a", duration: "4:30", ouvida: false },
+                { id: 449, title: "Noite de Rêverie", artist: "Romântico", src: "noite9.m4a", duration: "4:05", ouvida: false },
+                { id: 450, title: "Noite de Amor", artist: "Romântico", src: "noite5.m4a", duration: "4:25", ouvida: false },
+
+        ];
+
+        for (let i = 403; i < 450; i++) {
+            noiteTracks.push({
+                id: i,
+                title: `Noite Dançante ${i-402}`,
+                artist: "Dance",
+                src: `noite${i-402}.m4a`,
+                duration: "4:10",
+                ouvida: false
+            });
+        }
+
+        // ============================================
+        // ANÚNCIOS DE ÁUDIO
+        // ============================================
+        const advertisements = [
+            { id: 1, title: "Super Promoção - 50% OFF", artist: "Comercial", src: "zzcv.mp3", duration: "0:35" },
+            { id: 2, title: "Mega Oferta - Só hoje", artist: "Comercial", src: "zzcv.mp3", duration: "0:30" },
+            { id: 3, title: "Lançamento Exclusivo", artist: "Comercial", src: "zzcv.mp3", duration: "0:25" },
+            { id: 4, title: "Parceiro Oficial", artist: "Comercial", src: "zzcv.mp3", duration: "0:40" }
+        ];
+
+        // ============================================
+        // CONFIGURAÇÕES
+        // ============================================
+        const CONFIG = {
+            musicBetweenAds: 15, // A cada 15 músicas toca um anúncio
+            defaultVolume: 80
+        };
+
+        let playlist = [...manhaTracks];
+        let currentIndex = 0;
+        let isPlaying = false;
+        let isAdPlaying = false;
+        let adsEnabled = true;
+        let shuffleMode = false;
+        let repeatMode = false;
+        let musicPlayedCount = 0;
+        let currentAdIndex = 0;
+        let musicPausedTime = 0;
+        let listenerCount = 1247;
+        let uptimeSeconds = 0;
+
+        // Elementos DOM
+        const musicPlayer = document.getElementById('musicPlayer');
+        const adPlayer = document.getElementById('adPlayer');
+        const playBtn = document.getElementById('playPauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const repeatBtn = document.getElementById('repeatBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
+        const trackTitleBig = document.getElementById('trackTitleBig');
+        const trackArtistBig = document.getElementById('trackArtistBig');
+        const playlistContainer = document.getElementById('playlistContainer');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumePercent = document.getElementById('volumePercent');
+        const volumeIcon = document.getElementById('volumeIcon');
+        const adTimerDropdown = document.getElementById('adTimerDropdown');
+        const adStatusDropdown = document.getElementById('adStatusDropdown');
+        const toggleAdsBtnDropdown = document.getElementById('toggleAdsBtnDropdown');
+        const testAdBtnDropdown = document.getElementById('testAdBtnDropdown');
+        const skipAdBtnDropdown = document.getElementById('skipAdBtnDropdown');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+        const shareBtnNav = document.getElementById('shareBtnNav');
+        const listenerCountEl = document.getElementById('listenerCount');
+        const playedCountEl = document.getElementById('playedCount');
+        const uptimeEl = document.getElementById('uptime');
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const programacaoSection = document.getElementById('programacao-section');
+        const eventosSection = document.getElementById('eventos-section');
+        const periodName = document.getElementById('periodName');
+        const periodHours = document.getElementById('periodHours');
+        const playlistPeriodTag = document.getElementById('playlistPeriodTag');
+
+        // ============================================
+        // SISTEMA AUTOMÁTICO DE PERÍODOS
+        // ============================================
+        function getPlaylistByHour() {
+            const hora = new Date().getHours();
+            
+            if (hora >= 0 && hora < 6) {
+                return { playlist: madrugadaTracks, nome: 'Madrugada', icone: '🌙', horas: '00h - 06h' };
+            } else if (hora >= 6 && hora < 12) {
+                return { playlist: manhaTracks, nome: 'Manhã', icone: '🌅', horas: '06h - 12h' };
+            } else if (hora >= 12 && hora < 18) {
+                return { playlist: tardeTracks, nome: 'Tarde', icone: '🌆', horas: '12h - 18h' };
+            } else {
+                return { playlist: noiteTracks, nome: 'Noite', icone: '🌃', horas: '18h - 00h' };
+            }
+        }
+
+        function atualizarPeriodo() {
+            const { playlist: novaPlaylist, nome, icone, horas } = getPlaylistByHour();
+            
+            periodName.innerHTML = `${icone} ${nome}`;
+            periodHours.textContent = horas;
+            playlistPeriodTag.textContent = nome;
+            
+            if (playlist !== novaPlaylist) {
+                const estavaTocando = isPlaying && !isAdPlaying;
+                const tempoAtual = musicPlayer.currentTime;
+                
+                playlist = [...novaPlaylist];
+                
+                if (playlist.length > 0) {
+                    currentIndex = Math.min(currentIndex, playlist.length - 1);
+                    loadTrack(currentIndex);
+                    
+                    if (estavaTocando) {
+                        musicPlayer.currentTime = tempoAtual;
+                        playMusic();
+                    }
+                }
+                
+                showNotification(`${icone} Agora: ${nome}`);
+                criarPlaylist();
+            }
+        }
+
+        // ============================================
+        // FUNÇÕES DO PLAYER
+        // ============================================
+        function criarPlaylist() {
+            let html = '';
+            const mostrar = playlist.slice(0, 15);
+            mostrar.forEach((track, index) => {
+                html += `
+                    <div class="playlist-item" onclick="playTrack(${index})">
+                        <div class="item-number">${index + 1}</div>
+                        <div class="item-info">
+                            <div class="item-title">${track.title}</div>
+                            <div class="item-artist">${track.artist}</div>
+                        </div>
+                        <div class="item-duration">${track.duration}</div>
+                    </div>
+                `;
+            });
+            if (playlist.length > 15) {
+                html += `<div style="text-align:center; padding:8px; opacity:0.6;">+ ${playlist.length - 15} músicas</div>`;
+            }
+            playlistContainer.innerHTML = html || '<div style="padding:1rem; text-align:center;">Nenhuma música</div>';
+        }
+
+        window.playTrack = (index) => {
+            if (isAdPlaying) {
+                showNotification('⏸️ Aguarde o anúncio terminar');
+                return;
+            }
+            currentIndex = index;
+            loadTrack(currentIndex);
+            if(!isPlaying) playMusic();
+        };
+
+        function loadTrack(index) {
+            const track = playlist[index];
+            if (!track) return;
+            musicPlayer.src = track.src;
+            trackTitleBig.textContent = track.title;
+            trackArtistBig.textContent = track.artist;
+            totalTimeEl.textContent = track.duration;
+            progressFill.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        }
+
+        function playMusic() {
+            musicPlayer.play().then(() => {
+                isPlaying = true;
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            }).catch(() => {});
+        }
+
+        function pauseMusic() {
+            musicPlayer.pause();
+            isPlaying = false;
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+
+        function togglePlayPause() {
+            if (isAdPlaying) {
+                adPlayer.paused ? adPlayer.play() : adPlayer.pause();
+            } else {
+                isPlaying ? pauseMusic() : playMusic();
+            }
+        }
+
+        function nextTrack() {
+            if (isAdPlaying || !playlist.length) return;
+            
+            if(shuffleMode) {
+                let newIndex;
+                do { newIndex = Math.floor(Math.random() * playlist.length); } 
+                while(newIndex === currentIndex && playlist.length > 1);
+                currentIndex = newIndex;
+            } else {
+                currentIndex = (currentIndex + 1) % playlist.length;
+                if(!repeatMode && currentIndex === 0) {
+                    pauseMusic();
+                    return;
+                }
+            }
+            
+            loadTrack(currentIndex);
+            if(isPlaying) playMusic();
+            musicPlayedCount++;
+            playedCountEl.textContent = musicPlayedCount;
+            checkAdInterval();
+        }
+
+        function prevTrack() {
+            if (isAdPlaying || !playlist.length) return;
+            currentIndex = shuffleMode ? Math.floor(Math.random() * playlist.length) : (currentIndex - 1 + playlist.length) % playlist.length;
+            loadTrack(currentIndex);
+            if(isPlaying) playMusic();
+        }
+
+        function toggleShuffle() {
+            shuffleMode = !shuffleMode;
+            shuffleBtn.style.background = shuffleMode ? 'linear-gradient(135deg, #ff6ec4, #7873f5)' : 'rgba(255,255,255,0.1)';
+        }
+
+        function toggleRepeat() {
+            repeatMode = !repeatMode;
+            repeatBtn.style.background = repeatMode ? 'linear-gradient(135deg, #ff6ec4, #7873f5)' : 'rgba(255,255,255,0.1)';
+        }
+
+        // ============================================
+        // SISTEMA DE ANÚNCIOS
+        // ============================================
+        function checkAdInterval() {
+            if (musicPlayedCount > 0 && musicPlayedCount % CONFIG.musicBetweenAds === 0 && adsEnabled && !isAdPlaying) {
+                playNextAd();
+            }
+            updateAdTimer();
+        }
+
+        function updateAdTimer() {
+            if (adsEnabled) {
+                const songsUntilAd = CONFIG.musicBetweenAds - (musicPlayedCount % CONFIG.musicBetweenAds);
+                adTimerDropdown.textContent = songsUntilAd;
+            } else {
+                adTimerDropdown.textContent = "OFF";
+            }
+        }
+
+        function playNextAd() {
+            if (!adsEnabled || !advertisements.length || !playlist.length) return;
+            currentAdIndex = (currentAdIndex + 1) % advertisements.length;
+            playAd(currentAdIndex);
+        }
+
+        function playAd(index) {
+            const ad = advertisements[index];
+            musicPausedTime = musicPlayer.currentTime;
+            if (isPlaying) pauseMusic();
+            
+            adPlayer.src = ad.src;
+            isAdPlaying = true;
+            adStatusDropdown.innerHTML = `<i class="fas fa-volume-up"></i> ${ad.title} (${ad.duration})`;
+            skipAdBtnDropdown.style.display = "inline-flex";
+            
+            showNotification(`📢 ${ad.title}`);
+            
+            adPlayer.play().then(() => {
+                adPlayer.onended = finishAd;
+            }).catch(() => {
+                finishAd();
+            });
+        }
+
+        function finishAd() {
+            isAdPlaying = false;
+            updateAdTimer();
+            adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
+            skipAdBtnDropdown.style.display = "none";
+            
+            if (playlist.length) {
+                musicPlayer.currentTime = musicPausedTime;
+                playMusic();
+            }
+        }
+
+        function toggleAds() {
+            adsEnabled = !adsEnabled;
+            toggleAdsBtnDropdown.innerHTML = adsEnabled ? '<i class="fas fa-toggle-on"></i> Ativo' : '<i class="fas fa-toggle-off"></i> Inativo';
+            
+            if (!adsEnabled) {
+                adTimerDropdown.textContent = "OFF";
+                adStatusDropdown.innerHTML = '<i class="fas fa-ban"></i> Desativados';
+                if (isAdPlaying) {
+                    adPlayer.pause();
+                    finishAd();
+                }
+            } else {
+                updateAdTimer();
+                adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
+            }
+        }
+
+        function testAd() {
+            if (advertisements.length) {
+                playAd(currentAdIndex);
+            }
+        }
+
+        function skipAd() {
+            if (isAdPlaying) {
+                adPlayer.pause();
+                finishAd();
+                showNotification('⏭️ Anúncio pulado');
+            }
+        }
+
+        // ============================================
+        // UTILITÁRIOS
+        // ============================================
+        function formatTime(seconds) {
+            if(isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function showNotification(msg) {
+            notificationText.textContent = msg;
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 2000);
+        }
+
+        window.toggleSection = function(section) {
+            dropdownMenu.classList.remove('show');
+            if(section === 'programacao') {
+                programacaoSection.classList.toggle('show');
+                eventosSection.classList.remove('show');
+            } else if(section === 'eventos') {
+                eventosSection.classList.toggle('show');
+                programacaoSection.classList.remove('show');
+            }
+        };
+
+        window.editTicker = () => {
+            const newText = prompt("Editar mensagem:", document.querySelector('#ticker marquee').textContent);
+            if(newText) document.querySelector('#ticker marquee').textContent = newText;
+        };
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        function setupEventListeners() {
+            playBtn.addEventListener('click', togglePlayPause);
+            prevBtn.addEventListener('click', prevTrack);
+            nextBtn.addEventListener('click', nextTrack);
+            shuffleBtn.addEventListener('click', toggleShuffle);
+            repeatBtn.addEventListener('click', toggleRepeat);
+            
+            musicPlayer.addEventListener('timeupdate', () => {
+                if(musicPlayer.duration && !isAdPlaying) {
+                    const percent = (musicPlayer.currentTime / musicPlayer.duration) * 100;
+                    progressFill.style.width = `${percent}%`;
+                    currentTimeEl.textContent = formatTime(musicPlayer.currentTime);
+                }
+            });
+            
+            musicPlayer.addEventListener('ended', nextTrack);
+            
+            progressBar.addEventListener('click', (e) => {
+                if(isAdPlaying || !playlist.length) return;
+                const rect = progressBar.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                if(musicPlayer.duration) {
+                    musicPlayer.currentTime = (clickX / width) * musicPlayer.duration;
+                }
+            });
+            
+            volumeSlider.addEventListener('input', (e) => {
+                const vol = e.target.value / 100;
+                musicPlayer.volume = vol;
+                adPlayer.volume = vol;
+                volumePercent.textContent = `${e.target.value}%`;
+                volumeIcon.className = vol == 0 ? 'fas fa-volume-mute' : vol < 0.3 ? 'fas fa-volume-off' : vol < 0.7 ? 'fas fa-volume-down' : 'fas fa-volume-up';
+            });
+            
+            shareBtnNav.addEventListener('click', () => {
+                if(navigator.share) {
+                    navigator.share({ 
+                        title: 'Rádio Vende+', 
+                        text: '24h automática com os melhores hits', 
+                        url: window.location.href 
+                    });
+                } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    showNotification('📋 Link copiado!');
+                }
+            });
+
+            toggleAdsBtnDropdown.addEventListener('click', toggleAds);
+            testAdBtnDropdown.addEventListener('click', testAd);
+            skipAdBtnDropdown.addEventListener('click', skipAd);
+            menuToggle.addEventListener('click', () => dropdownMenu.classList.toggle('show'));
+        }
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+        window.addEventListener('load', () => {
+            musicPlayer.volume = 0.8;
+            adPlayer.volume = 0.8;
+            volumeSlider.value = 80;
+            
+            atualizarPeriodo();
+            criarPlaylist();
+            if(playlist.length) loadTrack(0);
+            setupEventListeners();
+            updateAdTimer();
+            
+            setInterval(atualizarPeriodo, 60000);
+            
+            setInterval(() => {
+                listenerCount += Math.floor(Math.random() * 11) - 3;
+                listenerCount = Math.max(800, listenerCount);
+                listenerCountEl.textContent = listenerCount > 999 ? (listenerCount/1000).toFixed(1)+'k' : listenerCount;
+            }, 30000);
+            
+            setInterval(() => {
+                uptimeSeconds++;
+                const h = Math.floor(uptimeSeconds / 3600);
+                const m = Math.floor((uptimeSeconds % 3600) / 60);
+                uptimeEl.textContent = h > 0 ? `${h}h${m}` : `${m}min`;
+            }, 1000);
+            
+            if(playlist.length) {
+                musicPlayer.play().then(() => {
+                    isPlaying = true;
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }).catch(() => {
+                    document.addEventListener('touchstart', () => {
+                        musicPlayer.play().then(() => {
+                            isPlaying = true;
+                            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        });
+                    }, { once: true });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
