@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,7 +9,7 @@
     <title>Rádio Vende+ - 24h Automático</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* RESET E ESTILOS GLOBAIS - MANTIDO IGUAL */
+        /* RESET E ESTILOS GLOBAIS */
         * {
             margin: 0;
             padding: 0;
@@ -16,10 +19,24 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             min-height: 100vh;
             color: #fff;
             padding: 8px;
+            transition: background 1s ease;
+        }
+
+        /* CORES DINÂMICAS POR PERÍODO */
+        body.period-madrugada {
+            background: linear-gradient(135deg, #0c0b1a 0%, #1a1a2f 50%, #16213e 100%);
+        }
+        body.period-manha {
+            background: linear-gradient(135deg, #f5af19 0%, #f12711 50%, #f37335 100%);
+        }
+        body.period-tarde {
+            background: linear-gradient(135deg, #ff6a00 0%, #ee0979 50%, #9d50bb 100%);
+        }
+        body.period-noite {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
         }
 
         .app-container {
@@ -28,12 +45,12 @@
             width: 100%;
         }
 
-        /* GLASSMORPHISM */
+        /* GLASSMORPHISM - adaptado para cada período */
         .glass-card {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 24px;
             padding: 16px;
             margin-bottom: 12px;
@@ -49,7 +66,7 @@
             border-radius: 30px;
             padding: 10px 18px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .logo-wrapper {
@@ -101,7 +118,7 @@
             border-radius: 30px;
             padding: 6px 12px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .nav-left {
@@ -111,7 +128,7 @@
         }
 
         .nav-item {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             font-size: 0.9rem;
             padding: 8px 12px;
@@ -154,7 +171,7 @@
             border-radius: 24px;
             padding: 16px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .dropdown-menu.show { display: block; }
@@ -276,7 +293,7 @@
             border-radius: 30px;
             padding: 16px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .listener-stats {
@@ -338,7 +355,7 @@
             border-radius: 30px;
             padding: 12px 16px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-left: 4px solid #ff6ec4;
         }
 
@@ -360,19 +377,19 @@
             cursor: pointer;
         }
 
-        /* PLAYER */
+        /* PLAYER - com vídeo quadrado */
         .player-card {
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
             border-radius: 32px;
             overflow: hidden;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .video-container {
             width: 100%;
-            aspect-ratio: 16/9;
+            aspect-ratio: 1/1; /* Quadrado perfeito */
             background: #000;
         }
         .video-container video {
@@ -436,6 +453,10 @@
             color: white;
             font-size: 1rem;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
         .play-btn {
             width: 60px;
@@ -476,7 +497,7 @@
             border-radius: 24px;
             padding: 16px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .playlist-items {
@@ -495,6 +516,14 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+        .playlist-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .playlist-item.playing {
+            background: linear-gradient(90deg, rgba(255,110,196,0.3), rgba(120,115,245,0.3));
+            border-left: 3px solid #ff6ec4;
         }
         .item-number {
             width: 28px;
@@ -531,7 +560,7 @@
             border-radius: 24px;
             padding: 20px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         .hidden-section.show { display: block; }
 
@@ -558,8 +587,12 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
-            border: 1px solid rgba(37, 211, 102, 0.2);
+            border: 1px solid rgba(37, 211, 102, 0.3);
             margin-bottom: 12px;
+            transition: background 0.2s;
+        }
+        .contact-mini:hover {
+            background: rgba(37, 211, 102, 0.25);
         }
         .contact-mini i { 
             color: #25D366; 
@@ -710,7 +743,7 @@
         <!-- PLAYER -->
         <div class="player-card">
             <div class="video-container">
-                <video autoplay loop muted playsinline>
+                <video autoplay loop muted playsinline id="bgVideo">
                     <source src="6995d87e653782dfa4035483-4.mp4" type="video/mp4">
                 </video>
             </div>
@@ -791,7 +824,7 @@
 
     <script>
         // ============================================
-        // PLAYLISTS ORGANIZADAS POR PERÍODO - 50 MÚSICAS CADA
+        // PLAYLISTS ORGANIZADAS POR PERÍODO - 25 MÚSICAS CADA (SEM REPETIÇÃO)
         // ============================================
         
         // ===== MADRUGADA (00h - 06h) =====
@@ -812,40 +845,15 @@
             { id: 114, title: "Woman in Love", artist: "Barbra Streisand", src: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45" },
             { id: 115, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00" },
             { id: 116, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50" },
-            { id: 117, title: "Madrugada de Paz", artist: "Banda Melodia", src: "madrugada17.m4a", duration: "4:25" },
+            { id: 117, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
             { id: 118, title: "Madrugada Serena", artist: "Grupo Romance", src: "madrugada18.m4a", duration: "4:20" },
             { id: 119, title: "Madrugada de Valsa", artist: "Orquestra da Lua", src: "madrugada19.m4a", duration: "4:15" },
             { id: 120, title: "Noite Silenciosa", artist: "Piano Bar", src: "madrugada20.m4a", duration: "3:45" },
             { id: 121, title: "Madrugada de Amor", artist: "Voz e Violão", src: "madrugada21.m4a", duration: "4:25" },
-            { id: 122, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
+            { id: 122, title: "Madrugada de Paz", artist: "Banda Melodia", src: "madrugada17.m4a", duration: "4:25" },
             { id: 123, title: "Madrugada de Sonhos", artist: "Som da Noite", src: "madrugada23.m4a", duration: "4:30" },
             { id: 124, title: "Madrugada de Rêverie", artist: "Clube da Esquina", src: "madrugada24.m4a", duration: "4:05" },
             { id: 125, title: "Céu da Madrugada", artist: "Estrela Guia", src: "madrugada25.m4a", duration: "4:00" },
-            { id: 126, title: "Vida Noturna", artist: "Banda da Lua", src: "madrugada26.m4a", duration: "3:50" },
-            { id: 127, title: "Esperança na Noite", artist: "Cantor Anônimo", src: "madrugada27.m4a", duration: "4:25" },
-            { id: 128, title: "Cenário Noturno", artist: "Grupo da Madrugada", src: "madrugada28.m4a", duration: "4:20" },
-            { id: 129, title: "Valsa Noturna", artist: "Orquestra Sinfônica", src: "madrugada29.m4a", duration: "4:15" },
-            { id: 130, title: "Amor na Madrugada", artist: "Dueto Perfeito", src: "madrugada30.m4a", duration: "4:25" },
-            { id: 131, title: "Lua de Mel", artist: "Casal 20", src: "madrugada31.m4a", duration: "4:15" },
-            { id: 132, title: "Sonhos Noturnos", artist: "Madrugadeiros", src: "madrugada32.m4a", duration: "4:30" },
-            { id: 133, title: "Devaneio", artist: "Noturnos", src: "madrugada33.m4a", duration: "4:05" },
-            { id: 134, title: "Paisagem da Janela", artist: "Lô Borges", src: "PAISAGEM_DA_JANELA_L_BORGES_muzzik.m4a", duration: "3:45" },
-            { id: 135, title: "Corre Pro Meu Mar", artist: "Maneva", src: "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", duration: "4:05" },
-            { id: 136, title: "Noite de Paz", artist: "Madrugada Tranquila", src: "madrugada36.m4a", duration: "4:15" },
-            { id: 137, title: "Madrugada de Verão", artist: "Verão 90", src: "madrugada37.m4a", duration: "4:30" },
-            { id: 138, title: "Noite de Amor Eterno", artist: "Românticos", src: "madrugada38.m4a", duration: "4:20" },
-            { id: 139, title: "Madrugada de Luz", artist: "Amanhecer", src: "madrugada39.m4a", duration: "4:10" },
-            { id: 140, title: "Céu Noturno", artist: "Estrelas", src: "madrugada40.m4a", duration: "4:25" },
-            { id: 141, title: "Madrugada de Outono", artist: "Folhas ao Vento", src: "madrugada41.m4a", duration: "4:15" },
-            { id: 142, title: "Noite de Primavera", artist: "Flores da Noite", src: "madrugada42.m4a", duration: "4:30" },
-            { id: 143, title: "Madrugada de Inverno", artist: "Geada", src: "madrugada43.m4a", duration: "4:20" },
-            { id: 144, title: "Madrugada de Sol", artist: "Nascer do Dia", src: "madrugada44.m4a", duration: "4:10" },
-            { id: 145, title: "Noite de Lua Cheia", artist: "Luar", src: "madrugada45.m4a", duration: "4:25" },
-            { id: 146, title: "Madrugada de Brisa", artist: "Ventos da Noite", src: "madrugada46.m4a", duration: "4:15" },
-            { id: 147, title: "Noite de Rimas", artist: "Poetas da Noite", src: "madrugada47.m4a", duration: "4:30" },
-            { id: 148, title: "Madrugada de Poesia", artist: "Versos Noturnos", src: "madrugada48.m4a", duration: "4:20" },
-            { id: 149, title: "Noite de Magia", artist: "Mágicos da Lua", src: "madrugada49.m4a", duration: "4:10" },
-            { id: 150, title: "Madrugada de Sinfonia", artist: "Orquestra Noturna", src: "madrugada50.m4a", duration: "4:25" }
         ];
 
         // ===== MANHÃ (06h - 12h) =====
@@ -875,31 +883,6 @@
             { id: 223, title: "Andar com Fé", artist: "Xanddy Harmonia part. Xande de Pilares", src: "Xanddy_Harmonia_Andar_com_Fé_muzzik.m4a", duration: "3:45" },
             { id: 224, title: "Sonho de Amor", artist: "Circuito Musical", src: "SONHO_DE_AMOR_Circuito_Musical_muzzik.m4a", duration: "4:00" },
             { id: 225, title: "Perfume", artist: "Desejo de Menina", src: "PERFUME_Desejo_de_Menina_muzzik.m4a", duration: "3:55" },
-            { id: 226, title: "Waves", artist: "Mr. Probz", src: "Mr_Probz_Waves_muzzik.m4a", duration: "4:10" },
-            { id: 227, title: "Manhã de Amor", artist: "Manhãs de Sol", src: "manha_amor.m4a", duration: "3:50" },
-            { id: 228, title: "Manhã de Cenário Romântico", artist: "Dia Claro", src: "manha_cenario.m4a", duration: "4:20" },
-            { id: 229, title: "Manhã de Valsa Romântica", artist: "Acordar Feliz", src: "manha_valsa.m4a", duration: "4:15" },
-            { id: 230, title: "Manhã de Amor Romântico", artist: "Primavera", src: "manha_amor_romantico.m4a", duration: "4:25" },
-            { id: 231, title: "Quando Um Grande Amor Se Faz", artist: "Gustavo Lima", src: "Gusttavo_Lima_Quando_Um_Grande_Amor_Se_Faz.m4a", duration: "4:15" },
-            { id: 232, title: "Manhã de Sonhos Romântica", artist: "Aurora", src: "manha_sonhos.m4a", duration: "4:30" },
-            { id: 233, title: "Boa Sorte", artist: "Vanessa da Mata", src: "Vanessa_da_Mata_Boa_Sorte_muzzik.m4a", duration: "4:05" },
-            { id: 234, title: "Infarto", artist: "Diego & Victor Hugo", src: "Diego_Victor_Hugo_Infarto_muzzik.m4a", duration: "4:15" },
-            { id: 235, title: "Manhã de Céu Azul", artist: "Novo Dia", src: "manha_ceu_azul.m4a", duration: "3:45" },
-            { id: 236, title: "Manhã de Vida", artist: "Viver", src: "manha_vida.m4a", duration: "4:00" },
-            { id: 237, title: "Manhã de Esperança", artist: "Acreditar", src: "manha_esperanca.m4a", duration: "3:55" },
-            { id: 238, title: "Palpite", artist: "Vanessa Rangel", src: "Vanessa_Rangel_Palpite_muzzik.m4a", duration: "4:10" },
-            { id: 239, title: "Sem Dela", artist: "Yann Muller", src: "Yann_Muller_SEM_Dela_muzzik.m4a", duration: "3:50" },
-            { id: 240, title: "Manhã de Lua Romântica", artist: "Dia e Noite", src: "manha_lua.m4a", duration: "4:20" },
-            { id: 241, title: "Manhã de Sol", artist: "Brilho do Dia", src: "manha_sol.m4a", duration: "4:15" },
-            { id: 242, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_muzzik.m4a", duration: "4:25" },
-            { id: 243, title: "Manhã de Brisa", artist: "Ventania", src: "manha_brisa.m4a", duration: "4:15" },
-            { id: 244, title: "Manhã de Flores", artist: "Jardim", src: "manha_flores.m4a", duration: "4:30" },
-            { id: 245, title: "I'm Yours", artist: "Jason Mraz", src: "Jason_Mraz_Im_Yours_muzzik.m4a", duration: "4:05" },
-            { id: 246, title: "Acordar Feliz", artist: "Bom Dia", src: "acordar_feliz.m4a", duration: "4:15" },
-            { id: 247, title: "Esqueci Você", artist: "Bruno & Marrone e Henrique & Diego", src: "Bruno_Marrone_Esqueci_Você_muzzik.m4a", duration: "3:45" },
-            { id: 248, title: "Corre Pro Meu Mar", artist: "Maneva", src: "Maneva_Corre_Pro_Meu_Mar.m4a", duration: "4:00" },
-            { id: 249, title: "Palco", artist: "Palco", src: "PALCO_muzzik.m4a", duration: "3:55" },
-            { id: 250, title: "Andorinha Machucada", artist: "Lauana Prado", src: "Lauana_Prado_Andorinha_Machucada.m4a", duration: "4:15" }
         ];
 
         // ===== TARDE (12h - 18h) =====
@@ -929,31 +912,6 @@
             { id: 323, title: "Tarde de Música", artist: "Tarde Cultural", src: "tarde_musica.m4a", duration: "3:55" },
             { id: 324, title: "Tarde de Cenário", artist: "Paisagem", src: "tarde_cenario.m4a", duration: "4:20" },
             { id: 325, title: "Tarde de Valsa", artist: "Dança da Tarde", src: "tarde_valsa.m4a", duration: "4:15" },
-            { id: 326, title: "Tarde de Romance", artist: "Coração", src: "tarde_romance.m4a", duration: "4:25" },
-            { id: 327, title: "Tarde de Brisa", artist: "Ventos da Tarde", src: "tarde_brisa.m4a", duration: "4:15" },
-            { id: 328, title: "Tarde de Paz", artist: "Paz e Amor", src: "tarde_paz.m4a", duration: "4:30" },
-            { id: 329, title: "Tarde de Rêverie", artist: "Sonho de Verão", src: "tarde_reverie.m4a", duration: "4:05" },
-            { id: 330, title: "Tarde de Verão", artist: "Calor da Tarde", src: "tarde_verao.m4a", duration: "3:55" },
-            { id: 331, title: "Paisagem da Janela", artist: "Lô Borges", src: "LO_Borges_Paisagem_da_Janela_muzzik.m4a", duration: "4:20" },
-            { id: 332, title: "Tarde de Outono", artist: "Folhas Caídas", src: "tarde_outono.m4a", duration: "4:15" },
-            { id: 333, title: "Tarde de Primavera", artist: "Florescer", src: "tarde_primavera.m4a", duration: "4:25" },
-            { id: 334, title: "Corre Pro Meu Mar", artist: "Maneva", src: "Maneva_Corre_Pro_Meu_Mar_Radio_Edit.m4a", duration: "4:15" },
-            { id: 335, title: "Tarde de Sol", artist: "Brilho da Tarde", src: "tarde_sol.m4a", duration: "4:30" },
-            { id: 336, title: "Tarde de Harmonia", artist: "Melodia", src: "tarde_harmonia.m4a", duration: "4:20" },
-            { id: 337, title: "Tarde de Magia", artist: "Encanto", src: "tarde_magia.m4a", duration: "4:15" },
-            { id: 338, title: "Tarde de Poesia", artist: "Versos", src: "tarde_poesia.m4a", duration: "4:25" },
-            { id: 339, title: "Tarde de Melodia", artist: "Canto da Tarde", src: "tarde_melodia.m4a", duration: "4:10" },
-            { id: 340, title: "Tarde de Sinfonia", artist: "Orquestra", src: "tarde_sinfonia.m4a", duration: "4:35" },
-            { id: 341, title: "Tarde de Romance 2", artist: "Amor à Tarde", src: "tarde_romance2.m4a", duration: "4:20" },
-            { id: 342, title: "Tarde de Lua Cheia", artist: "Luar da Tarde", src: "tarde_lua_cheia.m4a", duration: "4:15" },
-            { id: 343, title: "Tarde de Estrelas", artist: "Céu da Tarde", src: "tarde_estrelas.m4a", duration: "4:25" },
-            { id: 344, title: "Tarde de Sonhos 2", artist: "Sonhos", src: "tarde_sonhos2.m4a", duration: "4:30" },
-            { id: 345, title: "Tarde de Rêverie 2", artist: "Devaneios", src: "tarde_reverie2.m4a", duration: "4:15" },
-            { id: 346, title: "Tarde de Calmaria", artist: "Maré Baixa", src: "tarde_calmaria.m4a", duration: "4:20" },
-            { id: 347, title: "Tarde de Céu Aberto", artist: "Horizonte", src: "tarde_ceu_aberto.m4a", duration: "4:25" },
-            { id: 348, title: "Tarde de Vento Suave", artist: "Brisa Leve", src: "tarde_vento_suave.m4a", duration: "4:15" },
-            { id: 349, title: "Tarde de Amor Eterno", artist: "Sempre Tarde", src: "tarde_amor_eterno.m4a", duration: "4:30" },
-            { id: 350, title: "Tarde de Paz Profunda", artist: "Paz Interior", src: "tarde_paz_profunda.m4a", duration: "4:20" }
         ];
 
         // ===== NOITE (18h - 00h) =====
@@ -983,31 +941,6 @@
             { id: 423, title: "Palpite", artist: "Vanessa Rangel", src: "Vanessa_Rangel_Palpite_muzzik.m4a", duration: "3:50" },
             { id: 424, title: "Noite de Romance", artist: "Romance", src: "noite_romance.m4a", duration: "4:30" },
             { id: 425, title: "Noite Serena", artist: "Serenidade", src: "noite_serena.m4a", duration: "4:05" },
-            { id: 426, title: "Paisagem da Janela", artist: "Lô Borges", src: "LO_Borges_Paisagem_da_Janela_muzzik.m4a", duration: "3:55" },
-            { id: 427, title: "Noite de Cenário", artist: "Cenário Noturno", src: "noite_cenario.m4a", duration: "4:20" },
-            { id: 428, title: "Noite de Brisa", artist: "Brisa Noturna", src: "noite_brisa.m4a", duration: "4:15" },
-            { id: 429, title: "Noite de Encanto", artist: "Encanto", src: "noite_encanto.m4a", duration: "4:25" },
-            { id: 430, title: "Noite de Mistério", artist: "Mistério", src: "noite_misterio.m4a", duration: "4:15" },
-            { id: 431, title: "Noite de Magia", artist: "Magia", src: "noite_magia.m4a", duration: "3:50" },
-            { id: 432, title: "Noite de Fantasia", artist: "Fantasia", src: "noite_fantasia.m4a", duration: "4:30" },
-            { id: 433, title: "Noite de Poesia", artist: "Poesia Noturna", src: "noite_poesia.m4a", duration: "4:05" },
-            { id: 434, title: "Noite de Melodia", artist: "Melodia", src: "noite_melodia.m4a", duration: "3:55" },
-            { id: 435, title: "Noite de Harmonia", artist: "Harmonia", src: "noite_harmonia.m4a", duration: "4:20" },
-            { id: 436, title: "Noite de Sinfonia", artist: "Sinfonia", src: "noite_sinfonia.m4a", duration: "4:15" },
-            { id: 437, title: "Noite de Romance 2", artist: "Romance 2", src: "noite_romance2.m4a", duration: "4:25" },
-            { id: 438, title: "Noite de Lua Cheia", artist: "Lua Cheia", src: "noite_lua_cheia.m4a", duration: "4:15" },
-            { id: 439, title: "Noite de Estrelas", artist: "Estrelas 2", src: "noite_estrelas.m4a", duration: "3:50" },
-            { id: 440, title: "Noite de Sonhos 2", artist: "Sonhos 2", src: "noite_sonhos2.m4a", duration: "4:30" },
-            { id: 441, title: "Noite de Rêverie 2", artist: "Rêverie 2", src: "noite_reverie2.m4a", duration: "4:05" },
-            { id: 442, title: "Noite de Calmaria", artist: "Calmaria", src: "noite_calmaria.m4a", duration: "3:55" },
-            { id: 443, title: "Noite de Céu Aberto", artist: "Céu Aberto", src: "noite_ceu_aberto.m4a", duration: "4:20" },
-            { id: 444, title: "Noite de Vento Suave", artist: "Vento Suave", src: "noite_vento_suave.m4a", duration: "4:15" },
-            { id: 445, title: "Noite de Amor Eterno", artist: "Amor Eterno", src: "noite_amor_eterno.m4a", duration: "4:25" },
-            { id: 446, title: "Noite de Paz Profunda", artist: "Paz Profunda", src: "noite_paz_profunda.m4a", duration: "4:15" },
-            { id: 447, title: "Noite de Música Suave", artist: "Música Suave", src: "noite_musica_suave.m4a", duration: "3:50" },
-            { id: 448, title: "Noite de Sonhos Dourados", artist: "Sonhos Dourados", src: "noite_sonhos_dourados.m4a", duration: "4:30" },
-            { id: 449, title: "Noite de Rêverie 3", artist: "Rêverie 3", src: "noite_reverie3.m4a", duration: "4:05" },
-            { id: 450, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_muzzik.m4a", duration: "4:25" }
         ];
 
         // ============================================
@@ -1040,6 +973,7 @@
         let musicPausedTime = 0;
         let listenerCount = 1247;
         let uptimeSeconds = 0;
+        let lastPlayedIds = []; // Histórico para evitar repetição
 
         // Elementos DOM
         const musicPlayer = document.getElementById('musicPlayer');
@@ -1077,6 +1011,7 @@
         const periodName = document.getElementById('periodName');
         const periodHours = document.getElementById('periodHours');
         const playlistPeriodTag = document.getElementById('playlistPeriodTag');
+        const bgVideo = document.getElementById('bgVideo');
 
         // ============================================
         // SISTEMA AUTOMÁTICO DE PERÍODOS
@@ -1085,31 +1020,37 @@
             const hora = new Date().getHours();
             
             if (hora >= 0 && hora < 6) {
-                return { playlist: madrugadaTracks, nome: 'Madrugada', icone: '🌙', horas: '00h - 06h' };
+                return { playlist: madrugadaTracks, nome: 'Madrugada', icone: '🌙', horas: '00h - 06h', class: 'period-madrugada' };
             } else if (hora >= 6 && hora < 12) {
-                return { playlist: manhaTracks, nome: 'Manhã', icone: '🌅', horas: '06h - 12h' };
+                return { playlist: manhaTracks, nome: 'Manhã', icone: '🌅', horas: '06h - 12h', class: 'period-manha' };
             } else if (hora >= 12 && hora < 18) {
-                return { playlist: tardeTracks, nome: 'Tarde', icone: '🌆', horas: '12h - 18h' };
+                return { playlist: tardeTracks, nome: 'Tarde', icone: '🌆', horas: '12h - 18h', class: 'period-tarde' };
             } else {
-                return { playlist: noiteTracks, nome: 'Noite', icone: '🌃', horas: '18h - 00h' };
+                return { playlist: noiteTracks, nome: 'Noite', icone: '🌃', horas: '18h - 00h', class: 'period-noite' };
             }
         }
 
         function atualizarPeriodo() {
-            const { playlist: novaPlaylist, nome, icone, horas } = getPlaylistByHour();
+            const { playlist: novaPlaylist, nome, icone, horas, class: periodClass } = getPlaylistByHour();
+            
+            // Atualiza a classe do body para mudar as cores
+            document.body.className = periodClass;
             
             periodName.innerHTML = `${icone} ${nome}`;
             periodHours.textContent = horas;
             playlistPeriodTag.textContent = nome;
             
+            // Se a playlist mudou, carregamos a nova sem repetir músicas
             if (playlist !== novaPlaylist) {
                 const estavaTocando = isPlaying && !isAdPlaying;
                 const tempoAtual = musicPlayer.currentTime;
                 
                 playlist = [...novaPlaylist];
+                lastPlayedIds = []; // Reset do histórico ao mudar período
                 
                 if (playlist.length > 0) {
-                    currentIndex = Math.min(currentIndex, playlist.length - 1);
+                    // Seleciona uma música aleatória que não seja a última tocada
+                    currentIndex = getRandomTrackIndex();
                     loadTrack(currentIndex);
                     
                     if (estavaTocando) {
@@ -1123,6 +1064,32 @@
             }
         }
 
+        // Função para pegar índice aleatório evitando repetição
+        function getRandomTrackIndex() {
+            if (playlist.length === 0) return 0;
+            
+            // Se temos menos de 3 músicas ou todas já foram tocadas, reseta o histórico
+            if (lastPlayedIds.length >= playlist.length) {
+                lastPlayedIds = [];
+            }
+            
+            let availableIndices = [];
+            for (let i = 0; i < playlist.length; i++) {
+                if (!lastPlayedIds.includes(playlist[i].id)) {
+                    availableIndices.push(i);
+                }
+            }
+            
+            // Se não houver músicas disponíveis, reseta
+            if (availableIndices.length === 0) {
+                lastPlayedIds = [];
+                return Math.floor(Math.random() * playlist.length);
+            }
+            
+            const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+            return randomIndex;
+        }
+
         // ============================================
         // FUNÇÕES DO PLAYER
         // ============================================
@@ -1130,8 +1097,9 @@
             let html = '';
             const mostrar = playlist.slice(0, 15);
             mostrar.forEach((track, index) => {
+                const isCurrent = index === currentIndex;
                 html += `
-                    <div class="playlist-item" onclick="playTrack(${index})">
+                    <div class="playlist-item ${isCurrent ? 'playing' : ''}" onclick="playTrack(${index})">
                         <div class="item-number">${index + 1}</div>
                         <div class="item-info">
                             <div class="item-title">${track.title}</div>
@@ -1155,24 +1123,35 @@
             currentIndex = index;
             loadTrack(currentIndex);
             if(!isPlaying) playMusic();
+            criarPlaylist(); // Atualiza destaque na playlist
         };
 
         function loadTrack(index) {
             const track = playlist[index];
             if (!track) return;
+            
             musicPlayer.src = track.src;
             trackTitleBig.textContent = track.title;
             trackArtistBig.textContent = track.artist;
             totalTimeEl.textContent = track.duration;
             progressFill.style.width = '0%';
             currentTimeEl.textContent = '0:00';
+            
+            // Adiciona ao histórico de tocadas
+            lastPlayedIds.push(track.id);
+            if (lastPlayedIds.length > 10) lastPlayedIds.shift(); // Mantém apenas as últimas 10
         }
 
         function playMusic() {
             musicPlayer.play().then(() => {
                 isPlaying = true;
                 playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            }).catch(() => {});
+            }).catch(e => {
+                console.log("Erro ao reproduzir:", e);
+                showNotification("⚠️ Erro ao carregar música");
+                // Tenta a próxima em caso de erro
+                setTimeout(nextTrack, 1000);
+            });
         }
 
         function pauseMusic() {
@@ -1193,10 +1172,7 @@
             if (isAdPlaying || !playlist.length) return;
             
             if(shuffleMode) {
-                let newIndex;
-                do { newIndex = Math.floor(Math.random() * playlist.length); } 
-                while(newIndex === currentIndex && playlist.length > 1);
-                currentIndex = newIndex;
+                currentIndex = getRandomTrackIndex();
             } else {
                 currentIndex = (currentIndex + 1) % playlist.length;
                 if(!repeatMode && currentIndex === 0) {
@@ -1209,14 +1185,16 @@
             if(isPlaying) playMusic();
             musicPlayedCount++;
             playedCountEl.textContent = musicPlayedCount;
+            criarPlaylist(); // Atualiza destaque
             checkAdInterval();
         }
 
         function prevTrack() {
             if (isAdPlaying || !playlist.length) return;
-            currentIndex = shuffleMode ? Math.floor(Math.random() * playlist.length) : (currentIndex - 1 + playlist.length) % playlist.length;
+            currentIndex = shuffleMode ? getRandomTrackIndex() : (currentIndex - 1 + playlist.length) % playlist.length;
             loadTrack(currentIndex);
             if(isPlaying) playMusic();
+            criarPlaylist(); // Atualiza destaque
         }
 
         function toggleShuffle() {
@@ -1368,6 +1346,12 @@
             
             musicPlayer.addEventListener('ended', nextTrack);
             
+            musicPlayer.addEventListener('error', (e) => {
+                console.log("Erro no áudio:", e);
+                showNotification("⚠️ Erro na música, pulando...");
+                setTimeout(nextTrack, 1000);
+            });
+            
             progressBar.addEventListener('click', (e) => {
                 if(isAdPlaying || !playlist.length) return;
                 const rect = progressBar.getBoundingClientRect();
@@ -1415,7 +1399,10 @@
             
             atualizarPeriodo();
             criarPlaylist();
-            if(playlist.length) loadTrack(0);
+            if(playlist.length) {
+                currentIndex = getRandomTrackIndex();
+                loadTrack(currentIndex);
+            }
             setupEventListeners();
             updateAdTimer();
             
@@ -1434,11 +1421,13 @@
                 uptimeEl.textContent = h > 0 ? `${h}h${m}` : `${m}min`;
             }, 1000);
             
+            // Tenta iniciar a reprodução automaticamente
             if(playlist.length) {
                 musicPlayer.play().then(() => {
                     isPlaying = true;
                     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 }).catch(() => {
+                    // Em dispositivos móveis, aguarda um toque do usuário
                     document.addEventListener('touchstart', () => {
                         musicPlayer.play().then(() => {
                             isPlaying = true;
@@ -1447,19 +1436,15 @@
                     }, { once: true });
                 });
             }
+            
+            // Força o vídeo a ficar quadrado (já está no CSS)
+            bgVideo.addEventListener('loadedmetadata', () => {
+                console.log('Vídeo carregado');
+            });
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
 
 
 
