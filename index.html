@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -45,7 +42,7 @@
             width: 100%;
         }
 
-        /* GLASSMORPHISM - adaptado para cada período */
+        /* GLASSMORPHISM */
         .glass-card {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(12px);
@@ -377,7 +374,7 @@
             cursor: pointer;
         }
 
-        /* PLAYER - com vídeo quadrado */
+        /* PLAYER - com vídeo 16:9 (1920x1080) */
         .player-card {
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
@@ -389,13 +386,13 @@
 
         .video-container {
             width: 100%;
-            aspect-ratio: 1/1; /* Quadrado perfeito */
+            aspect-ratio: 16/9; /* Proporção 16:9 para vídeos 1920x1080 */
             background: #000;
         }
         .video-container video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Mantém a proporção cobrindo todo o container */
         }
 
         .player-controls {
@@ -974,6 +971,7 @@
         let listenerCount = 1247;
         let uptimeSeconds = 0;
         let lastPlayedIds = []; // Histórico para evitar repetição
+        let shouldResumeMusic = false; // Flag para controlar retomada automática
 
         // Elementos DOM
         const musicPlayer = document.getElementById('musicPlayer');
@@ -1131,6 +1129,7 @@
             if (!track) return;
             
             musicPlayer.src = track.src;
+            musicPlayer.load(); // Força o carregamento
             trackTitleBig.textContent = track.title;
             trackArtistBig.textContent = track.artist;
             totalTimeEl.textContent = track.duration;
@@ -1143,9 +1142,15 @@
         }
 
         function playMusic() {
+            if (isAdPlaying) {
+                shouldResumeMusic = true;
+                return;
+            }
+            
             musicPlayer.play().then(() => {
                 isPlaying = true;
                 playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                shouldResumeMusic = false;
             }).catch(e => {
                 console.log("Erro ao reproduzir:", e);
                 showNotification("⚠️ Erro ao carregar música");
@@ -1162,7 +1167,11 @@
 
         function togglePlayPause() {
             if (isAdPlaying) {
-                adPlayer.paused ? adPlayer.play() : adPlayer.pause();
+                if (adPlayer.paused) {
+                    adPlayer.play();
+                } else {
+                    adPlayer.pause();
+                }
             } else {
                 isPlaying ? pauseMusic() : playMusic();
             }
@@ -1208,7 +1217,7 @@
         }
 
         // ============================================
-        // SISTEMA DE ANÚNCIOS
+        // SISTEMA DE ANÚNCIOS - CORRIGIDO PARA RETOMAR AUTOMATICAMENTE
         // ============================================
         function checkAdInterval() {
             if (musicPlayedCount > 0 && musicPlayedCount % CONFIG.musicBetweenAds === 0 && adsEnabled && !isAdPlaying) {
@@ -1234,10 +1243,17 @@
 
         function playAd(index) {
             const ad = advertisements[index];
-            musicPausedTime = musicPlayer.currentTime;
-            if (isPlaying) pauseMusic();
             
+            // Salva o estado atual da música
+            if (isPlaying) {
+                musicPausedTime = musicPlayer.currentTime;
+                pauseMusic();
+                shouldResumeMusic = true;
+            }
+            
+            // Prepara e toca o anúncio
             adPlayer.src = ad.src;
+            adPlayer.load();
             isAdPlaying = true;
             adStatusDropdown.innerHTML = `<i class="fas fa-volume-up"></i> ${ad.title} (${ad.duration})`;
             skipAdBtnDropdown.style.display = "inline-flex";
@@ -1245,9 +1261,11 @@
             showNotification(`📢 ${ad.title}`);
             
             adPlayer.play().then(() => {
+                // Quando o anúncio terminar, chama finishAd automaticamente
                 adPlayer.onended = finishAd;
-            }).catch(() => {
-                finishAd();
+            }).catch((e) => {
+                console.log("Erro ao reproduzir anúncio:", e);
+                finishAd(); // Se falhar, termina imediatamente
             });
         }
 
@@ -1257,7 +1275,8 @@
             adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
             skipAdBtnDropdown.style.display = "none";
             
-            if (playlist.length) {
+            // Retoma a música automaticamente se estava tocando antes
+            if (shouldResumeMusic && playlist.length) {
                 musicPlayer.currentTime = musicPausedTime;
                 playMusic();
             }
@@ -1437,58 +1456,11 @@
                 });
             }
             
-            // Força o vídeo a ficar quadrado (já está no CSS)
+            // Garante que o vídeo tenha o tamanho correto
             bgVideo.addEventListener('loadedmetadata', () => {
-                console.log('Vídeo carregado');
+                console.log('Vídeo carregado em 16:9');
             });
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
