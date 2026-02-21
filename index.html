@@ -763,12 +763,12 @@
             </div>
         </div>
 
-        <!-- PLAYLIST ÚNICA -->
+        <!-- PLAYLIST ÚNICA COM LINKS RAW GITHUB -->
         <div class="playlist-card">
             <div class="playlist-header">
                 <div class="playlist-title">
                     <i class="fas fa-music"></i>
-                    <h3>Playlist</h3>
+                    <h3>Playlist (Links Raw GitHub)</h3>
                 </div>
             </div>
             <div class="playlist-items" id="playlistContainer"></div>
@@ -803,7 +803,7 @@
         </div>
 
         <footer class="main-footer">
-            <p>Rádio+ &copy; 2025 • Modo Automático</p>
+            <p>Rádio+ &copy; 2025 • Links Raw GitHub</p>
         </footer>
     </div>
 
@@ -813,38 +813,236 @@
 
     <script>
         (function() {
-            // ==================== LISTA DE MÚSICAS ====================
+            // ==================== CONFIGURAÇÃO DA URL BASE ====================
+            // Use esta variável para definir a URL base de onde as músicas estão hospedadas
+            // Para GitHub Raw, use: https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPOSITORIO/main/
+            const BASE_URL = "https://raw.githubusercontent.com/vendemais-sjc/vendemais123/main/";
+            
+            // Alternativa: Se preferir usar links completos diretamente, comente a linha acima
+            // e descomente a linha abaixo, ajustando os links manualmente na playlist
+            // const BASE_URL = ""; // Deixa vazio para usar links completos
+
+            // ==================== LISTA DE MÚSICAS COM LINKS ====================
+            // As músicas são montadas com BASE_URL + nome do arquivo
+            // Você só precisa garantir que os nomes dos arquivos estão corretos
             const playlistCompleta = [
-                { id: 1, title: "Sexual Healing", artist: "Marvin Gaye", src: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00" },
-                { id: 2, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", src: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45" },
-                { id: 3, title: "I've Had The Time Of My Life", artist: "Mauricio Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15" },
-                { id: 4, title: "Sunrise", artist: "Simply Red", src: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50" },
-                { id: 5, title: "Forever Young", artist: "Alphaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05" },
-                { id: 6, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55" },
-                { id: 7, title: "Everytime You Go Away", artist: "Dino Fonseca", src: "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", duration: "4:20" },
-                { id: 8, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", src: "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", duration: "3:40" },
-                { id: 9, title: "What's Up", artist: "4 Non Blondes", src: "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", duration: "4:10" },
-                { id: 10, title: "Thank You", artist: "Dido", src: "Dido_Thank_You_muzzik.m4a", duration: "3:55" },
-                { id: 11, title: "TRANSAS", artist: "Belo", src: "Belo_Transas_Ao_Vivo_DVD_Belo_In_Concert_muzzik.m4a", duration: "4:25" },
-                { id: 12, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:15" },
-                { id: 13, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", duration: "3:50" },
-                { id: 14, title: "Woman in Love", artist: "Barbra Streisand", src: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45" },
-                { id: 15, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00" },
-                { id: 16, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50" },
-                { id: 17, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
-                { id: 18, title: "Corre Pro Meu Mar", artist: "Maneva", src: "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", duration: "4:25" },
-                { id: 19, title: "Paciência", artist: "Ferrugem Part. Alcione", src: "Ferrugem_Paci_ncia_Part_Alcione_muzzik.m4a", duration: "4:25" },
-                { id: 20, title: "Sorriso Maroto", artist: "Sorriso Maroto", src: "soriso maroto.mp3", duration: "3:30" },
-                { id: 21, title: "Lá Na Roça", artist: "Felipe e Murillo ft Ana Castela", src: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15" },
-                { id: 22, title: "Sorri Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45" },
-                { id: 23, title: "Ainda bem", artist: "Xande de Pilares", src: "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", duration: "4:00" },
-                { id: 24, title: "Boa Sorte", artist: "Vanessa da Mata", src: "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", duration: "3:55" },
-                { id: 25, title: "Garota Nacional", artist: "Skank", src: "Skank_Garota_Nacional_muzzik.m4a", duration: "4:00" },
-                { id: 26, title: "OPA KD EU!", artist: "Cleito & romário", src: "Clayton_Rom_rio_Opa_Cad_Eu_muzzik.m4a", duration: "3:45" },
-                { id: 27, title: "MINA DO CONDOMINIO", artist: "Seu Jorge", src: "Mina_do_Mina_do_Condom_nio_muzzik.m4a", duration: "4:15" },
-                { id: 28, title: "Epitáfio", artist: "Titãs", src: "Epit_fio_Epit_fio_muzzik.m4a", duration: "4:10" },
-                { id: 29, title: "Lanterna dos Afogados", artist: "Paralamas", src: "Lanterna_Dos_Lanterna_Dos_Afogados_muzzik.m4a", duration: "4:05" },
-                { id: 30, title: "Apaguei Pra Todos", artist: "Ferrugem & Sorriso Maroto", src: "7Apaguei_Pra_Todos_Ferrugem_part_Sorriso_Maroto_muzzik.m4a", duration: "4:30" }
+                { 
+                    id: 1, 
+                    title: "More Than A Woman", 
+                    artist: "Bee Gees", 
+                    src: BASE_URL + "Bee_Gees_More_Than_A_Woman_muzzik.m4a", 
+                    duration: "4:31" 
+                },
+                { 
+                    id: 2, 
+                    title: "Sexual Healing", 
+                    artist: "Marvin Gaye", 
+                    src: BASE_URL + "Sexual_Healing_Sexual_Healing_muzzik.m4a", 
+                    duration: "4:00" 
+                },
+                { 
+                    id: 3, 
+                    title: "Ah Como Eu Amei", 
+                    artist: "Ivete Sangalo", 
+                    src: BASE_URL + "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", 
+                    duration: "3:45" 
+                },
+                { 
+                    id: 4, 
+                    title: "I've Had The Time Of My Life", 
+                    artist: "Mauricio Manieri", 
+                    src: BASE_URL + "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", 
+                    duration: "4:15" 
+                },
+                { 
+                    id: 5, 
+                    title: "Sunrise", 
+                    artist: "Simply Red", 
+                    src: BASE_URL + "Simply_Red_Sunrise_muzzik.m4a", 
+                    duration: "3:50" 
+                },
+                { 
+                    id: 6, 
+                    title: "Forever Young", 
+                    artist: "Alphaville", 
+                    src: BASE_URL + "Alphaville_Forever_Young_muzzik.m4a", 
+                    duration: "4:05" 
+                },
+                { 
+                    id: 7, 
+                    title: "Everybody's Changing", 
+                    artist: "Keane", 
+                    src: BASE_URL + "Keane_Everybody_s_Changing_muzzik.m4a", 
+                    duration: "3:55" 
+                },
+                { 
+                    id: 8, 
+                    title: "Everytime You Go Away", 
+                    artist: "Dino Fonseca", 
+                    src: BASE_URL + "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", 
+                    duration: "4:20" 
+                },
+                { 
+                    id: 9, 
+                    title: "A Tal Canção", 
+                    artist: "Vitor Kley & Samuel Rosa", 
+                    src: BASE_URL + "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", 
+                    duration: "3:40" 
+                },
+                { 
+                    id: 10, 
+                    title: "What's Up", 
+                    artist: "4 Non Blondes", 
+                    src: BASE_URL + "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", 
+                    duration: "4:10" 
+                },
+                { 
+                    id: 11, 
+                    title: "Thank You", 
+                    artist: "Dido", 
+                    src: BASE_URL + "Dido_Thank_You_muzzik.m4a", 
+                    duration: "3:55" 
+                },
+                { 
+                    id: 12, 
+                    title: "TRANSAS", 
+                    artist: "Belo", 
+                    src: BASE_URL + "Belo_Transas_Ao_Vivo_DVD_Belo_In_Concert_muzzik.m4a", 
+                    duration: "4:25" 
+                },
+                { 
+                    id: 13, 
+                    title: "Homem Aranha", 
+                    artist: "Jorge Vercilo", 
+                    src: BASE_URL + "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", 
+                    duration: "4:15" 
+                },
+                { 
+                    id: 14, 
+                    title: "Everybody Wants To Rule The World", 
+                    artist: "Tears For Fears", 
+                    src: BASE_URL + "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", 
+                    duration: "3:50" 
+                },
+                { 
+                    id: 15, 
+                    title: "Woman in Love", 
+                    artist: "Barbra Streisand", 
+                    src: BASE_URL + "eWoman_in_Woman_in_Love_muzzik.m4a", 
+                    duration: "3:45" 
+                },
+                { 
+                    id: 16, 
+                    title: "Mil e Uma Noites de Amor", 
+                    artist: "Pepeu Gomes", 
+                    src: BASE_URL + "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", 
+                    duration: "4:00" 
+                },
+                { 
+                    id: 17, 
+                    title: "Pedindo Amor", 
+                    artist: "Mano a Mano", 
+                    src: BASE_URL + "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", 
+                    duration: "3:50" 
+                },
+                { 
+                    id: 18, 
+                    title: "Reluz", 
+                    artist: "Marcos Sabino", 
+                    src: BASE_URL + "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", 
+                    duration: "4:15" 
+                },
+                { 
+                    id: 19, 
+                    title: "Corre Pro Meu Mar", 
+                    artist: "Maneva", 
+                    src: BASE_URL + "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", 
+                    duration: "4:25" 
+                },
+                { 
+                    id: 20, 
+                    title: "Paciência", 
+                    artist: "Ferrugem Part. Alcione", 
+                    src: BASE_URL + "Ferrugem_Paci_ncia_Part_Alcione_muzzik.m4a", 
+                    duration: "4:25" 
+                },
+                { 
+                    id: 21, 
+                    title: "Sorriso Maroto", 
+                    artist: "Sorriso Maroto", 
+                    src: BASE_URL + "soriso maroto.mp3", 
+                    duration: "3:30" 
+                },
+                { 
+                    id: 22, 
+                    title: "Lá Na Roça", 
+                    artist: "Felipe e Murillo ft Ana Castela", 
+                    src: BASE_URL + "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", 
+                    duration: "4:15" 
+                },
+                { 
+                    id: 23, 
+                    title: "Sorri Sou Rei", 
+                    artist: "Natiruts", 
+                    src: BASE_URL + "Natiruts_Sorri_Sou_Rei_muzzik.m4a", 
+                    duration: "3:45" 
+                },
+                { 
+                    id: 24, 
+                    title: "Ainda bem", 
+                    artist: "Xande de Pilares", 
+                    src: BASE_URL + "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", 
+                    duration: "4:00" 
+                },
+                { 
+                    id: 25, 
+                    title: "Boa Sorte", 
+                    artist: "Vanessa da Mata", 
+                    src: BASE_URL + "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", 
+                    duration: "3:55" 
+                },
+                { 
+                    id: 26, 
+                    title: "Garota Nacional", 
+                    artist: "Skank", 
+                    src: BASE_URL + "Skank_Garota_Nacional_muzzik.m4a", 
+                    duration: "4:00" 
+                },
+                { 
+                    id: 27, 
+                    title: "OPA KD EU!", 
+                    artist: "Cleito & romário", 
+                    src: BASE_URL + "Clayton_Rom_rio_Opa_Cad_Eu_muzzik.m4a", 
+                    duration: "3:45" 
+                },
+                { 
+                    id: 28, 
+                    title: "MINA DO CONDOMINIO", 
+                    artist: "Seu Jorge", 
+                    src: BASE_URL + "Mina_do_Mina_do_Condom_nio_muzzik.m4a", 
+                    duration: "4:15" 
+                },
+                { 
+                    id: 29, 
+                    title: "Epitáfio", 
+                    artist: "Titãs", 
+                    src: BASE_URL + "Epit_fio_Epit_fio_muzzik.m4a", 
+                    duration: "4:10" 
+                },
+                { 
+                    id: 30, 
+                    title: "Lanterna dos Afogados", 
+                    artist: "Paralamas", 
+                    src: BASE_URL + "Lanterna_Dos_Lanterna_Dos_Afogados_muzzik.m4a", 
+                    duration: "4:05" 
+                },
+                { 
+                    id: 31, 
+                    title: "Apaguei Pra Todos", 
+                    artist: "Ferrugem & Sorriso Maroto", 
+                    src: BASE_URL + "7Apaguei_Pra_Todos_Ferrugem_part_Sorriso_Maroto_muzzik.m4a", 
+                    duration: "4:30" 
+                }
             ];
 
             // ==================== ANÚNCIOS ====================
@@ -990,6 +1188,10 @@
                 
                 currentIndex = index;
                 const track = playlistAtual[currentIndex];
+                
+                // Log para debug (remover em produção)
+                console.log('Carregando música:', track.title, 'URL:', track.src);
+                
                 musicPlayer.src = track.src;
                 musicPlayer.load();
                 trackTitleBig.textContent = track.title;
@@ -1206,7 +1408,7 @@
 
                 shareBtnNav.addEventListener('click', () => {
                     if (navigator.share) {
-                        navigator.share({ title: 'Rádio+', text: 'Música automática 24h', url: window.location.href });
+                        navigator.share({ title: 'Rádio+', text: 'Música automática com links Raw GitHub', url: window.location.href });
                     } else {
                         navigator.clipboard.writeText(window.location.href);
                         showNotification('📋 Link copiado!');
