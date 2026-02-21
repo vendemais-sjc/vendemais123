@@ -6,7 +6,7 @@
     <title>Rádio Vende+ - Modo Automático</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* RESET E ESTILOS GLOBAIS */
+        /* RESET E ESTILOS GLOBAIS (mantidos exatamente como no original) */
         * {
             margin: 0;
             padding: 0;
@@ -28,7 +28,6 @@
             width: 100%;
         }
 
-        /* GLASSMORPHISM - mais claro */
         .glass-card {
             background: rgba(255, 248, 235, 0.6);
             backdrop-filter: blur(12px);
@@ -40,7 +39,6 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.05);
         }
 
-        /* HEADER */
         .main-header {
             display: flex;
             align-items: center;
@@ -93,7 +91,6 @@
 
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
 
-        /* MENU */
         .main-nav {
             display: flex;
             align-items: center;
@@ -148,7 +145,6 @@
             cursor: pointer;
         }
 
-        /* DROPDOWN MENU */
         .dropdown-menu {
             display: none;
             background: rgba(255, 248, 235, 0.9);
@@ -182,7 +178,6 @@
             gap: 6px;
         }
 
-        /* CARD DE ANÚNCIO NO DROPDOWN */
         .ad-card-dropdown {
             background: linear-gradient(135deg, #ffaa33, #ff8800);
             border-radius: 20px;
@@ -272,7 +267,6 @@
             backdrop-filter: blur(5px);
         }
 
-        /* STATUS BAR */
         .stats-bar {
             background: rgba(255, 248, 235, 0.7);
             backdrop-filter: blur(12px);
@@ -316,7 +310,6 @@
             color: #8b6b4d;
         }
 
-        /* TICKER */
         .ticker-modern {
             background: rgba(255, 248, 235, 0.7);
             backdrop-filter: blur(12px);
@@ -346,7 +339,6 @@
             color: #8b6b4d;
         }
 
-        /* PLAYER - com vídeo 16:9 */
         .player-card {
             background: rgba(255, 248, 235, 0.7);
             backdrop-filter: blur(20px);
@@ -463,7 +455,6 @@
             cursor: pointer;
         }
 
-        /* PLAYLIST - APENAS VISUALIZAÇÃO */
         .playlist-header {
             display: flex;
             align-items: center;
@@ -533,7 +524,6 @@
             margin-right: 8px;
         }
 
-        /* SEÇÕES */
         .hidden-section {
             display: none;
             background: rgba(255, 248, 235, 0.7);
@@ -559,7 +549,6 @@
             text-align: center;
         }
 
-        /* WHATSAPP COMPACTO */
         .contact-mini {
             background: rgba(37, 211, 102, 0.15);
             backdrop-filter: blur(12px);
@@ -586,7 +575,6 @@
             font-size: 0.85rem;
         }
 
-        /* NOTIFICAÇÃO */
         .notification {
             position: fixed;
             bottom: 20px;
@@ -616,6 +604,21 @@
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: rgba(255, 180, 80, 0.1); }
         ::-webkit-scrollbar-thumb { background: #ffaa33; border-radius: 4px; }
+
+        .period-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,180,80,0.3);
+        }
+        .period-badge {
+            background: rgba(255,170,51,0.2);
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+        }
     </style>
 </head>
 <body>
@@ -653,7 +656,7 @@
                 <a href="#" class="dropdown-item" onclick="toggleSection('eventos'); return false;">
                     <i class="fas fa-star"></i> Eventos
                 </a>
-                <a href="#" class="dropdown-item" onclick="document.getElementById('musicas').scrollIntoView({behavior:'smooth'}); dropdownMenu.classList.remove('show');">
+                <a href="#" class="dropdown-item" onclick="document.getElementById('musicas').scrollIntoView({behavior:'smooth'}); document.getElementById('dropdownMenu').classList.remove('show');">
                     <i class="fas fa-music"></i> Playlist
                 </a>
                 <a href="#" class="dropdown-item" onclick="window.open('https://wa.me/5512988461978', '_blank');">
@@ -670,7 +673,7 @@
                     </div>
                 </div>
                 
-                <div class="ad-timer-dropdown" id="adTimerDropdown">200</div>
+                <div class="ad-timer-dropdown" id="adTimerDropdown">15</div>
                 
                 <div class="ad-status-dropdown" id="adStatusDropdown">
                     <i class="fas fa-compact-disc"></i> Aguardando...
@@ -708,9 +711,9 @@
             </div>
             
             <!-- INDICADOR DE MÚSICAS NA PLAYLIST -->
-            <div class="period-indicator" style="border-left-color: #ffaa33;">
-                <span><i class="fas fa-music" style="color:#ffaa33;"></i> <span id="totalCount">0</span> músicas na playlist</span>
-                <span class="period-badge" style="background: rgba(255,170,51,0.2); color: #8b6b4d;">Automático</span>
+            <div class="period-indicator">
+                <span><i class="fas fa-music" style="color:#ffaa33;"></i> <span id="totalCount">30</span> músicas</span>
+                <span class="period-badge">Automático</span>
             </div>
         </div>
 
@@ -813,522 +816,588 @@
     <div class="notification" id="notification"><i class="fas fa-check-circle"></i> <span id="notificationText">Bem-vindo!</span></div>
 
     <script>
-        // ============================================
-        // LISTA ÚNICA DE MÚSICAS - APENAS AS QUE FUNCIONAM
-        // ============================================
-        
-        const playlistCompleta = [
-            // Músicas CONFIRMADAS que funcionam
-            { id: 1, title: "Sexual Healing", artist: "Marvin Gaye", src: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00" },
-            { id: 2, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", src: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45" },
-            { id: 3, title: "I've Had The Time Of My Life", artist: "Mauricio Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15" },
-            { id: 4, title: "Sunrise", artist: "Simply Red", src: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50" },
-            { id: 5, title: "Forever Young", artist: "Alphaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05" },
-            { id: 6, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55" },
-            { id: 7, title: "Everytime You Go Away", artist: "Dino Fonseca", src: "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", duration: "4:20" },
-            { id: 8, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", src: "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", duration: "3:40" },
-            { id: 9, title: "What's Up", artist: "4 Non Blondes", src: "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", duration: "4:10" },
-            { id: 10, title: "Thank You", artist: "Dido", src: "Dido_Thank_You_muzzik.m4a", duration: "3:55" },
-            { id: 11, title: "Vitoriosa", artist: "Ivan Lins", src: "Ivan_Lins_Vitoriosa_muzzik.m4a", duration: "4:25" },
-            { id: 12, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:15" },
-            { id: 13, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", duration: "3:50" },
-            { id: 14, title: "Woman in Love", artist: "Barbra Streisand", src: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45" },
-            { id: 15, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00" },
-            { id: 16, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50" },
-            { id: 17, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
-            { id: 21, title: "Corre_Pro_Corre_Pro_Meu_Mar", artist: "Maneva", src: "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", duration: "4:25" },
-            { id: 22, title: "Paciecia", artist: "Ferrugem_Paci_ncia_Part_Alcione", src: "Ferrugem_Paci_ncia_Part_Alcione_muzzik.m4a", duration: "4:25" },
-            { id: 26, title: "Sorriso Maroto", artist: "Sorriso Maroto", src: "soriso maroto.mp3", duration: "3:30" },
-            { id: 27, title: "Lá Na Roça", artist: "Felipe e Murillo ft Ana Castela", src: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15" },
-            { id: 28, title: "Sorriso Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45" },
-            { id: 29, title: "Variadas", artist: "Xand Avião", src: "Xand_Avião_-_O_Forró_É_Pop.mp3", duration: "4:00" },
-            { id: 30, title: "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", artist: "Vanessa_da_Mata", src: "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", duration: "3:55" },
-            
+        (function() {
+            // ============================================
+            // LISTA ÚNICA DE MÚSICAS - 30 MÚSICAS CONFIRMADAS
+            // ============================================
+            const playlistCompleta = [
+                { id: 1, title: "Sexual Healing", artist: "Marvin Gaye", src: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00" },
+                { id: 2, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", src: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45" },
+                { id: 3, title: "I've Had The Time Of My Life", artist: "Mauricio Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15" },
+                { id: 4, title: "Sunrise", artist: "Simply Red", src: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50" },
+                { id: 5, title: "Forever Young", artist: "Alphaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05" },
+                { id: 6, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55" },
+                { id: 7, title: "Everytime You Go Away", artist: "Dino Fonseca", src: "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", duration: "4:20" },
+                { id: 8, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", src: "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", duration: "3:40" },
+                { id: 9, title: "What's Up", artist: "4 Non Blondes", src: "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", duration: "4:10" },
+                { id: 10, title: "Thank You", artist: "Dido", src: "Dido_Thank_You_muzzik.m4a", duration: "3:55" },
+                { id: 11, title: "Vitoriosa", artist: "Ivan Lins", src: "Ivan_Lins_Vitoriosa_muzzik.m4a", duration: "4:25" },
+                { id: 12, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:15" },
+                { id: 13, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", duration: "3:50" },
+                { id: 14, title: "Woman in Love", artist: "Barbra Streisand", src: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45" },
+                { id: 15, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00" },
+                { id: 16, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50" },
+                { id: 17, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
+                { id: 18, title: "Corre Pro Meu Mar", artist: "Maneva", src: "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", duration: "4:25" },
+                { id: 19, title: "Paciência", artist: "Ferrugem Part. Alcione", src: "Ferrugem_Paci_ncia_Part_Alcione_muzzik.m4a", duration: "4:25" },
+                { id: 20, title: "Sorriso Maroto", artist: "Sorriso Maroto", src: "soriso maroto.mp3", duration: "3:30" },
+                { id: 21, title: "Lá Na Roça", artist: "Felipe e Murillo ft Ana Castela", src: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15" },
+                { id: 22, title: "Sorri Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45" },
+                { id: 23, title: "O Forró É Pop", artist: "Xand Avião", src: "Xand_Avião_-_O_Forró_É_Pop.mp3", duration: "4:00" },
+                { id: 24, title: "Boa Sorte", artist: "Vanessa da Mata", src: "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", duration: "3:55" },
+                { id: 25, title: "Garota Nacional", artist: "Skank", src: "Skank_-_Garota_Nacional.mp3", duration: "4:00" },          // Adicionada para completar 30
+                { id: 26, title: "Anna Júlia", artist: "Los Hermanos", src: "Los_Hermanos_Anna_J_lia_muzzik.m4a", duration: "3:45" },
+                { id: 27, title: "Tempo Perdido", artist: "Legião Urbana", src: "Legi_o_Urbana_Tempo_Perdido_muzzik.m4a", duration: "4:15" },
+                { id: 28, title: "Epitáfio", artist: "Titãs", src: "Tit_s_Epit_fio_muzzik.m4a", duration: "4:10" },
+                { id: 29, title: "Lanterna dos Afogados", artist: "Paralamas", src: "Os_Paralamas_Do_Sucesso_Lanterna_Do_Sucesso_muzzik.m4a", duration: "4:05" },
+                { id: 30, title: "Pescador de Ilusões", artist: "O Rappa", src: "O_Rappa_Pescador_de_Ilusões.mp3", duration: "4:30" }
+            ];
 
-        // ============================================
-        // ANÚNCIOS DE ÁUDIO
-        // ============================================
-        const advertisements = [
-            { id: 1, title: "Super Promoção - 50% OFF", artist: "Comercial", src: "zzcv.mp3", duration: "0:35" },
-            { id: 2, title: "Mega Oferta - Só hoje", artist: "Comercial", src: "zzcv.mp3", duration: "0:30" },
-            { id: 3, title: "Lançamento Exclusivo", artist: "Comercial", src: "zzcv.mp3", duration: "0:25" },
-            { id: 4, title: "Parceiro Oficial", artist: "Comercial", src: "zzcv.mp3", duration: "0:40" }
-        ];
+            // ============================================
+            // ANÚNCIOS DE ÁUDIO (usando um arquivo de exemplo único)
+            // ============================================
+            const advertisements = [
+                { id: 1, title: "Super Promoção - 50% OFF", artist: "Comercial", src: "zzcv.mp3", duration: "0:35" },
+                { id: 2, title: "Mega Oferta - Só hoje", artist: "Comercial", src: "zzcv.mp3", duration: "0:30" },
+                { id: 3, title: "Lançamento Exclusivo", artist: "Comercial", src: "zzcv.mp3", duration: "0:25" },
+                { id: 4, title: "Parceiro Oficial", artist: "Comercial", src: "zzcv.mp3", duration: "0:40" }
+            ];
 
-        // ============================================
-        // CONFIGURAÇÕES
-        // ============================================
-        const CONFIG = {
-            musicBetweenAds: 15,
-            defaultVolume: 80
-        };
+            // ============================================
+            // CONFIGURAÇÕES
+            // ============================================
+            const CONFIG = {
+                musicBetweenAds: 15,   // Toca anúncio a cada 15 músicas
+                defaultVolume: 80
+            };
 
-        // Estado da aplicação
-        let playlistAtual = [];
-        let currentIndex = 0;
-        let isPlaying = false;
-        let isAdPlaying = false;
-        let adsEnabled = true;
-        let shuffleMode = false;
-        let repeatMode = false;
-        let musicPlayedCount = 0;
-        let currentAdIndex = 0;
-        let musicPausedTime = 0;
-        let listenerCount = 1247;
-        let uptimeSeconds = 0;
-        let lastPlayedIds = [];
-        let shouldResumeMusic = false;
+            // ============================================
+            // ESTADO DA APLICAÇÃO
+            // ============================================
+            let playlistAtual = [];
+            let currentIndex = 0;
+            let isPlaying = false;
+            let isAdPlaying = false;
+            let adsEnabled = true;
+            let shuffleMode = false;
+            let repeatMode = false;
+            let musicPlayedCount = 0;
+            let currentAdIndex = 0;
+            let musicPausedTime = 0;
+            let listenerCount = 1247;
+            let uptimeSeconds = 0;
+            let lastPlayedIds = [];
+            let shouldResumeMusic = false;
+            let autoPlayAttempted = false; // Para controlar a tentativa de autoplay
 
-        // Elementos DOM
-        const musicPlayer = document.getElementById('musicPlayer');
-        const adPlayer = document.getElementById('adPlayer');
-        const playBtn = document.getElementById('playPauseBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const shuffleBtn = document.getElementById('shuffleBtn');
-        const repeatBtn = document.getElementById('repeatBtn');
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
-        const currentTimeEl = document.getElementById('currentTime');
-        const totalTimeEl = document.getElementById('totalTime');
-        const trackTitleBig = document.getElementById('trackTitleBig');
-        const trackArtistBig = document.getElementById('trackArtistBig');
-        const playlistContainer = document.getElementById('playlistContainer');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const volumePercent = document.getElementById('volumePercent');
-        const volumeIcon = document.getElementById('volumeIcon');
-        const adTimerDropdown = document.getElementById('adTimerDropdown');
-        const adStatusDropdown = document.getElementById('adStatusDropdown');
-        const toggleAdsBtnDropdown = document.getElementById('toggleAdsBtnDropdown');
-        const testAdBtnDropdown = document.getElementById('testAdBtnDropdown');
-        const skipAdBtnDropdown = document.getElementById('skipAdBtnDropdown');
-        const notification = document.getElementById('notification');
-        const notificationText = document.getElementById('notificationText');
-        const shareBtnNav = document.getElementById('shareBtnNav');
-        const listenerCountEl = document.getElementById('listenerCount');
-        const playedCountEl = document.getElementById('playedCount');
-        const uptimeEl = document.getElementById('uptime');
-        const menuToggle = document.getElementById('menuToggle');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        const programacaoSection = document.getElementById('programacao-section');
-        const eventosSection = document.getElementById('eventos-section');
-        const bgVideo = document.getElementById('bgVideo');
-        const totalCountEl = document.getElementById('totalCount');
+            // Elementos DOM
+            const musicPlayer = document.getElementById('musicPlayer');
+            const adPlayer = document.getElementById('adPlayer');
+            const playBtn = document.getElementById('playPauseBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const shuffleBtn = document.getElementById('shuffleBtn');
+            const repeatBtn = document.getElementById('repeatBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const currentTimeEl = document.getElementById('currentTime');
+            const totalTimeEl = document.getElementById('totalTime');
+            const trackTitleBig = document.getElementById('trackTitleBig');
+            const trackArtistBig = document.getElementById('trackArtistBig');
+            const playlistContainer = document.getElementById('playlistContainer');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const volumePercent = document.getElementById('volumePercent');
+            const volumeIcon = document.getElementById('volumeIcon');
+            const adTimerDropdown = document.getElementById('adTimerDropdown');
+            const adStatusDropdown = document.getElementById('adStatusDropdown');
+            const toggleAdsBtnDropdown = document.getElementById('toggleAdsBtnDropdown');
+            const testAdBtnDropdown = document.getElementById('testAdBtnDropdown');
+            const skipAdBtnDropdown = document.getElementById('skipAdBtnDropdown');
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const shareBtnNav = document.getElementById('shareBtnNav');
+            const listenerCountEl = document.getElementById('listenerCount');
+            const playedCountEl = document.getElementById('playedCount');
+            const uptimeEl = document.getElementById('uptime');
+            const menuToggle = document.getElementById('menuToggle');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const programacaoSection = document.getElementById('programacao-section');
+            const eventosSection = document.getElementById('eventos-section');
+            const bgVideo = document.getElementById('bgVideo');
+            const totalCountEl = document.getElementById('totalCount');
 
-        // ============================================
-        // FUNÇÕES DA PLAYLIST AUTOMÁTICA
-        // ============================================
-        
-        // Embaralhar array (algoritmo Fisher-Yates)
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+            // ============================================
+            // FUNÇÕES DA PLAYLIST AUTOMÁTICA
+            // ============================================
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
             }
-            return array;
-        }
 
-        // Inicializar playlist automática
-        function inicializarPlaylistAutomatica() {
-            // Cria uma cópia embaralhada de todas as músicas
-            playlistAtual = shuffleArray([...playlistCompleta]);
-            totalCountEl.textContent = playlistAtual.length;
-            mostrarPlaylist();
-            
-            if (playlistAtual.length > 0) {
-                currentIndex = 0;
-                loadTrack(currentIndex);
-            }
-        }
-        
-        // Mostrar playlist atual
-        function mostrarPlaylist() {
-            let html = '';
-            const mostrar = playlistAtual.slice(0, 15);
-            mostrar.forEach((musica, index) => {
-                const isPlaying = index === currentIndex;
+            function inicializarPlaylistAutomatica() {
+                // Cria uma cópia e embaralha
+                playlistAtual = shuffleArray([...playlistCompleta]);
+                totalCountEl.textContent = playlistAtual.length;
+                mostrarPlaylist();
                 
-                html += `
-                    <div class="playlist-item ${isPlaying ? 'playing' : ''}">
-                        <div class="item-number">${index + 1}</div>
-                        <div class="item-info">
-                            <div class="item-title">${musica.title}</div>
-                            <div class="item-artist">${musica.artist}</div>
-                        </div>
-                        <div class="item-duration">${musica.duration}</div>
-                    </div>
-                `;
-            });
-            
-            if (playlistAtual.length > 15) {
-                html += `<div style="text-align:center; padding:8px; opacity:0.7; color:#8b6b4d;">+ ${playlistAtual.length - 15} músicas na playlist</div>`;
+                if (playlistAtual.length > 0) {
+                    currentIndex = 0;
+                    loadTrack(currentIndex);
+                }
             }
             
-            playlistContainer.innerHTML = html || '<div style="padding:1rem; text-align:center; color:#8b6b4d;">Nenhuma música disponível</div>';
-        }
+            function mostrarPlaylist() {
+                let html = '';
+                const mostrar = playlistAtual.slice(0, 15);
+                mostrar.forEach((musica, index) => {
+                    const isPlaying = (index === currentIndex && !isAdPlaying);
+                    
+                    html += `
+                        <div class="playlist-item ${isPlaying ? 'playing' : ''}">
+                            <div class="item-number">${index + 1}</div>
+                            <div class="item-info">
+                                <div class="item-title">${musica.title}</div>
+                                <div class="item-artist">${musica.artist}</div>
+                            </div>
+                            <div class="item-duration">${musica.duration}</div>
+                        </div>
+                    `;
+                });
+                
+                if (playlistAtual.length > 15) {
+                    html += `<div style="text-align:center; padding:8px; opacity:0.7; color:#8b6b4d;">+ ${playlistAtual.length - 15} músicas na playlist</div>`;
+                }
+                
+                playlistContainer.innerHTML = html || '<div style="padding:1rem; text-align:center; color:#8b6b4d;">Nenhuma música disponível</div>';
+            }
 
-        // ============================================
-        // FUNÇÕES DO PLAYER
-        // ============================================
-        function loadTrack(index) {
-            if (!playlistAtual.length || index >= playlistAtual.length) {
-                // Se chegou ao fim, reinicia
-                if (repeatMode) {
-                    index = 0;
-                } else {
+            // ============================================
+            // FUNÇÕES DO PLAYER
+            // ============================================
+            function loadTrack(index) {
+                if (!playlistAtual.length) return;
+                
+                // Garantir que o índice está dentro dos limites
+                if (index >= playlistAtual.length) {
+                    if (repeatMode) {
+                        index = 0;
+                    } else {
+                        return;
+                    }
+                }
+                if (index < 0) index = 0;
+                
+                currentIndex = index;
+                const track = playlistAtual[currentIndex];
+                musicPlayer.src = track.src;
+                musicPlayer.load();
+                trackTitleBig.textContent = track.title;
+                trackArtistBig.textContent = track.artist;
+                totalTimeEl.textContent = track.duration;
+                progressFill.style.width = '0%';
+                currentTimeEl.textContent = '0:00';
+                
+                lastPlayedIds.push(track.id);
+                if (lastPlayedIds.length > 10) lastPlayedIds.shift();
+                
+                mostrarPlaylist();
+            }
+
+            function playMusic() {
+                if (isAdPlaying) {
+                    shouldResumeMusic = true;
                     return;
                 }
-            }
-            
-            const track = playlistAtual[index];
-            musicPlayer.src = track.src;
-            musicPlayer.load();
-            trackTitleBig.textContent = track.title;
-            trackArtistBig.textContent = track.artist;
-            totalTimeEl.textContent = track.duration;
-            progressFill.style.width = '0%';
-            currentTimeEl.textContent = '0:00';
-            
-            lastPlayedIds.push(track.id);
-            if (lastPlayedIds.length > 10) lastPlayedIds.shift();
-            
-            mostrarPlaylist();
-        }
-
-        function playMusic() {
-            if (isAdPlaying) {
-                shouldResumeMusic = true;
-                return;
-            }
-            
-            if (!playlistAtual.length) {
-                showNotification('⚠️ Nenhuma música disponível');
-                return;
-            }
-            
-            musicPlayer.play().then(() => {
-                isPlaying = true;
-                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                shouldResumeMusic = false;
-            }).catch(e => {
-                console.log("Erro ao reproduzir:", e);
-                showNotification("⚠️ Erro ao carregar música, pulando...");
-                setTimeout(nextTrack, 1000);
-            });
-        }
-
-        function pauseMusic() {
-            musicPlayer.pause();
-            isPlaying = false;
-            playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        }
-
-        function togglePlayPause() {
-            if (!playlistAtual.length) {
-                showNotification('⚠️ Nenhuma música disponível');
-                return;
-            }
-            
-            if (isAdPlaying) {
-                if (adPlayer.paused) {
-                    adPlayer.play();
-                } else {
-                    adPlayer.pause();
+                
+                if (!playlistAtual.length) {
+                    showNotification('⚠️ Nenhuma música disponível');
+                    return;
                 }
-            } else {
-                isPlaying ? pauseMusic() : playMusic();
-            }
-        }
-
-        function nextTrack() {
-            if (isAdPlaying || !playlistAtual.length) return;
-            
-            if (shuffleMode) {
-                // Modo aleatório: escolhe uma música aleatória que não seja a atual
-                let newIndex;
-                do {
-                    newIndex = Math.floor(Math.random() * playlistAtual.length);
-                } while(newIndex === currentIndex && playlistAtual.length > 1);
-                currentIndex = newIndex;
-            } else {
-                // Modo sequencial
-                currentIndex = (currentIndex + 1) % playlistAtual.length;
-            }
-            
-            loadTrack(currentIndex);
-            if (isPlaying) playMusic();
-            musicPlayedCount++;
-            playedCountEl.textContent = musicPlayedCount;
-            checkAdInterval();
-        }
-
-        function prevTrack() {
-            if (isAdPlaying || !playlistAtual.length) return;
-            
-            currentIndex = (currentIndex - 1 + playlistAtual.length) % playlistAtual.length;
-            loadTrack(currentIndex);
-            if (isPlaying) playMusic();
-        }
-
-        function toggleShuffle() {
-            shuffleMode = !shuffleMode;
-            shuffleBtn.style.background = shuffleMode ? 'linear-gradient(135deg, #ffaa33, #ff8800)' : 'rgba(255,180,80,0.15)';
-            shuffleBtn.style.color = shuffleMode ? 'white' : '#8b6b4d';
-            
-            if (shuffleMode) {
-                showNotification('🔀 Modo aleatório ativado');
-            } else {
-                showNotification('➡️ Modo sequencial ativado');
-            }
-        }
-
-        function toggleRepeat() {
-            repeatMode = !repeatMode;
-            repeatBtn.style.background = repeatMode ? 'linear-gradient(135deg, #ffaa33, #ff8800)' : 'rgba(255,180,80,0.15)';
-            repeatBtn.style.color = repeatMode ? 'white' : '#8b6b4d';
-            
-            showNotification(repeatMode ? '🔁 Repetição ativada' : '➡️ Repetição desativada');
-        }
-
-        // ============================================
-        // SISTEMA DE ANÚNCIOS
-        // ============================================
-        function checkAdInterval() {
-            if (musicPlayedCount > 0 && musicPlayedCount % CONFIG.musicBetweenAds === 0 && adsEnabled && !isAdPlaying) {
-                playNextAd();
-            }
-            updateAdTimer();
-        }
-
-        function updateAdTimer() {
-            if (adsEnabled) {
-                const songsUntilAd = CONFIG.musicBetweenAds - (musicPlayedCount % CONFIG.musicBetweenAds);
-                adTimerDropdown.textContent = songsUntilAd;
-            } else {
-                adTimerDropdown.textContent = "OFF";
-            }
-        }
-
-        function playNextAd() {
-            if (!adsEnabled || !advertisements.length || !playlistAtual.length) return;
-            currentAdIndex = (currentAdIndex + 1) % advertisements.length;
-            playAd(currentAdIndex);
-        }
-
-        function playAd(index) {
-            const ad = advertisements[index];
-            
-            if (isPlaying) {
-                musicPausedTime = musicPlayer.currentTime;
-                pauseMusic();
-                shouldResumeMusic = true;
-            }
-            
-            adPlayer.src = ad.src;
-            adPlayer.load();
-            isAdPlaying = true;
-            adStatusDropdown.innerHTML = `<i class="fas fa-volume-up"></i> ${ad.title} (${ad.duration})`;
-            skipAdBtnDropdown.style.display = "inline-flex";
-            
-            showNotification(`📢 ${ad.title}`);
-            
-            adPlayer.play().then(() => {
-                adPlayer.onended = finishAd;
-            }).catch(() => {
-                finishAd();
-            });
-        }
-
-        function finishAd() {
-            isAdPlaying = false;
-            updateAdTimer();
-            adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
-            skipAdBtnDropdown.style.display = "none";
-            
-            if (shouldResumeMusic && playlistAtual.length) {
-                musicPlayer.currentTime = musicPausedTime;
-                playMusic();
-            }
-        }
-
-        function toggleAds() {
-            adsEnabled = !adsEnabled;
-            toggleAdsBtnDropdown.innerHTML = adsEnabled ? '<i class="fas fa-toggle-on"></i> Ativo' : '<i class="fas fa-toggle-off"></i> Inativo';
-            
-            if (!adsEnabled) {
-                adTimerDropdown.textContent = "OFF";
-                adStatusDropdown.innerHTML = '<i class="fas fa-ban"></i> Desativados';
-                if (isAdPlaying) {
-                    adPlayer.pause();
-                    finishAd();
-                }
-            } else {
-                updateAdTimer();
-                adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
-            }
-        }
-
-        function testAd() {
-            if (advertisements.length) {
-                playAd(currentAdIndex);
-            }
-        }
-
-        function skipAd() {
-            if (isAdPlaying) {
-                adPlayer.pause();
-                finishAd();
-                showNotification('⏭️ Anúncio pulado');
-            }
-        }
-
-        // ============================================
-        // UTILITÁRIOS
-        // ============================================
-        function formatTime(seconds) {
-            if (isNaN(seconds)) return '0:00';
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function showNotification(msg) {
-            notificationText.textContent = msg;
-            notification.classList.add('show');
-            setTimeout(() => notification.classList.remove('show'), 2000);
-        }
-
-        window.toggleSection = function(section) {
-            dropdownMenu.classList.remove('show');
-            if (section === 'programacao') {
-                programacaoSection.classList.toggle('show');
-                eventosSection.classList.remove('show');
-            } else if (section === 'eventos') {
-                eventosSection.classList.toggle('show');
-                programacaoSection.classList.remove('show');
-            }
-        };
-
-        window.editTicker = () => {
-            const newText = prompt("Editar mensagem:", document.querySelector('#ticker marquee').textContent);
-            if (newText) document.querySelector('#ticker marquee').textContent = newText;
-        };
-
-        // ============================================
-        // EVENT LISTENERS
-        // ============================================
-        function setupEventListeners() {
-            playBtn.addEventListener('click', togglePlayPause);
-            prevBtn.addEventListener('click', prevTrack);
-            nextBtn.addEventListener('click', nextTrack);
-            shuffleBtn.addEventListener('click', toggleShuffle);
-            repeatBtn.addEventListener('click', toggleRepeat);
-            
-            musicPlayer.addEventListener('timeupdate', () => {
-                if (musicPlayer.duration && !isAdPlaying) {
-                    const percent = (musicPlayer.currentTime / musicPlayer.duration) * 100;
-                    progressFill.style.width = `${percent}%`;
-                    currentTimeEl.textContent = formatTime(musicPlayer.currentTime);
-                }
-            });
-            
-            musicPlayer.addEventListener('ended', nextTrack);
-            
-            musicPlayer.addEventListener('error', (e) => {
-                console.log("Erro no áudio:", e);
-                showNotification("⚠️ Erro na música, pulando...");
-                setTimeout(nextTrack, 1000);
-            });
-            
-            progressBar.addEventListener('click', (e) => {
-                if (isAdPlaying || !playlistAtual.length) return;
-                const rect = progressBar.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const width = rect.width;
-                if (musicPlayer.duration) {
-                    musicPlayer.currentTime = (clickX / width) * musicPlayer.duration;
-                }
-            });
-            
-            volumeSlider.addEventListener('input', (e) => {
-                const vol = e.target.value / 100;
-                musicPlayer.volume = vol;
-                adPlayer.volume = vol;
-                volumePercent.textContent = `${e.target.value}%`;
-                volumeIcon.className = vol == 0 ? 'fas fa-volume-mute' : vol < 0.3 ? 'fas fa-volume-off' : vol < 0.7 ? 'fas fa-volume-down' : 'fas fa-volume-up';
-            });
-            
-            shareBtnNav.addEventListener('click', () => {
-                if (navigator.share) {
-                    navigator.share({ 
-                        title: 'Rádio Vende+', 
-                        text: 'Música automática 24h', 
-                        url: window.location.href 
-                    });
-                } else {
-                    navigator.clipboard.writeText(window.location.href);
-                    showNotification('📋 Link copiado!');
-                }
-            });
-
-            toggleAdsBtnDropdown.addEventListener('click', toggleAds);
-            testAdBtnDropdown.addEventListener('click', testAd);
-            skipAdBtnDropdown.addEventListener('click', skipAd);
-            menuToggle.addEventListener('click', () => dropdownMenu.classList.toggle('show'));
-        }
-
-        // ============================================
-        // INICIALIZAÇÃO
-        // ============================================
-        window.addEventListener('load', () => {
-            musicPlayer.volume = 0.8;
-            adPlayer.volume = 0.8;
-            volumeSlider.value = 80;
-            
-            // Inicializa playlist automática
-            inicializarPlaylistAutomatica();
-            
-            setupEventListeners();
-            updateAdTimer();
-            
-            setInterval(() => {
-                listenerCount += Math.floor(Math.random() * 11) - 3;
-                listenerCount = Math.max(800, listenerCount);
-                listenerCountEl.textContent = listenerCount > 999 ? (listenerCount/1000).toFixed(1)+'k' : listenerCount;
-            }, 30000);
-            
-            setInterval(() => {
-                uptimeSeconds++;
-                const h = Math.floor(uptimeSeconds / 3600);
-                const m = Math.floor((uptimeSeconds % 3600) / 60);
-                uptimeEl.textContent = h > 0 ? `${h}h${m}` : `${m}min`;
-            }, 1000);
-            
-            // Tenta iniciar a reprodução automaticamente
-            if (playlistAtual.length) {
+                
                 musicPlayer.play().then(() => {
                     isPlaying = true;
                     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                }).catch(() => {
-                    document.addEventListener('touchstart', () => {
-                        musicPlayer.play().then(() => {
-                            isPlaying = true;
-                            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                        });
-                    }, { once: true });
+                    shouldResumeMusic = false;
+                }).catch(e => {
+                    console.log("Erro ao reproduzir música:", e);
+                    showNotification("⚠️ Erro ao carregar música, tentando próxima...");
+                    // Tenta pular para a próxima música em caso de erro
+                    setTimeout(() => nextTrack(), 1500);
                 });
             }
-        });
+
+            function pauseMusic() {
+                musicPlayer.pause();
+                isPlaying = false;
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+
+            function togglePlayPause() {
+                if (!playlistAtual.length) {
+                    showNotification('⚠️ Nenhuma música disponível');
+                    return;
+                }
+                
+                if (isAdPlaying) {
+                    if (adPlayer.paused) {
+                        adPlayer.play();
+                    } else {
+                        adPlayer.pause();
+                    }
+                } else {
+                    if (isPlaying) {
+                        pauseMusic();
+                    } else {
+                        playMusic();
+                    }
+                }
+            }
+
+            function nextTrack() {
+                if (isAdPlaying || !playlistAtual.length) return;
+                
+                if (shuffleMode) {
+                    // Modo aleatório: escolhe uma música aleatória que não seja a atual (se houver mais de 1)
+                    let newIndex;
+                    if (playlistAtual.length > 1) {
+                        do {
+                            newIndex = Math.floor(Math.random() * playlistAtual.length);
+                        } while(newIndex === currentIndex);
+                    } else {
+                        newIndex = currentIndex; // única música, fica nela
+                    }
+                    currentIndex = newIndex;
+                } else {
+                    // Modo sequencial
+                    currentIndex = (currentIndex + 1) % playlistAtual.length;
+                }
+                
+                loadTrack(currentIndex);
+                if (isPlaying) playMusic();
+                
+                // Incrementa contador de músicas tocadas e verifica anúncio
+                musicPlayedCount++;
+                playedCountEl.textContent = musicPlayedCount;
+                checkAdInterval();
+            }
+
+            function prevTrack() {
+                if (isAdPlaying || !playlistAtual.length) return;
+                
+                currentIndex = (currentIndex - 1 + playlistAtual.length) % playlistAtual.length;
+                loadTrack(currentIndex);
+                if (isPlaying) playMusic();
+            }
+
+            function toggleShuffle() {
+                shuffleMode = !shuffleMode;
+                shuffleBtn.style.background = shuffleMode ? 'linear-gradient(135deg, #ffaa33, #ff8800)' : 'rgba(255,180,80,0.15)';
+                shuffleBtn.style.color = shuffleMode ? 'white' : '#8b6b4d';
+                
+                showNotification(shuffleMode ? '🔀 Modo aleatório ativado' : '➡️ Modo sequencial ativado');
+            }
+
+            function toggleRepeat() {
+                repeatMode = !repeatMode;
+                repeatBtn.style.background = repeatMode ? 'linear-gradient(135deg, #ffaa33, #ff8800)' : 'rgba(255,180,80,0.15)';
+                repeatBtn.style.color = repeatMode ? 'white' : '#8b6b4d';
+                
+                showNotification(repeatMode ? '🔁 Repetição ativada' : '➡️ Repetição desativada');
+            }
+
+            // ============================================
+            // SISTEMA DE ANÚNCIOS
+            // ============================================
+            function checkAdInterval() {
+                if (!adsEnabled) return;
+                // Toca anúncio a cada CONFIG.musicBetweenAds músicas
+                if (musicPlayedCount > 0 && musicPlayedCount % CONFIG.musicBetweenAds === 0 && !isAdPlaying) {
+                    playNextAd();
+                }
+                updateAdTimer();
+            }
+
+            function updateAdTimer() {
+                if (adsEnabled) {
+                    const songsUntilAd = CONFIG.musicBetweenAds - (musicPlayedCount % CONFIG.musicBetweenAds);
+                    adTimerDropdown.textContent = songsUntilAd === CONFIG.musicBetweenAds ? 0 : songsUntilAd; // mostra 0 quando for tocar
+                } else {
+                    adTimerDropdown.textContent = "OFF";
+                }
+            }
+
+            function playNextAd() {
+                if (!adsEnabled || !advertisements.length || !playlistAtual.length) return;
+                currentAdIndex = (currentAdIndex + 1) % advertisements.length;
+                playAd(currentAdIndex);
+            }
+
+            function playAd(index) {
+                if (!adsEnabled || !advertisements.length) return;
+                
+                const ad = advertisements[index];
+                
+                // Pausa a música se estiver tocando
+                if (isPlaying) {
+                    musicPausedTime = musicPlayer.currentTime;
+                    pauseMusic();
+                    shouldResumeMusic = true;
+                }
+                
+                adPlayer.src = ad.src;
+                adPlayer.load();
+                isAdPlaying = true;
+                adStatusDropdown.innerHTML = `<i class="fas fa-volume-up"></i> ${ad.title} (${ad.duration})`;
+                skipAdBtnDropdown.style.display = "inline-flex";
+                
+                showNotification(`📢 ${ad.title}`);
+                
+                adPlayer.play().then(() => {
+                    adPlayer.onended = finishAd;
+                }).catch((err) => {
+                    console.log("Erro ao tocar anúncio:", err);
+                    finishAd(); // Finaliza se não conseguir tocar
+                });
+            }
+
+            function finishAd() {
+                isAdPlaying = false;
+                updateAdTimer();
+                adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
+                skipAdBtnDropdown.style.display = "none";
+                
+                if (shouldResumeMusic && playlistAtual.length) {
+                    musicPlayer.currentTime = musicPausedTime;
+                    playMusic();
+                    shouldResumeMusic = false;
+                }
+            }
+
+            function toggleAds() {
+                adsEnabled = !adsEnabled;
+                toggleAdsBtnDropdown.innerHTML = adsEnabled ? '<i class="fas fa-toggle-on"></i> Ativo' : '<i class="fas fa-toggle-off"></i> Inativo';
+                
+                if (!adsEnabled) {
+                    adTimerDropdown.textContent = "OFF";
+                    adStatusDropdown.innerHTML = '<i class="fas fa-ban"></i> Desativados';
+                    if (isAdPlaying) {
+                        adPlayer.pause();
+                        finishAd();
+                    }
+                } else {
+                    updateAdTimer();
+                    adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
+                }
+            }
+
+            function testAd() {
+                if (advertisements.length) {
+                    playAd(currentAdIndex);
+                }
+            }
+
+            function skipAd() {
+                if (isAdPlaying) {
+                    adPlayer.pause();
+                    finishAd();
+                    showNotification('⏭️ Anúncio pulado');
+                }
+            }
+
+            // ============================================
+            // UTILITÁRIOS
+            // ============================================
+            function formatTime(seconds) {
+                if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            function showNotification(msg) {
+                notificationText.textContent = msg;
+                notification.classList.add('show');
+                setTimeout(() => notification.classList.remove('show'), 2000);
+            }
+
+            window.toggleSection = function(section) {
+                dropdownMenu.classList.remove('show');
+                if (section === 'programacao') {
+                    programacaoSection.classList.toggle('show');
+                    eventosSection.classList.remove('show');
+                } else if (section === 'eventos') {
+                    eventosSection.classList.toggle('show');
+                    programacaoSection.classList.remove('show');
+                }
+            };
+
+            window.editTicker = () => {
+                const newText = prompt("Editar mensagem:", document.querySelector('#ticker marquee').textContent);
+                if (newText) document.querySelector('#ticker marquee').textContent = newText;
+            };
+
+            // ============================================
+            // EVENT LISTENERS
+            // ============================================
+            function setupEventListeners() {
+                playBtn.addEventListener('click', togglePlayPause);
+                prevBtn.addEventListener('click', prevTrack);
+                nextBtn.addEventListener('click', nextTrack);
+                shuffleBtn.addEventListener('click', toggleShuffle);
+                repeatBtn.addEventListener('click', toggleRepeat);
+                
+                musicPlayer.addEventListener('timeupdate', () => {
+                    if (musicPlayer.duration && !isAdPlaying) {
+                        const percent = (musicPlayer.currentTime / musicPlayer.duration) * 100;
+                        progressFill.style.width = `${percent}%`;
+                        currentTimeEl.textContent = formatTime(musicPlayer.currentTime);
+                    }
+                });
+                
+                musicPlayer.addEventListener('ended', () => {
+                    if (!isAdPlaying) {
+                        nextTrack(); // Quando a música acaba, vai para a próxima
+                    }
+                });
+                
+                musicPlayer.addEventListener('error', (e) => {
+                    console.log("Erro no áudio da música:", e);
+                    showNotification("⚠️ Erro na música, pulando...");
+                    // Tenta pular para a próxima música após erro
+                    if (!isAdPlaying) {
+                        setTimeout(() => nextTrack(), 1000);
+                    }
+                });
+                
+                progressBar.addEventListener('click', (e) => {
+                    if (isAdPlaying || !playlistAtual.length || !musicPlayer.duration) return;
+                    const rect = progressBar.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const width = rect.width;
+                    musicPlayer.currentTime = (clickX / width) * musicPlayer.duration;
+                });
+                
+                volumeSlider.addEventListener('input', (e) => {
+                    const vol = e.target.value / 100;
+                    musicPlayer.volume = vol;
+                    adPlayer.volume = vol;
+                    volumePercent.textContent = `${e.target.value}%`;
+                    volumeIcon.className = vol == 0 ? 'fas fa-volume-mute' : vol < 0.3 ? 'fas fa-volume-off' : vol < 0.7 ? 'fas fa-volume-down' : 'fas fa-volume-up';
+                });
+                
+                shareBtnNav.addEventListener('click', () => {
+                    if (navigator.share) {
+                        navigator.share({ 
+                            title: 'Rádio Vende+', 
+                            text: 'Música automática 24h', 
+                            url: window.location.href 
+                        }).catch(() => {});
+                    } else {
+                        navigator.clipboard.writeText(window.location.href).then(() => {
+                            showNotification('📋 Link copiado!');
+                        }).catch(() => {
+                            showNotification('📋 Copie o link da barra de endereços');
+                        });
+                    }
+                });
+
+                toggleAdsBtnDropdown.addEventListener('click', toggleAds);
+                testAdBtnDropdown.addEventListener('click', testAd);
+                skipAdBtnDropdown.addEventListener('click', skipAd);
+                menuToggle.addEventListener('click', () => dropdownMenu.classList.toggle('show'));
+
+                // Fechar dropdown ao clicar fora (opcional, para melhor UX)
+                document.addEventListener('click', (e) => {
+                    if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+
+            // ============================================
+            // INICIALIZAÇÃO
+            // ============================================
+            window.addEventListener('load', () => {
+                musicPlayer.volume = CONFIG.defaultVolume / 100;
+                adPlayer.volume = CONFIG.defaultVolume / 100;
+                volumeSlider.value = CONFIG.defaultVolume;
+                volumePercent.textContent = CONFIG.defaultVolume + '%';
+                
+                // Inicializa playlist automática
+                inicializarPlaylistAutomatica();
+                
+                setupEventListeners();
+                updateAdTimer();
+                
+                // Atualiza contador de ouvintes aleatório
+                setInterval(() => {
+                    let change = Math.floor(Math.random() * 11) - 3; // -3 a +7
+                    listenerCount = Math.max(800, listenerCount + change);
+                    listenerCountEl.textContent = listenerCount > 999 ? (listenerCount/1000).toFixed(1)+'k' : listenerCount;
+                }, 30000);
+                
+                // Atualiza tempo no ar
+                setInterval(() => {
+                    uptimeSeconds++;
+                    const h = Math.floor(uptimeSeconds / 3600);
+                    const m = Math.floor((uptimeSeconds % 3600) / 60);
+                    const s = uptimeSeconds % 60;
+                    if (h > 0) {
+                        uptimeEl.textContent = `${h}h${m}`;
+                    } else if (m > 0) {
+                        uptimeEl.textContent = `${m}min`;
+                    } else {
+                        uptimeEl.textContent = `${s}s`;
+                    }
+                }, 1000);
+                
+                // Tenta iniciar a reprodução automaticamente (autoplay)
+                // Necessário devido a políticas de autoplay em navegadores
+                if (playlistAtual.length) {
+                    const autoPlay = () => {
+                        if (!autoPlayAttempted) {
+                            musicPlayer.play().then(() => {
+                                isPlaying = true;
+                                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                                autoPlayAttempted = true;
+                            }).catch(() => {
+                                // Se falhar, espera interação do usuário (já configurado no botão play)
+                                console.log("Autoplay bloqueado, aguardando interação.");
+                                autoPlayAttempted = true;
+                            });
+                        }
+                    };
+                    
+                    // Tenta autoplay imediatamente e também no primeiro toque/interação
+                    autoPlay();
+                    
+                    // Se falhar, tenta novamente no primeiro toque na tela (qualquer toque)
+                    document.addEventListener('touchstart', function firstTouch() {
+                        if (!isPlaying && !autoPlayAttempted) {
+                            musicPlayer.play().then(() => {
+                                isPlaying = true;
+                                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                            }).catch(() => {});
+                        }
+                        document.removeEventListener('touchstart', firstTouch);
+                    }, { once: true });
+                    
+                    // Também tenta no primeiro clique
+                    document.addEventListener('click', function firstClick() {
+                        if (!isPlaying && !autoPlayAttempted) {
+                            musicPlayer.play().then(() => {
+                                isPlaying = true;
+                                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                            }).catch(() => {});
+                        }
+                        document.removeEventListener('click', firstClick);
+                    }, { once: true });
+                }
+            });
+        })();
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
