@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rádio Vende+ - Modo Automático</title>
+    <title>Rádio+</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -22,8 +22,8 @@
 
         /* Tema Claro (padrão) */
         body.theme-light {
-            background: linear-gradient(135deg, #fff9e6 0%, #fff2d9 50%, #ffebcc 100%);
-            color: #5a4a3a;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #212529;
         }
         .theme-light .glass-card,
         .theme-light .main-header,
@@ -32,21 +32,23 @@
         .theme-light .stats-bar,
         .theme-light .ticker-modern,
         .theme-light .player-card,
-        .theme-light .hidden-section,
-        .theme-light .playlist-item {
-            background: rgba(255, 248, 235, 0.7);
-            border-color: rgba(255, 200, 120, 0.4);
-            color: #5a4a3a;
+        .theme-light .playlist-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #212529;
         }
         .theme-light .control-btn {
-            background: rgba(255, 180, 80, 0.15);
-            color: #8b6b4d;
+            background: rgba(0, 0, 0, 0.05);
+            color: #495057;
+        }
+        .theme-light .playlist-item {
+            background: rgba(0, 0, 0, 0.03);
         }
 
-        /* Tema Escuro */
+        /* Tema Escuro (BEM ESCURO) */
         body.theme-dark {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #3a3a3a 100%);
-            color: #f0e6d2;
+            background: #000000;
+            color: #e0e0e0;
         }
         .theme-dark .glass-card,
         .theme-dark .main-header,
@@ -55,27 +57,35 @@
         .theme-dark .stats-bar,
         .theme-dark .ticker-modern,
         .theme-dark .player-card,
-        .theme-dark .hidden-section,
-        .theme-dark .playlist-item {
-            background: rgba(40, 40, 40, 0.8);
-            border-color: rgba(255, 180, 80, 0.3);
-            color: #f0e6d2;
+        .theme-dark .playlist-card {
+            background: #1a1a1a;
+            border-color: #333333;
+            color: #e0e0e0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
         }
         .theme-dark .control-btn {
-            background: rgba(255, 180, 80, 0.2);
-            color: #ffcc99;
+            background: #2d2d2d;
+            color: #ffffff;
+            border: 1px solid #444;
         }
-        .theme-dark .logo-text h1,
-        .theme-dark .stat-info span,
-        .theme-dark .track-info h2,
-        .theme-dark .playlist-title,
-        .theme-dark .ticker-text marquee {
-            color: #f0e6d2;
+        .theme-dark .playlist-item {
+            background: #242424;
+            border-color: #3a3a3a;
+        }
+        .theme-dark .playlist-item:hover {
+            background: #2a2a2a;
+        }
+        .theme-dark .logo-icon {
+            background: linear-gradient(135deg, #ffaa33, #ff8800);
+        }
+        .theme-dark .live-badge {
+            background: linear-gradient(135deg, #ffaa33, #ff8800);
+            color: #000;
         }
 
         /* Tema Azul Noturno */
         body.theme-blue {
-            background: linear-gradient(135deg, #0b1a30 0%, #1a2f4a 50%, #2a4070 100%);
+            background: linear-gradient(135deg, #0a1929 0%, #1a2a3a 100%);
             color: #e0f0ff;
         }
         .theme-blue .glass-card,
@@ -85,22 +95,17 @@
         .theme-blue .stats-bar,
         .theme-blue .ticker-modern,
         .theme-blue .player-card,
-        .theme-blue .hidden-section,
-        .theme-blue .playlist-item {
-            background: rgba(20, 40, 70, 0.8);
-            border-color: rgba(100, 180, 255, 0.4);
+        .theme-blue .playlist-card {
+            background: rgba(20, 40, 70, 0.95);
+            border-color: #2a4a7a;
             color: #e0f0ff;
         }
         .theme-blue .control-btn {
-            background: rgba(100, 180, 255, 0.2);
-            color: #aad0ff;
+            background: #1a3a5a;
+            color: #b0e0ff;
         }
-        .theme-blue .logo-text h1,
-        .theme-blue .stat-info span,
-        .theme-blue .track-info h2,
-        .theme-blue .playlist-title,
-        .theme-blue .ticker-text marquee {
-            color: #e0f0ff;
+        .theme-blue .playlist-item {
+            background: #1e3a5a;
         }
 
         .app-container {
@@ -109,7 +114,7 @@
             width: 100%;
         }
 
-        .glass-card, .main-header, .main-nav, .dropdown-menu, .stats-bar, .ticker-modern, .player-card, .hidden-section {
+        .glass-card, .main-header, .main-nav, .dropdown-menu, .stats-bar, .ticker-modern, .player-card, .playlist-card {
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 24px;
@@ -132,31 +137,36 @@
         .logo-wrapper {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             background: linear-gradient(135deg, #ffaa33, #ff8800);
-            border-radius: 14px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: white;
+        }
+
+        .logo-text h1 {
+            font-size: 1rem;
+            font-weight: 600;
         }
 
         .live-badge {
             background: linear-gradient(135deg, #ffaa33, #ff8800);
             color: white;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             animation: pulse 2s infinite;
         }
 
@@ -171,17 +181,17 @@
         .nav-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
-        .nav-item, .btn-share-nav, .menu-toggle, .theme-btn {
+        .nav-item, .btn-share-nav, .menu-toggle, .theme-btn, .fullscreen-btn {
             background: rgba(255, 180, 80, 0.2);
             border: none;
             color: inherit;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 30px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -194,28 +204,6 @@
         }
         .dropdown-menu.show { display: block; }
 
-        .dropdown-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .dropdown-item {
-            background: rgba(255, 180, 80, 0.15);
-            color: inherit;
-            padding: 16px 8px;
-            border-radius: 18px;
-            text-align: center;
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Seletor de temas */
         .theme-selector {
             display: flex;
             gap: 8px;
@@ -224,9 +212,10 @@
         }
         .theme-btn {
             width: auto;
-            padding: 0 12px;
+            padding: 0 10px;
             gap: 4px;
             background: rgba(255, 180, 80, 0.25);
+            font-size: 0.8rem;
         }
 
         .ad-card-dropdown {
@@ -318,49 +307,59 @@
             backdrop-filter: blur(5px);
         }
 
+        .stats-bar {
+            padding: 12px;
+        }
+
         .listener-stats {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .stat-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .stat-icon {
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             background: rgba(255, 180, 80, 0.2);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ff8800;
+            font-size: 0.8rem;
         }
 
         .stat-info h4 {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             opacity: 0.7;
+        }
+        .stat-info span {
+            font-size: 0.9rem;
+            font-weight: 600;
         }
 
         .ticker-content {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .ticker-text {
             flex: 1;
             overflow: hidden;
         }
         .ticker-text marquee {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
         .ticker-edit {
             opacity: 0.6;
             cursor: pointer;
+            font-size: 0.8rem;
         }
 
         .player-card {
@@ -379,29 +378,33 @@
         }
 
         .player-controls {
-            padding: 20px;
+            padding: 16px;
         }
 
         .track-info {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         .track-info h2 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 4px;
         }
+        .track-info p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
 
-        .progress-modern { margin-bottom: 20px; }
+        .progress-modern { margin-bottom: 16px; }
         .progress-time {
             display: flex;
             justify-content: space-between;
             font-size: 0.7rem;
             opacity: 0.7;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         .progress-bar {
             width: 100%;
-            height: 5px;
+            height: 4px;
             background: rgba(255, 180, 80, 0.2);
             border-radius: 10px;
             cursor: pointer;
@@ -417,34 +420,34 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 16px;
         }
         .control-btn {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border: none;
-            border-radius: 16px;
-            font-size: 1rem;
+            border-radius: 14px;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
         }
         .play-btn {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             background: linear-gradient(135deg, #ffaa33, #ff8800);
             color: white;
-            font-size: 1.4rem;
-            border-radius: 24px;
+            font-size: 1.3rem;
+            border-radius: 20px;
         }
 
         .volume-control {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             background: rgba(255, 180, 80, 0.1);
-            padding: 8px 16px;
-            border-radius: 40px;
+            padding: 6px 12px;
+            border-radius: 30px;
         }
         .volume-slider {
             flex: 1;
@@ -455,18 +458,24 @@
         }
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             background: white;
             border: 2px solid #ff8800;
             border-radius: 50%;
             cursor: pointer;
         }
+        .volume-control span {
+            font-size: 0.8rem;
+            min-width: 35px;
+        }
+
+        /* PLAYLIST ÚNICA */
+        .playlist-card {
+            padding: 16px;
+        }
 
         .playlist-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
             margin-bottom: 12px;
         }
         
@@ -475,12 +484,15 @@
             align-items: center;
             gap: 8px;
         }
+        .playlist-title i {
+            color: #ffaa33;
+        }
 
         .playlist-items {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: 300px;
+            gap: 6px;
+            max-height: 400px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -488,15 +500,15 @@
         .playlist-item {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             padding: 10px;
-            background: rgba(255, 180, 80, 0.1);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 200, 120, 0.3);
+            background: rgba(255, 180, 80, 0.08);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 200, 120, 0.2);
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: all 0.2s;
         }
-        .playlist-item:active { transform: scale(0.98); }
+        .playlist-item:active { transform: scale(0.99); }
         
         .playlist-item.playing {
             background: linear-gradient(90deg, rgba(255,170,51,0.2), rgba(255,136,0,0.2));
@@ -504,15 +516,15 @@
         }
         
         .item-number {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             background: rgba(255, 180, 80, 0.2);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: 0.7rem;
+            font-weight: 600;
         }
         
         .item-info {
@@ -520,21 +532,78 @@
         }
         .item-title {
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .item-artist {
             font-size: 0.7rem;
-            opacity: 0.8;
+            opacity: 0.7;
         }
         .item-duration {
             font-size: 0.7rem;
-            opacity: 0.8;
-            margin-right: 8px;
+            opacity: 0.7;
+            margin-right: 4px;
         }
-        .featured-badge {
-            color: gold;
-            margin-left: 4px;
+
+        /* BOTÃO WHATSAPP MENOR */
+        .contact-mini {
+            background: rgba(37, 211, 102, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            margin-bottom: 12px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 0.85rem;
+        }
+        .contact-mini i { 
+            color: #25D366; 
+            font-size: 1rem;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(255, 248, 235, 0.95);
+            backdrop-filter: blur(20px);
+            color: #212529;
+            padding: 10px 18px;
+            border-radius: 40px;
+            transition: 0.3s;
+            z-index: 1000;
+            border-left: 4px solid #ffaa33;
             font-size: 0.8rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .notification.show { transform: translateX(-50%) translateY(0); }
+
+        .period-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255,180,80,0.3);
+            font-size: 0.8rem;
+        }
+
+        .fullscreen-btn {
+            width: 36px;
+            height: 36px;
+        }
+
+        .main-footer {
+            text-align: center;
+            padding: 16px 10px 8px;
+            opacity: 0.6;
+            font-size: 0.7rem;
         }
 
         .hidden-section {
@@ -545,72 +614,16 @@
         .program-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 12px;
+            gap: 8px;
+            margin-top: 10px;
         }
         .program-item {
             background: linear-gradient(135deg, #ffaa33, #ff8800);
             color: white;
-            padding: 16px;
-            border-radius: 20px;
+            padding: 12px;
+            border-radius: 16px;
             text-align: center;
-        }
-
-        .contact-mini {
-            background: rgba(37, 211, 102, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 30px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            border: 1px solid rgba(37, 211, 102, 0.3);
-            margin-bottom: 12px;
-        }
-        .contact-mini i { color: #25D366; font-size: 1.2rem; }
-
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(255, 248, 235, 0.95);
-            backdrop-filter: blur(20px);
-            color: #5a4a3a;
-            padding: 12px 20px;
-            border-radius: 50px;
-            transition: 0.3s;
-            z-index: 1000;
-            border-left: 4px solid #ffaa33;
-            font-size: 0.85rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .notification.show { transform: translateX(-50%) translateY(0); }
-
-        .period-indicator {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,180,80,0.3);
-        }
-        .period-badge {
-            background: rgba(255,170,51,0.2);
-            padding: 4px 8px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-        }
-
-        .fullscreen-btn {
-            background: rgba(255,180,80,0.2);
-            border: none;
-            color: inherit;
-            width: 40px;
-            height: 40px;
-            border-radius: 30px;
-            cursor: pointer;
+            font-size: 0.8rem;
         }
 
         ::-webkit-scrollbar { width: 4px; }
@@ -620,11 +633,11 @@
 </head>
 <body class="theme-light">
     <div class="app-container">
-        <!-- HEADER -->
+        <!-- HEADER REDUZIDO -->
         <header class="main-header">
             <div class="logo-wrapper">
                 <div class="logo-icon"><i class="fas fa-broadcast-tower"></i></div>
-                <div class="logo-text"><h1>Rádio Vende+</h1></div>
+                <div class="logo-text"><h1>Rádio+</h1></div>
             </div>
             <div class="live-badge"><i class="fas fa-circle"></i> AO VIVO</div>
         </header>
@@ -653,20 +666,6 @@
                 <button class="theme-btn" onclick="setTheme('light')"><i class="fas fa-sun"></i> Claro</button>
                 <button class="theme-btn" onclick="setTheme('dark')"><i class="fas fa-moon"></i> Escuro</button>
                 <button class="theme-btn" onclick="setTheme('blue')"><i class="fas fa-star"></i> Noturno</button>
-            </div>
-            <div class="dropdown-grid">
-                <a href="#" class="dropdown-item" onclick="toggleSection('programacao'); return false;">
-                    <i class="fas fa-calendar-alt"></i> Programação
-                </a>
-                <a href="#" class="dropdown-item" onclick="toggleSection('eventos'); return false;">
-                    <i class="fas fa-star"></i> Eventos
-                </a>
-                <a href="#" class="dropdown-item" onclick="document.getElementById('musicas').scrollIntoView({behavior:'smooth'}); document.getElementById('dropdownMenu').classList.remove('show');">
-                    <i class="fas fa-music"></i> Playlist
-                </a>
-                <a href="#" class="dropdown-item" onclick="window.open('https://wa.me/5512988461978', '_blank');">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                </a>
             </div>
 
             <!-- CARD DE ANÚNCIO -->
@@ -722,7 +721,7 @@
             <div class="ticker-content">
                 <div class="ticker-icon"><i class="fas fa-bullhorn"></i></div>
                 <div class="ticker-text">
-                    <marquee id="ticker" scrollamount="4">🎵 RÁDIO VENDE+ - 24 HORAS COM OS MELHORES HITS • MÚSICA SEM PARAR • SELEÇÃO AUTOMÁTICA</marquee>
+                    <marquee id="ticker" scrollamount="4">🎵 RÁDIO+ - MÚSICA SEM PARAR • SELEÇÃO AUTOMÁTICA</marquee>
                 </div>
                 <div class="ticker-edit" onclick="editTicker()"><i class="fas fa-pencil-alt"></i></div>
             </div>
@@ -737,7 +736,7 @@
             </div>
             <div class="player-controls">
                 <div class="track-info">
-                    <h2 id="trackTitleBig">Rádio Vende+</h2>
+                    <h2 id="trackTitleBig">Rádio+</h2>
                     <p id="trackArtistBig">Sistema Automático</p>
                 </div>
                 <div class="progress-modern">
@@ -764,58 +763,47 @@
             </div>
         </div>
 
-        <!-- MÚSICAS EM DESTAQUE -->
-        <div class="glass-card">
-            <div class="playlist-header">
-                <div class="playlist-title">
-                    <i class="fas fa-star" style="color:gold;"></i>
-                    <h3>Músicas em Destaque</h3>
-                </div>
-            </div>
-            <div class="playlist-items" id="featuredContainer"></div>
-        </div>
-
-        <!-- PLAYLIST AUTOMÁTICA -->
-        <div class="playlist-card" id="musicas">
+        <!-- PLAYLIST ÚNICA -->
+        <div class="playlist-card">
             <div class="playlist-header">
                 <div class="playlist-title">
                     <i class="fas fa-music"></i>
-                    <h3>Playlist Automática</h3>
+                    <h3>Playlist</h3>
                 </div>
             </div>
             <div class="playlist-items" id="playlistContainer"></div>
         </div>
 
-        <!-- PROGRAMAÇÃO -->
+        <!-- PROGRAMAÇÃO (OCULTA) -->
         <div class="hidden-section" id="programacao-section">
-            <h3 style="margin-bottom: 12px;"><i class="fas fa-calendar-alt"></i> Programação</h3>
+            <h3 style="margin-bottom: 10px; font-size:1rem;"><i class="fas fa-calendar-alt"></i> Programação</h3>
             <div class="program-grid">
-                <div class="program-item"><i class="fas fa-moon"></i><h4>Madrugada</h4><div style="font-size:0.65rem;">00h - 06h</div></div>
-                <div class="program-item"><i class="fas fa-sun"></i><h4>Manhã</h4><div style="font-size:0.65rem;">06h - 12h</div></div>
-                <div class="program-item"><i class="fas fa-cloud-sun"></i><h4>Tarde</h4><div style="font-size:0.65rem;">12h - 18h</div></div>
-                <div class="program-item"><i class="fas fa-star"></i><h4>Noite</h4><div style="font-size:0.65rem;">18h - 00h</div></div>
+                <div class="program-item"><i class="fas fa-moon"></i><h4>Madrugada</h4><div>00h-06h</div></div>
+                <div class="program-item"><i class="fas fa-sun"></i><h4>Manhã</h4><div>06h-12h</div></div>
+                <div class="program-item"><i class="fas fa-cloud-sun"></i><h4>Tarde</h4><div>12h-18h</div></div>
+                <div class="program-item"><i class="fas fa-star"></i><h4>Noite</h4><div>18h-00h</div></div>
             </div>
         </div>
 
-        <!-- EVENTOS -->
+        <!-- EVENTOS (OCULTO) -->
         <div class="hidden-section" id="eventos-section">
-            <h3 style="margin-bottom: 12px;"><i class="fas fa-star"></i> Eventos</h3>
+            <h3 style="margin-bottom: 10px; font-size:1rem;"><i class="fas fa-star"></i> Eventos</h3>
             <div style="background: rgba(255,180,80,0.1); border-radius: 16px; padding: 12px;">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <div style="text-align:center; min-width:50px;"><div style="font-size:1.3rem; font-weight:700; color:#ffaa33;">15</div><div style="font-size:0.6rem;">JUN</div></div>
-                    <div><h4>Show Ao Vivo</h4><p style="font-size:0.7rem;"><i class="fas fa-clock"></i> 20h</p></div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="text-align:center; min-width:45px;"><div style="font-size:1.2rem; font-weight:700; color:#ffaa33;">15</div><div style="font-size:0.6rem;">JUN</div></div>
+                    <div><h4 style="font-size:0.9rem;">Show Ao Vivo</h4><p style="font-size:0.7rem;"><i class="fas fa-clock"></i> 20h</p></div>
                 </div>
             </div>
         </div>
 
-        <!-- WHATSAPP -->
+        <!-- WHATSAPP REDUZIDO -->
         <div class="contact-mini" onclick="window.open('https://wa.me/5512988461978', '_blank')">
             <i class="fab fa-whatsapp"></i>
-            <span>Fale conosco - Clique aqui! 12 98846-1978</span>
+            <span>Fale conosco</span>
         </div>
 
         <footer class="main-footer">
-            <p>Rádio Vende+ &copy; 2025 • Modo Automático</p>
+            <p>Rádio+ &copy; 2025 • Modo Automático</p>
         </footer>
     </div>
 
@@ -827,36 +815,36 @@
         (function() {
             // ==================== LISTA DE MÚSICAS ====================
             const playlistCompleta = [
-                { id: 1, title: "Sexual Healing", artist: "Marvin Gaye", src: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00", featured: true },
-                { id: 2, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", src: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45", featured: false },
-                { id: 3, title: "I've Had The Time Of My Life", artist: "Mauricio Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15", featured: true },
-                { id: 4, title: "Sunrise", artist: "Simply Red", src: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50", featured: false },
-                { id: 5, title: "Forever Young", artist: "Alphaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05", featured: true },
-                { id: 6, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55", featured: false },
-                { id: 7, title: "Everytime You Go Away", artist: "Dino Fonseca", src: "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", duration: "4:20", featured: false },
-                { id: 8, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", src: "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", duration: "3:40", featured: true },
-                { id: 9, title: "What's Up", artist: "4 Non Blondes", src: "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", duration: "4:10", featured: false },
-                { id: 10, title: "Thank You", artist: "Dido", src: "Dido_Thank_You_muzzik.m4a", duration: "3:55", featured: false },
-                { id: 11, title: "TRANSAS", artist: "Belo", src: "Belo_Transas_Ao_Vivo_DVD_Belo_In_Concert_muzzik.m4a", duration: "4:25", featured: true },
-                { id: 12, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:15", featured: false },
-                { id: 13, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", duration: "3:50", featured: true },
-                { id: 14, title: "Woman in Love", artist: "Barbra Streisand", src: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45", featured: false },
-                { id: 15, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00", featured: false },
-                { id: 16, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50", featured: true },
-                { id: 17, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15", featured: false },
-                { id: 18, title: "Corre Pro Meu Mar", artist: "Maneva", src: "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", duration: "4:25", featured: true },
-                { id: 19, title: "Paciência", artist: "Ferrugem Part. Alcione", src: "Ferrugem_Paci_ncia_Part_Alcione_muzzik.m4a", duration: "4:25", featured: false },
-                { id: 20, title: "Sorriso Maroto", artist: "Sorriso Maroto", src: "soriso maroto.mp3", duration: "3:30", featured: false },
-                { id: 21, title: "Lá Na Roça", artist: "Felipe e Murillo ft Ana Castela", src: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15", featured: true },
-                { id: 22, title: "Sorri Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45", featured: false },
-                { id: 23, title: "Ainda bem", artist: "Xande de Pilares", src: "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", duration: "4:00", featured: false },
-                { id: 24, title: "Boa Sorte", artist: "Vanessa da Mata", src: "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", duration: "3:55", featured: true },
-                { id: 25, title: "Garota Nacional", artist: "Skank", src: "Skank_Garota_Nacional_muzzik.m4a", duration: "4:00", featured: false },
-                { id: 26, title: "OPA KD EU!", artist: "Cleito & romário", src: "Clayton_Rom_rio_Opa_Cad_Eu_muzzik.m4a", duration: "3:45", featured: true },
-                { id: 27, title: "MINA DO CONDOMINIO", artist: "Seu Jorge", src: "Mina_do_Mina_do_Condom_nio_muzzik.m4a", duration: "4:15", featured: false },
-                { id: 28, title: "Epitáfio", artist: "Titãs", src: "Epit_fio_Epit_fio_muzzik.m4a", duration: "4:10", featured: true },
-                { id: 29, title: "Lanterna dos Afogados", artist: "Paralamas", src: "Lanterna_Dos_Lanterna_Dos_Afogados_muzzik.m4a", duration: "4:05", featured: false },
-                { id: 30, title: "7Apaguei_Pra_Todos", artist: "Ferrugem $ Sorriso Maroto", src: "7Apaguei_Pra_Todos_Ferrugem_part_Sorriso_Maroto_muzzik.m4a", duration: "4:30", featured: true }
+                { id: 1, title: "Sexual Healing", artist: "Marvin Gaye", src: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00" },
+                { id: 2, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", src: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45" },
+                { id: 3, title: "I've Had The Time Of My Life", artist: "Mauricio Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15" },
+                { id: 4, title: "Sunrise", artist: "Simply Red", src: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50" },
+                { id: 5, title: "Forever Young", artist: "Alphaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05" },
+                { id: 6, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55" },
+                { id: 7, title: "Everytime You Go Away", artist: "Dino Fonseca", src: "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", duration: "4:20" },
+                { id: 8, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", src: "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", duration: "3:40" },
+                { id: 9, title: "What's Up", artist: "4 Non Blondes", src: "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", duration: "4:10" },
+                { id: 10, title: "Thank You", artist: "Dido", src: "Dido_Thank_You_muzzik.m4a", duration: "3:55" },
+                { id: 11, title: "TRANSAS", artist: "Belo", src: "Belo_Transas_Ao_Vivo_DVD_Belo_In_Concert_muzzik.m4a", duration: "4:25" },
+                { id: 12, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:15" },
+                { id: 13, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", duration: "3:50" },
+                { id: 14, title: "Woman in Love", artist: "Barbra Streisand", src: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45" },
+                { id: 15, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00" },
+                { id: 16, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50" },
+                { id: 17, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
+                { id: 18, title: "Corre Pro Meu Mar", artist: "Maneva", src: "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", duration: "4:25" },
+                { id: 19, title: "Paciência", artist: "Ferrugem Part. Alcione", src: "Ferrugem_Paci_ncia_Part_Alcione_muzzik.m4a", duration: "4:25" },
+                { id: 20, title: "Sorriso Maroto", artist: "Sorriso Maroto", src: "soriso maroto.mp3", duration: "3:30" },
+                { id: 21, title: "Lá Na Roça", artist: "Felipe e Murillo ft Ana Castela", src: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15" },
+                { id: 22, title: "Sorri Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45" },
+                { id: 23, title: "Ainda bem", artist: "Xande de Pilares", src: "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", duration: "4:00" },
+                { id: 24, title: "Boa Sorte", artist: "Vanessa da Mata", src: "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", duration: "3:55" },
+                { id: 25, title: "Garota Nacional", artist: "Skank", src: "Skank_Garota_Nacional_muzzik.m4a", duration: "4:00" },
+                { id: 26, title: "OPA KD EU!", artist: "Cleito & romário", src: "Clayton_Rom_rio_Opa_Cad_Eu_muzzik.m4a", duration: "3:45" },
+                { id: 27, title: "MINA DO CONDOMINIO", artist: "Seu Jorge", src: "Mina_do_Mina_do_Condom_nio_muzzik.m4a", duration: "4:15" },
+                { id: 28, title: "Epitáfio", artist: "Titãs", src: "Epit_fio_Epit_fio_muzzik.m4a", duration: "4:10" },
+                { id: 29, title: "Lanterna dos Afogados", artist: "Paralamas", src: "Lanterna_Dos_Lanterna_Dos_Afogados_muzzik.m4a", duration: "4:05" },
+                { id: 30, title: "Apaguei Pra Todos", artist: "Ferrugem & Sorriso Maroto", src: "7Apaguei_Pra_Todos_Ferrugem_part_Sorriso_Maroto_muzzik.m4a", duration: "4:30" }
             ];
 
             // ==================== ANÚNCIOS ====================
@@ -871,7 +859,6 @@
 
             // ==================== ESTADO ====================
             let playlistAtual = [];
-            let featuredSongs = [];
             let currentIndex = 0;
             let isPlaying = false;
             let isAdPlaying = false;
@@ -885,8 +872,6 @@
             let uptimeSeconds = 0;
             let shouldResumeMusic = false;
             let autoPlayAttempted = false;
-            let isFeaturedMode = false; // quando true, está tocando uma destacada
-            let returnToIndex = 0; // guarda posição da playlist automática
 
             // Elementos DOM
             const musicPlayer = document.getElementById('musicPlayer');
@@ -903,7 +888,6 @@
             const trackTitleBig = document.getElementById('trackTitleBig');
             const trackArtistBig = document.getElementById('trackArtistBig');
             const playlistContainer = document.getElementById('playlistContainer');
-            const featuredContainer = document.getElementById('featuredContainer');
             const volumeSlider = document.getElementById('volumeSlider');
             const volumePercent = document.getElementById('volumePercent');
             const volumeIcon = document.getElementById('volumeIcon');
@@ -922,7 +906,6 @@
             const dropdownMenu = document.getElementById('dropdownMenu');
             const programacaoSection = document.getElementById('programacao-section');
             const eventosSection = document.getElementById('eventos-section');
-            const bgVideo = document.getElementById('bgVideo');
             const totalCountEl = document.getElementById('totalCount');
             const fullscreenBtn = document.getElementById('fullscreenBtn');
 
@@ -947,9 +930,7 @@
                 }
             });
             document.addEventListener('fullscreenchange', () => {
-                if (!document.fullscreenElement) {
-                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-                }
+                fullscreenBtn.innerHTML = document.fullscreenElement ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
             });
 
             // ==================== FUNÇÕES DA PLAYLIST ====================
@@ -963,10 +944,8 @@
 
             function inicializarPlaylist() {
                 playlistAtual = shuffleArray([...playlistCompleta]);
-                featuredSongs = playlistCompleta.filter(s => s.featured);
                 totalCountEl.textContent = playlistAtual.length;
                 mostrarPlaylist();
-                mostrarDestaques();
                 if (playlistAtual.length > 0) {
                     currentIndex = 0;
                     loadTrack(currentIndex);
@@ -975,32 +954,11 @@
 
             function mostrarPlaylist() {
                 let html = '';
-                const mostrar = playlistAtual.slice(0, 15);
-                mostrar.forEach((musica, index) => {
-                    const isPlaying = (index === currentIndex && !isAdPlaying && !isFeaturedMode);
+                playlistAtual.forEach((musica, index) => {
+                    const isPlaying = (index === currentIndex && !isAdPlaying);
                     html += `
                         <div class="playlist-item ${isPlaying ? 'playing' : ''}" onclick="selectSong(${index})">
                             <div class="item-number">${index + 1}</div>
-                            <div class="item-info">
-                                <div class="item-title">${musica.title} ${musica.featured ? '<i class="fas fa-star featured-badge" style="color:gold;"></i>' : ''}</div>
-                                <div class="item-artist">${musica.artist}</div>
-                            </div>
-                            <div class="item-duration">${musica.duration}</div>
-                        </div>
-                    `;
-                });
-                if (playlistAtual.length > 15) {
-                    html += `<div style="text-align:center; padding:8px; opacity:0.7;">+ ${playlistAtual.length - 15} músicas</div>`;
-                }
-                playlistContainer.innerHTML = html || '<div style="padding:1rem; text-align:center;">Nenhuma música</div>';
-            }
-
-            function mostrarDestaques() {
-                let html = '';
-                featuredSongs.forEach((musica) => {
-                    html += `
-                        <div class="playlist-item" onclick="playFeatured('${musica.id}')">
-                            <div class="item-number"><i class="fas fa-star" style="color:gold;"></i></div>
                             <div class="item-info">
                                 <div class="item-title">${musica.title}</div>
                                 <div class="item-artist">${musica.artist}</div>
@@ -1009,40 +967,17 @@
                         </div>
                     `;
                 });
-                featuredContainer.innerHTML = html || '<div style="padding:1rem;">Nenhum destaque</div>';
+                playlistContainer.innerHTML = html || '<div style="padding:1rem; text-align:center;">Nenhuma música</div>';
             }
 
             window.selectSong = function(index) {
-                if (isAdPlaying) return;
-                // Sair do modo destaque se estiver
-                isFeaturedMode = false;
+                if (isAdPlaying) {
+                    showNotification('⏸️ Aguarde o anúncio terminar');
+                    return;
+                }
                 currentIndex = index;
                 loadTrack(currentIndex);
                 if (isPlaying) playMusic();
-            };
-
-            window.playFeatured = function(id) {
-                if (isAdPlaying) return;
-                const musica = playlistCompleta.find(m => m.id == id);
-                if (!musica) return;
-                
-                // Guarda posição atual para retornar depois
-                returnToIndex = currentIndex;
-                isFeaturedMode = true;
-                
-                // Carrega a música destacada
-                musicPlayer.src = musica.src;
-                musicPlayer.load();
-                trackTitleBig.textContent = musica.title;
-                trackArtistBig.textContent = musica.artist;
-                totalTimeEl.textContent = musica.duration;
-                progressFill.style.width = '0%';
-                currentTimeEl.textContent = '0:00';
-                
-                if (isPlaying) playMusic();
-                else togglePlayPause();
-                
-                showNotification('⭐ Destaque: ' + musica.title);
             };
 
             function loadTrack(index) {
@@ -1075,8 +1010,8 @@
                     isPlaying = true;
                     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 }).catch(e => {
-                    console.log(e);
-                    showNotification('⚠️ Erro, pulando...');
+                    console.log('Erro ao tocar:', e);
+                    showNotification('⚠️ Erro na música, pulando...');
                     setTimeout(() => nextTrack(), 1500);
                 });
             }
@@ -1098,23 +1033,17 @@
             function nextTrack() {
                 if (isAdPlaying) return;
                 
-                if (isFeaturedMode) {
-                    // Terminou destaque, volta para playlist automática
-                    isFeaturedMode = false;
-                    currentIndex = returnToIndex;
-                    loadTrack(currentIndex);
-                    if (isPlaying) playMusic();
-                    showNotification('↩️ Voltando à playlist automática');
-                    return;
-                }
-                
                 if (shuffleMode && playlistAtual.length > 1) {
                     let newIndex;
                     do { newIndex = Math.floor(Math.random() * playlistAtual.length); } 
-                    while (newIndex === currentIndex);
+                    while (newIndex === currentIndex && playlistAtual.length > 1);
                     currentIndex = newIndex;
                 } else {
                     currentIndex = (currentIndex + 1) % playlistAtual.length;
+                    if (!repeatMode && currentIndex === 0 && musicPlayedCount > 0) {
+                        pauseMusic();
+                        return;
+                    }
                 }
                 
                 loadTrack(currentIndex);
@@ -1126,7 +1055,7 @@
             }
 
             function prevTrack() {
-                if (isAdPlaying || isFeaturedMode) return;
+                if (isAdPlaying) return;
                 currentIndex = (currentIndex - 1 + playlistAtual.length) % playlistAtual.length;
                 loadTrack(currentIndex);
                 if (isPlaying) playMusic();
@@ -1135,7 +1064,7 @@
             // ==================== ANÚNCIOS ====================
             function checkAdInterval() {
                 if (!adsEnabled) return;
-                if (musicPlayedCount > 0 && musicPlayedCount % CONFIG.musicBetweenAds === 0 && !isAdPlaying && !isFeaturedMode) {
+                if (musicPlayedCount > 0 && musicPlayedCount % CONFIG.musicBetweenAds === 0 && !isAdPlaying) {
                     playNextAd();
                 }
                 updateAdTimer();
@@ -1236,17 +1165,19 @@
                 playBtn.addEventListener('click', togglePlayPause);
                 prevBtn.addEventListener('click', prevTrack);
                 nextBtn.addEventListener('click', nextTrack);
+                
                 shuffleBtn.addEventListener('click', () => {
                     shuffleMode = !shuffleMode;
                     shuffleBtn.style.background = shuffleMode ? 'linear-gradient(135deg, #ffaa33, #ff8800)' : '';
                     shuffleBtn.style.color = shuffleMode ? 'white' : '';
-                    showNotification(shuffleMode ? '🔀 Aleatório' : '➡️ Sequencial');
+                    showNotification(shuffleMode ? '🔀 Modo aleatório ativado' : '➡️ Modo sequencial ativado');
                 });
+                
                 repeatBtn.addEventListener('click', () => {
                     repeatMode = !repeatMode;
                     repeatBtn.style.background = repeatMode ? 'linear-gradient(135deg, #ffaa33, #ff8800)' : '';
                     repeatBtn.style.color = repeatMode ? 'white' : '';
-                    showNotification(repeatMode ? '🔁 Repetir' : '➡️ Repetir desligado');
+                    showNotification(repeatMode ? '🔁 Repetição ativada' : '➡️ Repetição desativada');
                 });
 
                 musicPlayer.addEventListener('timeupdate', () => {
@@ -1256,6 +1187,7 @@
                         currentTimeEl.textContent = formatTime(musicPlayer.currentTime);
                     }
                 });
+                
                 musicPlayer.addEventListener('ended', () => { if (!isAdPlaying) nextTrack(); });
                 musicPlayer.addEventListener('error', () => { if (!isAdPlaying) setTimeout(nextTrack, 1000); });
 
@@ -1273,8 +1205,9 @@
                 });
 
                 shareBtnNav.addEventListener('click', () => {
-                    if (navigator.share) navigator.share({ title: 'Rádio Vende+', text: 'Música automática 24h', url: window.location.href });
-                    else {
+                    if (navigator.share) {
+                        navigator.share({ title: 'Rádio+', text: 'Música automática 24h', url: window.location.href });
+                    } else {
                         navigator.clipboard.writeText(window.location.href);
                         showNotification('📋 Link copiado!');
                     }
@@ -1283,9 +1216,13 @@
                 toggleAdsBtnDropdown.addEventListener('click', toggleAds);
                 testAdBtnDropdown.addEventListener('click', testAd);
                 skipAdBtnDropdown.addEventListener('click', skipAd);
+                
                 menuToggle.addEventListener('click', () => dropdownMenu.classList.toggle('show'));
+                
                 document.addEventListener('click', (e) => {
-                    if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) dropdownMenu.classList.remove('show');
+                    if (!menuToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.remove('show');
+                    }
                 });
             }
 
@@ -1312,7 +1249,7 @@
                     uptimeEl.textContent = h > 0 ? `${h}h${m}` : `${m}min`;
                 }, 1000);
 
-                // Autoplay tentativa
+                // Autoplay
                 if (playlistAtual.length) {
                     const autoPlay = () => {
                         if (!autoPlayAttempted) {
@@ -1332,12 +1269,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
