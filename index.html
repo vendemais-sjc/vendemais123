@@ -374,7 +374,7 @@
             cursor: pointer;
         }
 
-        /* PLAYER - com vídeo 16:9 (1920x1080) */
+        /* PLAYER - com vídeo 16:9 */
         .player-card {
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
@@ -386,13 +386,13 @@
 
         .video-container {
             width: 100%;
-            aspect-ratio: 16/9; /* Proporção 16:9 para vídeos 1920x1080 */
+            aspect-ratio: 16/9;
             background: #000;
         }
         .video-container video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Mantém a proporção cobrindo todo o container */
+            object-fit: cover;
         }
 
         .player-controls {
@@ -821,123 +821,96 @@
 
     <script>
         // ============================================
-        // PLAYLISTS ORGANIZADAS POR PERÍODO - 25 MÚSICAS CADA (SEM REPETIÇÃO)
+        // PLAYLIST ÚNICA E SIMPLES - FÁCIL DE MANTER
         // ============================================
         
-        // ===== MADRUGADA (00h - 06h) =====
-        const madrugadaTracks = [
-            { id: 101, title: "Sexual Healing", artist: "Marvin Gaye", src: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00" },
-            { id: 102, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", src: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45" },
-            { id: 103, title: "I've Had The Time Of My Life", artist: "Mauricio Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15" },
-            { id: 104, title: "Sunrise", artist: "Simply Red", src: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50" },
-            { id: 105, title: "Forever Young", artist: "Alphaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05" },
-            { id: 106, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55" },
-            { id: 107, title: "Everytime You Go Away", artist: "Dino Fonseca", src: "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", duration: "4:20" },
-            { id: 108, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", src: "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", duration: "3:40" },
-            { id: 109, title: "What's Up", artist: "4 Non Blondes", src: "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", duration: "4:10" },
-            { id: 110, title: "Thank You", artist: "Dido", src: "Dido_Thank_You_muzzik.m4a", duration: "3:55" },
-            { id: 111, title: "Vitoriosa", artist: "Ivan Lins", src: "Ivan_Lins_Vitoriosa_muzzik.m4a", duration: "4:25" },
-            { id: 112, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:15" },
-            { id: 113, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", duration: "3:50" },
-            { id: 114, title: "Woman in Love", artist: "Barbra Streisand", src: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45" },
-            { id: 115, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00" },
-            { id: 116, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50" },
-            { id: 117, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
-            { id: 118, title: "Madrugada Serena", artist: "Grupo Romance", src: "madrugada18.m4a", duration: "4:20" },
-            { id: 119, title: "Madrugada de Valsa", artist: "Orquestra da Lua", src: "madrugada19.m4a", duration: "4:15" },
-            { id: 120, title: "Noite Silenciosa", artist: "Piano Bar", src: "madrugada20.m4a", duration: "3:45" },
-            { id: 121, title: "Madrugada de Amor", artist: "Voz e Violão", src: "madrugada21.m4a", duration: "4:25" },
-            { id: 122, title: "Madrugada de Paz", artist: "Banda Melodia", src: "madrugada17.m4a", duration: "4:25" },
-            { id: 123, title: "Madrugada de Sonhos", artist: "Som da Noite", src: "madrugada23.m4a", duration: "4:30" },
-            { id: 124, title: "Madrugada de Rêverie", artist: "Clube da Esquina", src: "madrugada24.m4a", duration: "4:05" },
-            { id: 125, title: "Céu da Madrugada", artist: "Estrela Guia", src: "madrugada25.m4a", duration: "4:00" },
-        ];
-
-        // ===== MANHÃ (06h - 12h) =====
-        const manhaTracks = [
-            { id: 201, title: "Sorriso Maroto", artist: "Sorriso Maroto", src: "soriso maroto.mp3", duration: "3:30" },
-            { id: 202, title: "Lá Na Roça", artist: "Felipe e Murillo ft Ana Castela", src: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15" },
-            { id: 203, title: "Sorriso Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45" },
-            { id: 204, title: "Variadas", artist: "Xand Avião", src: "Xand_Avião_-_O_Forró_É_Pop.mp3", duration: "4:00" },
-            { id: 205, title: "Mina do Condomínio", artist: "Seu Jorge", src: "Mina_do_Condom_nio_muzzik.m4a", duration: "3:55" },
-            { id: 206, title: "Die With A Smile", artist: "Lady Gaga & Bruno Mars", src: "Lady_Gaga_Bruno_Mars_Die_With_A_Smile_muzzik.m4a", duration: "4:10" },
-            { id: 207, title: "Desbloqueado", artist: "Diego e Victor Hugo", src: "Diego_Victor_Hugo_Desbloqueado.mp3", duration: "3:50" },
-            { id: 208, title: "PDA", artist: "John Legend", src: "John_Legend_P_D_A_muzzik.m4a", duration: "4:25" },
-            { id: 209, title: "Anunciação", artist: "Alceu Valença", src: "Alceu_Valença_Anunciação.mp3", duration: "4:20" },
-            { id: 210, title: "Retrovisor", artist: "Gustavo Lima", src: "Gusttavo_Lima_Retrovisor_muzzik.m4a", duration: "4:15" },
-            { id: 211, title: "Versos e Promessas", artist: "Calcinha Preta", src: "Calcinha_Preta_Versos_E_Promessas.mp3", duration: "4:25" },
-            { id: 212, title: "Nosso Primeiro Beijo", artist: "Gloria Groove", src: "Gloria_Groove_Nosso_Primeiro_Beijo_muzzik.m4a", duration: "4:15" },
-            { id: 213, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:30" },
-            { id: 214, title: "Transas", artist: "Belo", src: "Belo_Transas_Ao_Vivo_muzzik.m4a", duration: "4:05" },
-            { id: 215, title: "Discurso", artist: "Henrique e Juliano", src: "Henrique_e_Juliano_DISCURSO_muzzik.m4a", duration: "3:55" },
-            { id: 216, title: "Disritmia", artist: "Disritmia", src: "Disritmia_Espumas_ao_vento_muzzik.m4a", duration: "3:30" },
-            { id: 217, title: "Garanhão da Madrugada", artist: "Fernando & Sorocaba", src: "Garanhão_da_Madrugada_muzzik.m4a", duration: "4:15" },
-            { id: 218, title: "Paciência", artist: "Ferrugem & Alcione", src: "Ferrugem_Paciência_Part_Alcione_muzzik.m4a", duration: "4:25" },
-            { id: 219, title: "Porsche Azul", artist: "Claudio Ney e Juliana", src: "Claudio_Ney_e_Juliana_Porsche_Azul_muzzik.m4a", duration: "4:15" },
-            { id: 220, title: "Opa Cadê Eu", artist: "Clayton & Romário", src: "Clayton_Romário_Opa_Cad_Eu_muzzik.m4a", duration: "4:30" },
-            { id: 221, title: "Que Era Eu", artist: "Lauana Prado", src: "Lauana_Prado_Que_Era_Eu_muzzik.m4a", duration: "4:05" },
-            { id: 222, title: "Dona", artist: "Luan Santana feat. Léo Foguete", src: "Luan_Santana_DONA_muzzik.m4a", duration: "4:15" },
-            { id: 223, title: "Andar com Fé", artist: "Xanddy Harmonia part. Xande de Pilares", src: "Xanddy_Harmonia_Andar_com_Fé_muzzik.m4a", duration: "3:45" },
-            { id: 224, title: "Sonho de Amor", artist: "Circuito Musical", src: "SONHO_DE_AMOR_Circuito_Musical_muzzik.m4a", duration: "4:00" },
-            { id: 225, title: "Perfume", artist: "Desejo de Menina", src: "PERFUME_Desejo_de_Menina_muzzik.m4a", duration: "3:55" },
-        ];
-
-        // ===== TARDE (12h - 18h) =====
-        const tardeTracks = [
-            { id: 301, title: "PDA", artist: "John Legend", src: "John_Legend_PDA_muzzik.m4a", duration: "4:55" },
-            { id: 302, title: "Thank You", artist: "Dido", src: "Dido_Thank_You_muzzik.m4a", duration: "4:55" },
-            { id: 303, title: "More Than a Woman", artist: "Bee Gees", src: "Bee_Gees_More_Than_A_Woman_muzzik.m4a", duration: "4:31" },
-            { id: 304, title: "Everytime You Go Away", artist: "Dino Fonseca", src: "Dino_Fonseca_Everytime_You_Go_Away_muzzik.m4a", duration: "5:11" },
-            { id: 305, title: "Stars", artist: "Simply Red", src: "Simply_Red_Stars_muzzik.m4a", duration: "4:32" },
-            { id: 306, title: "Clube da Esquina", artist: "Flávio Venturini", src: "Flavio_Venturini_Clube_da_Esquina_muzzik.m4a", duration: "4:32" },
-            { id: 307, title: "Forever Young", artist: "Alphaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:59" },
-            { id: 308, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", src: "Vitor_Kley_Samuel_Rosa_A_Tal_Canção_muzzik.m4a", duration: "5:12" },
-            { id: 309, title: "Cheia de Charme", artist: "Guilherme Arantes", src: "Guilherme_Arantes_Cheia_de_Charme_muzzik.m4a", duration: "3:45" },
-            { id: 310, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "4:20" },
-            { id: 311, title: "Send It Back", artist: "Don West", src: "DON_WEST_Send_It_Back_muzzik.m4a", duration: "4:15" },
-            { id: 312, title: "Vamos Fugir", artist: "Skank", src: "Skank_Vamos_Fugir_muzzik.m4a", duration: "4:10" },
-            { id: 313, title: "Valerie", artist: "Amy Winehouse", src: "Amy_Winehouse_Valerie_muzzik.m4a", duration: "4:20" },
-            { id: 314, title: "Is This Love", artist: "Bob Marley", src: "Bob_Marley_Is_This_Love_muzzik.m4a", duration: "4:30" },
-            { id: 315, title: "I've Had The Time Of My Life", artist: "Maurício Manieri", src: "Mauricio_Manieri_Time_Of_My_Life_muzzik.m4a", duration: "4:05" },
-            { id: 316, title: "My Sweet Lord", artist: "George Harrison", src: "George_Harrison_My_Sweet_Lord_muzzik.m4a", duration: "3:55" },
-            { id: 317, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World.m4a", duration: "4:20" },
-            { id: 318, title: "Woman in Love", artist: "Barbra Streisand", src: "Barbra_Streisand_Woman_in_Love_muzzik.m4a", duration: "4:15" },
-            { id: 319, title: "Tarde de Amor", artist: "Tarde Demais", src: "tarde_amor.m4a", duration: "4:25" },
-            { id: 320, title: "Tarde de Lua", artist: "Entardecer", src: "tarde_lua.m4a", duration: "4:15" },
-            { id: 321, title: "Tarde de Sonhos", artist: "Sonhador", src: "tarde_sonhos.m4a", duration: "4:30" },
-            { id: 322, title: "Amor Perfeito", artist: "Mano a Mano", src: "MANO_A_MANO_Amor_Perfeito_muzzik.m4a", duration: "4:05" },
-            { id: 323, title: "Tarde de Música", artist: "Tarde Cultural", src: "tarde_musica.m4a", duration: "3:55" },
-            { id: 324, title: "Tarde de Cenário", artist: "Paisagem", src: "tarde_cenario.m4a", duration: "4:20" },
-            { id: 325, title: "Tarde de Valsa", artist: "Dança da Tarde", src: "tarde_valsa.m4a", duration: "4:15" },
-        ];
-
-        // ===== NOITE (18h - 00h) =====
-        const noiteTracks = [
-            { id: 401, title: "Linda Juventude +2", artist: "Flávio Venturini & Jota Quest", src: "9Flavio_Venturini_Flavio_Venturini_Feat_Jota_muzzik.m4a", duration: "4:20" },
-            { id: 402, title: "Ainda Bem", artist: "Xande de Pilares", src: "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", duration: "3:55" },
-            { id: 403, title: "More Than a Woman", artist: "Bee Gees", src: "Bee_Gees_More_Than_A_Woman_muzzik.m4a", duration: "4:10" },
-            { id: 404, title: "Toda Forma de Amor", artist: "Lulu Santos", src: "Lulu_Santos_Toda_Forma_de_Amor_muzzik.m4a", duration: "3:45" },
-            { id: 405, title: "Sorri, Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "4:25" },
-            { id: 406, title: "Send It Back", artist: "Don West", src: "DON_WEST_Send_It_Back_muzzik.m4a", duration: "4:15" },
-            { id: 407, title: "I've Had the Time of My Life", artist: "Maurício Manieri", src: "Mauricio_Manieri_Time_Of_My_Life_muzzik.m4a", duration: "3:50" },
-            { id: 408, title: "Is This Love", artist: "Bob Marley", src: "Bob_Marley_Is_This_Love_muzzik.m4a", duration: "4:30" },
-            { id: 409, title: "Foi Bom, Mas Foi Ontem @1", artist: "Grupo Menos é Mais e João Gomes", src: "Grupo_Menos_Mais_NATTAN_Pela_ltima_Vez_muzzik.m4a", duration: "4:05" },
-            { id: 410, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "3:55" },
-            { id: 411, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World.m4a", duration: "4:20" },
-            { id: 412, title: "Woman in Love", artist: "Barbra Streisand", src: "Barbra_Streisand_Woman_in_Love_muzzik.m4a", duration: "4:15" },
-            { id: 413, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:25" },
-            { id: 414, title: "Noite de Lua", artist: "Luzeiro", src: "noite_lua.m4a", duration: "4:15" },
-            { id: 415, title: "Noite de Música", artist: "Serenata", src: "noite_musica.m4a", duration: "3:50" },
-            { id: 416, title: "Noite de Sonhos", artist: "Sonhos", src: "noite_sonhos.m4a", duration: "4:30" },
-            { id: 417, title: "Noite de Rêverie", artist: "Noturno", src: "noite_reverie.m4a", duration: "4:05" },
-            { id: 418, title: "Noite Estrelada", artist: "Estrelas", src: "noite_estrelada.m4a", duration: "3:55" },
-            { id: 419, title: "Palco", artist: "Palco", src: "PALCO_muzzik.m4a", duration: "4:20" },
-            { id: 420, title: "Noite de Valsa", artist: "Valsa Noturna", src: "noite_valsa.m4a", duration: "4:15" },
-            { id: 421, title: "Noite de Amor", artist: "Amor Noturno", src: "noite_amor.m4a", duration: "4:25" },
-            { id: 422, title: "Noite de Paz", artist: "Paz Noturna", src: "noite_paz.m4a", duration: "4:15" },
-            { id: 423, title: "Palpite", artist: "Vanessa Rangel", src: "Vanessa_Rangel_Palpite_muzzik.m4a", duration: "3:50" },
-            { id: 424, title: "Noite de Romance", artist: "Romance", src: "noite_romance.m4a", duration: "4:30" },
-            { id: 425, title: "Noite Serena", artist: "Serenidade", src: "noite_serena.m4a", duration: "4:05" },
+        // ARRAY ÚNICA com TODAS as músicas
+        // Para adicionar uma música nova, basta copiar e colar uma linha abaixo
+        const todasAsMusicas = [
+            // Formato: { id: número único, title: "Nome", artist: "Artista", src: "arquivo.mp3", duration: "3:45" }
+            
+            // MÚSICAS BASE (tocam em todos os períodos)
+            { id: 1, title: "Sexual Healing", artist: "Marvin Gaye", src: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00" },
+            { id: 2, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", src: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45" },
+            { id: 3, title: "I've Had The Time Of My Life", artist: "Mauricio Manieri", src: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15" },
+            { id: 4, title: "Sunrise", artist: "Simply Red", src: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50" },
+            { id: 5, title: "Forever Young", artist: "Alphaville", src: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05" },
+            { id: 6, title: "Everybody's Changing", artist: "Keane", src: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55" },
+            { id: 7, title: "Everytime You Go Away", artist: "Dino Fonseca", src: "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", duration: "4:20" },
+            { id: 8, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", src: "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", duration: "3:40" },
+            { id: 9, title: "What's Up", artist: "4 Non Blondes", src: "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", duration: "4:10" },
+            { id: 10, title: "Thank You", artist: "Dido", src: "Dido_Thank_You_muzzik.m4a", duration: "3:55" },
+            { id: 11, title: "Vitoriosa", artist: "Ivan Lins", src: "Ivan_Lins_Vitoriosa_muzzik.m4a", duration: "4:25" },
+            { id: 12, title: "Homem Aranha", artist: "Jorge Vercilo", src: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:15" },
+            { id: 13, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", src: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", duration: "3:50" },
+            { id: 14, title: "Woman in Love", artist: "Barbra Streisand", src: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45" },
+            { id: 15, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", src: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00" },
+            { id: 16, title: "Pedindo Amor", artist: "Mano a Mano", src: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50" },
+            { id: 17, title: "Reluz", artist: "Marcos Sabino", src: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
+            { id: 18, title: "Madrugada Serena", artist: "Grupo Romance", src: "madrugada18.m4a", duration: "4:20" },
+            { id: 19, title: "Madrugada de Valsa", artist: "Orquestra da Lua", src: "madrugada19.m4a", duration: "4:15" },
+            { id: 20, title: "Noite Silenciosa", artist: "Piano Bar", src: "madrugada20.m4a", duration: "3:45" },
+            { id: 21, title: "Madrugada de Amor", artist: "Voz e Violão", src: "madrugada21.m4a", duration: "4:25" },
+            { id: 22, title: "Madrugada de Paz", artist: "Banda Melodia", src: "madrugada17.m4a", duration: "4:25" },
+            { id: 23, title: "Madrugada de Sonhos", artist: "Som da Noite", src: "madrugada23.m4a", duration: "4:30" },
+            { id: 24, title: "Madrugada de Rêverie", artist: "Clube da Esquina", src: "madrugada24.m4a", duration: "4:05" },
+            { id: 25, title: "Céu da Madrugada", artist: "Estrela Guia", src: "madrugada25.m4a", duration: "4:00" },
+            
+            // MÚSICAS ANIMADAS (mais para manhã/tarde)
+            { id: 26, title: "Sorriso Maroto", artist: "Sorriso Maroto", src: "soriso maroto.mp3", duration: "3:30" },
+            { id: 27, title: "Lá Na Roça", artist: "Felipe e Murillo ft Ana Castela", src: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15" },
+            { id: 28, title: "Sorriso Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45" },
+            { id: 29, title: "Variadas", artist: "Xand Avião", src: "Xand_Avião_-_O_Forró_É_Pop.mp3", duration: "4:00" },
+            { id: 30, title: "Mina do Condomínio", artist: "Seu Jorge", src: "Mina_do_Condom_nio_muzzik.m4a", duration: "3:55" },
+            { id: 31, title: "Die With A Smile", artist: "Lady Gaga & Bruno Mars", src: "Lady_Gaga_Bruno_Mars_Die_With_A_Smile_muzzik.m4a", duration: "4:10" },
+            { id: 32, title: "Desbloqueado", artist: "Diego e Victor Hugo", src: "Diego_Victor_Hugo_Desbloqueado.mp3", duration: "3:50" },
+            { id: 33, title: "PDA", artist: "John Legend", src: "John_Legend_P_D_A_muzzik.m4a", duration: "4:25" },
+            { id: 34, title: "Anunciação", artist: "Alceu Valença", src: "Alceu_Valença_Anunciação.mp3", duration: "4:20" },
+            { id: 35, title: "Retrovisor", artist: "Gustavo Lima", src: "Gusttavo_Lima_Retrovisor_muzzik.m4a", duration: "4:15" },
+            { id: 36, title: "Versos e Promessas", artist: "Calcinha Preta", src: "Calcinha_Preta_Versos_E_Promessas.mp3", duration: "4:25" },
+            { id: 37, title: "Nosso Primeiro Beijo", artist: "Gloria Groove", src: "Gloria_Groove_Nosso_Primeiro_Beijo_muzzik.m4a", duration: "4:15" },
+            { id: 38, title: "Transas", artist: "Belo", src: "Belo_Transas_Ao_Vivo_muzzik.m4a", duration: "4:05" },
+            { id: 39, title: "Discurso", artist: "Henrique e Juliano", src: "Henrique_e_Juliano_DISCURSO_muzzik.m4a", duration: "3:55" },
+            { id: 40, title: "Disritmia", artist: "Disritmia", src: "Disritmia_Espumas_ao_vento_muzzik.m4a", duration: "3:30" },
+            { id: 41, title: "Garanhão da Madrugada", artist: "Fernando & Sorocaba", src: "Garanhão_da_Madrugada_muzzik.m4a", duration: "4:15" },
+            { id: 42, title: "Paciência", artist: "Ferrugem & Alcione", src: "Ferrugem_Paciência_Part_Alcione_muzzik.m4a", duration: "4:25" },
+            { id: 43, title: "Porsche Azul", artist: "Claudio Ney e Juliana", src: "Claudio_Ney_e_Juliana_Porsche_Azul_muzzik.m4a", duration: "4:15" },
+            { id: 44, title: "Opa Cadê Eu", artist: "Clayton & Romário", src: "Clayton_Romário_Opa_Cad_Eu_muzzik.m4a", duration: "4:30" },
+            { id: 45, title: "Que Era Eu", artist: "Lauana Prado", src: "Lauana_Prado_Que_Era_Eu_muzzik.m4a", duration: "4:05" },
+            { id: 46, title: "Dona", artist: "Luan Santana feat. Léo Foguete", src: "Luan_Santana_DONA_muzzik.m4a", duration: "4:15" },
+            { id: 47, title: "Andar com Fé", artist: "Xanddy Harmonia part. Xande de Pilares", src: "Xanddy_Harmonia_Andar_com_Fé_muzzik.m4a", duration: "3:45" },
+            { id: 48, title: "Sonho de Amor", artist: "Circuito Musical", src: "SONHO_DE_AMOR_Circuito_Musical_muzzik.m4a", duration: "4:00" },
+            { id: 49, title: "Perfume", artist: "Desejo de Menina", src: "PERFUME_Desejo_de_Menina_muzzik.m4a", duration: "3:55" },
+            
+            // MÚSICAS POP/INTERNACIONAIS
+            { id: 50, title: "More Than a Woman", artist: "Bee Gees", src: "Bee_Gees_More_Than_A_Woman_muzzik.m4a", duration: "4:31" },
+            { id: 51, title: "Stars", artist: "Simply Red", src: "Simply_Red_Stars_muzzik.m4a", duration: "4:32" },
+            { id: 52, title: "Clube da Esquina", artist: "Flávio Venturini", src: "Flavio_Venturini_Clube_da_Esquina_muzzik.m4a", duration: "4:32" },
+            { id: 53, title: "Cheia de Charme", artist: "Guilherme Arantes", src: "Guilherme_Arantes_Cheia_de_Charme_muzzik.m4a", duration: "3:45" },
+            { id: 54, title: "Send It Back", artist: "Don West", src: "DON_WEST_Send_It_Back_muzzik.m4a", duration: "4:15" },
+            { id: 55, title: "Vamos Fugir", artist: "Skank", src: "Skank_Vamos_Fugir_muzzik.m4a", duration: "4:10" },
+            { id: 56, title: "Valerie", artist: "Amy Winehouse", src: "Amy_Winehouse_Valerie_muzzik.m4a", duration: "4:20" },
+            { id: 57, title: "Is This Love", artist: "Bob Marley", src: "Bob_Marley_Is_This_Love_muzzik.m4a", duration: "4:30" },
+            { id: 58, title: "My Sweet Lord", artist: "George Harrison", src: "George_Harrison_My_Sweet_Lord_muzzik.m4a", duration: "3:55" },
+            
+            // MÚSICAS CALMAS (mais para noite/madrugada)
+            { id: 59, title: "Linda Juventude +2", artist: "Flávio Venturini & Jota Quest", src: "9Flavio_Venturini_Flavio_Venturini_Feat_Jota_muzzik.m4a", duration: "4:20" },
+            { id: 60, title: "Ainda Bem", artist: "Xande de Pilares", src: "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", duration: "3:55" },
+            { id: 61, title: "Toda Forma de Amor", artist: "Lulu Santos", src: "Lulu_Santos_Toda_Forma_de_Amor_muzzik.m4a", duration: "3:45" },
+            { id: 62, title: "Sorri, Sou Rei", artist: "Natiruts", src: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "4:25" },
+            { id: 63, title: "Foi Bom, Mas Foi Ontem", artist: "Grupo Menos é Mais e João Gomes", src: "Grupo_Menos_Mais_NATTAN_Pela_ltima_Vez_muzzik.m4a", duration: "4:05" },
+            { id: 64, title: "Palco", artist: "Palco", src: "PALCO_muzzik.m4a", duration: "4:20" },
+            { id: 65, title: "Palpite", artist: "Vanessa Rangel", src: "Vanessa_Rangel_Palpite_muzzik.m4a", duration: "3:50" },
+            { id: 66, title: "Noite de Lua", artist: "Luzeiro", src: "noite_lua.m4a", duration: "4:15" },
+            { id: 67, title: "Noite de Música", artist: "Serenata", src: "noite_musica.m4a", duration: "3:50" },
+            { id: 68, title: "Noite de Sonhos", artist: "Sonhos", src: "noite_sonhos.m4a", duration: "4:30" },
+            { id: 69, title: "Noite de Rêverie", artist: "Noturno", src: "noite_reverie.m4a", duration: "4:05" },
+            { id: 70, title: "Noite Estrelada", artist: "Estrelas", src: "noite_estrelada.m4a", duration: "3:55" },
+            { id: 71, title: "Noite de Valsa", artist: "Valsa Noturna", src: "noite_valsa.m4a", duration: "4:15" },
+            { id: 72, title: "Noite de Amor", artist: "Amor Noturno", src: "noite_amor.m4a", duration: "4:25" },
+            { id: 73, title: "Noite de Paz", artist: "Paz Noturna", src: "noite_paz.m4a", duration: "4:15" },
+            { id: 74, title: "Noite de Romance", artist: "Romance", src: "noite_romance.m4a", duration: "4:30" },
+            { id: 75, title: "Noite Serena", artist: "Serenidade", src: "noite_serena.m4a", duration: "4:05" },
         ];
 
         // ============================================
@@ -958,7 +931,7 @@
             defaultVolume: 80
         };
 
-        let playlist = [...manhaTracks];
+        let playlist = [];
         let currentIndex = 0;
         let isPlaying = false;
         let isAdPlaying = false;
@@ -970,8 +943,8 @@
         let musicPausedTime = 0;
         let listenerCount = 1247;
         let uptimeSeconds = 0;
-        let lastPlayedIds = []; // Histórico para evitar repetição
-        let shouldResumeMusic = false; // Flag para controlar retomada automática
+        let lastPlayedIds = [];
+        let shouldResumeMusic = false;
 
         // Elementos DOM
         const musicPlayer = document.getElementById('musicPlayer');
@@ -1012,80 +985,87 @@
         const bgVideo = document.getElementById('bgVideo');
 
         // ============================================
+        // FUNÇÃO SIMPLES PARA CRIAR PLAYLIST POR PERÍODO
+        // ============================================
+        function criarPlaylistPorPeriodo(periodo) {
+            // Embaralha as músicas para ter variedade
+            const musicasEmbaralhadas = [...todasAsMusicas].sort(() => 0.5 - Math.random());
+            
+            // Pega as primeiras 30 músicas (ou menos se tiver menos de 30)
+            return musicasEmbaralhadas.slice(0, 30);
+        }
+
+        // ============================================
         // SISTEMA AUTOMÁTICO DE PERÍODOS
         // ============================================
         function getPlaylistByHour() {
             const hora = new Date().getHours();
             
+            // Define o período baseado na hora
             if (hora >= 0 && hora < 6) {
-                return { playlist: madrugadaTracks, nome: 'Madrugada', icone: '🌙', horas: '00h - 06h', class: 'period-madrugada' };
+                return { 
+                    periodo: 'Madrugada', 
+                    icone: '🌙', 
+                    horas: '00h - 06h', 
+                    class: 'period-madrugada',
+                    playlist: criarPlaylistPorPeriodo('madrugada')
+                };
             } else if (hora >= 6 && hora < 12) {
-                return { playlist: manhaTracks, nome: 'Manhã', icone: '🌅', horas: '06h - 12h', class: 'period-manha' };
+                return { 
+                    periodo: 'Manhã', 
+                    icone: '🌅', 
+                    horas: '06h - 12h', 
+                    class: 'period-manha',
+                    playlist: criarPlaylistPorPeriodo('manha')
+                };
             } else if (hora >= 12 && hora < 18) {
-                return { playlist: tardeTracks, nome: 'Tarde', icone: '🌆', horas: '12h - 18h', class: 'period-tarde' };
+                return { 
+                    periodo: 'Tarde', 
+                    icone: '🌆', 
+                    horas: '12h - 18h', 
+                    class: 'period-tarde',
+                    playlist: criarPlaylistPorPeriodo('tarde')
+                };
             } else {
-                return { playlist: noiteTracks, nome: 'Noite', icone: '🌃', horas: '18h - 00h', class: 'period-noite' };
+                return { 
+                    periodo: 'Noite', 
+                    icone: '🌃', 
+                    horas: '18h - 00h', 
+                    class: 'period-noite',
+                    playlist: criarPlaylistPorPeriodo('noite')
+                };
             }
         }
 
         function atualizarPeriodo() {
-            const { playlist: novaPlaylist, nome, icone, horas, class: periodClass } = getPlaylistByHour();
+            const { periodo, icone, horas, class: periodClass, playlist: novaPlaylist } = getPlaylistByHour();
             
             // Atualiza a classe do body para mudar as cores
             document.body.className = periodClass;
             
-            periodName.innerHTML = `${icone} ${nome}`;
+            periodName.innerHTML = `${icone} ${periodo}`;
             periodHours.textContent = horas;
-            playlistPeriodTag.textContent = nome;
+            playlistPeriodTag.textContent = periodo;
             
-            // Se a playlist mudou, carregamos a nova sem repetir músicas
-            if (playlist !== novaPlaylist) {
-                const estavaTocando = isPlaying && !isAdPlaying;
-                const tempoAtual = musicPlayer.currentTime;
-                
-                playlist = [...novaPlaylist];
-                lastPlayedIds = []; // Reset do histórico ao mudar período
-                
-                if (playlist.length > 0) {
-                    // Seleciona uma música aleatória que não seja a última tocada
-                    currentIndex = getRandomTrackIndex();
-                    loadTrack(currentIndex);
-                    
-                    if (estavaTocando) {
-                        musicPlayer.currentTime = tempoAtual;
-                        playMusic();
-                    }
-                }
-                
-                showNotification(`${icone} Agora: ${nome}`);
-                criarPlaylist();
-            }
-        }
-
-        // Função para pegar índice aleatório evitando repetição
-        function getRandomTrackIndex() {
-            if (playlist.length === 0) return 0;
+            // Se a playlist mudou ou é a primeira vez
+            const estavaTocando = isPlaying && !isAdPlaying;
+            const tempoAtual = musicPlayer.currentTime;
             
-            // Se temos menos de 3 músicas ou todas já foram tocadas, reseta o histórico
-            if (lastPlayedIds.length >= playlist.length) {
-                lastPlayedIds = [];
-            }
+            playlist = novaPlaylist;
+            lastPlayedIds = [];
             
-            let availableIndices = [];
-            for (let i = 0; i < playlist.length; i++) {
-                if (!lastPlayedIds.includes(playlist[i].id)) {
-                    availableIndices.push(i);
+            if (playlist.length > 0) {
+                currentIndex = Math.floor(Math.random() * playlist.length);
+                loadTrack(currentIndex);
+                
+                if (estavaTocando) {
+                    musicPlayer.currentTime = tempoAtual;
+                    playMusic();
                 }
             }
             
-            // Se não houver músicas disponíveis, reseta
-            if (availableIndices.length === 0) {
-                lastPlayedIds = [];
-                return Math.floor(Math.random() * playlist.length);
-            }
-            
-            const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-            return randomIndex;
+            showNotification(`${icone} Agora: ${periodo}`);
+            criarPlaylist();
         }
 
         // ============================================
@@ -1121,7 +1101,7 @@
             currentIndex = index;
             loadTrack(currentIndex);
             if(!isPlaying) playMusic();
-            criarPlaylist(); // Atualiza destaque na playlist
+            criarPlaylist();
         };
 
         function loadTrack(index) {
@@ -1129,16 +1109,15 @@
             if (!track) return;
             
             musicPlayer.src = track.src;
-            musicPlayer.load(); // Força o carregamento
+            musicPlayer.load();
             trackTitleBig.textContent = track.title;
             trackArtistBig.textContent = track.artist;
             totalTimeEl.textContent = track.duration;
             progressFill.style.width = '0%';
             currentTimeEl.textContent = '0:00';
             
-            // Adiciona ao histórico de tocadas
             lastPlayedIds.push(track.id);
-            if (lastPlayedIds.length > 10) lastPlayedIds.shift(); // Mantém apenas as últimas 10
+            if (lastPlayedIds.length > 10) lastPlayedIds.shift();
         }
 
         function playMusic() {
@@ -1154,7 +1133,6 @@
             }).catch(e => {
                 console.log("Erro ao reproduzir:", e);
                 showNotification("⚠️ Erro ao carregar música");
-                // Tenta a próxima em caso de erro
                 setTimeout(nextTrack, 1000);
             });
         }
@@ -1181,7 +1159,11 @@
             if (isAdPlaying || !playlist.length) return;
             
             if(shuffleMode) {
-                currentIndex = getRandomTrackIndex();
+                let newIndex;
+                do {
+                    newIndex = Math.floor(Math.random() * playlist.length);
+                } while(newIndex === currentIndex && playlist.length > 1);
+                currentIndex = newIndex;
             } else {
                 currentIndex = (currentIndex + 1) % playlist.length;
                 if(!repeatMode && currentIndex === 0) {
@@ -1194,16 +1176,16 @@
             if(isPlaying) playMusic();
             musicPlayedCount++;
             playedCountEl.textContent = musicPlayedCount;
-            criarPlaylist(); // Atualiza destaque
+            criarPlaylist();
             checkAdInterval();
         }
 
         function prevTrack() {
             if (isAdPlaying || !playlist.length) return;
-            currentIndex = shuffleMode ? getRandomTrackIndex() : (currentIndex - 1 + playlist.length) % playlist.length;
+            currentIndex = shuffleMode ? Math.floor(Math.random() * playlist.length) : (currentIndex - 1 + playlist.length) % playlist.length;
             loadTrack(currentIndex);
             if(isPlaying) playMusic();
-            criarPlaylist(); // Atualiza destaque
+            criarPlaylist();
         }
 
         function toggleShuffle() {
@@ -1217,7 +1199,7 @@
         }
 
         // ============================================
-        // SISTEMA DE ANÚNCIOS - CORRIGIDO PARA RETOMAR AUTOMATICAMENTE
+        // SISTEMA DE ANÚNCIOS
         // ============================================
         function checkAdInterval() {
             if (musicPlayedCount > 0 && musicPlayedCount % CONFIG.musicBetweenAds === 0 && adsEnabled && !isAdPlaying) {
@@ -1244,14 +1226,12 @@
         function playAd(index) {
             const ad = advertisements[index];
             
-            // Salva o estado atual da música
             if (isPlaying) {
                 musicPausedTime = musicPlayer.currentTime;
                 pauseMusic();
                 shouldResumeMusic = true;
             }
             
-            // Prepara e toca o anúncio
             adPlayer.src = ad.src;
             adPlayer.load();
             isAdPlaying = true;
@@ -1261,11 +1241,9 @@
             showNotification(`📢 ${ad.title}`);
             
             adPlayer.play().then(() => {
-                // Quando o anúncio terminar, chama finishAd automaticamente
                 adPlayer.onended = finishAd;
-            }).catch((e) => {
-                console.log("Erro ao reproduzir anúncio:", e);
-                finishAd(); // Se falhar, termina imediatamente
+            }).catch(() => {
+                finishAd();
             });
         }
 
@@ -1275,7 +1253,6 @@
             adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
             skipAdBtnDropdown.style.display = "none";
             
-            // Retoma a música automaticamente se estava tocando antes
             if (shouldResumeMusic && playlist.length) {
                 musicPlayer.currentTime = musicPausedTime;
                 playMusic();
@@ -1418,10 +1395,7 @@
             
             atualizarPeriodo();
             criarPlaylist();
-            if(playlist.length) {
-                currentIndex = getRandomTrackIndex();
-                loadTrack(currentIndex);
-            }
+            
             setupEventListeners();
             updateAdTimer();
             
@@ -1440,13 +1414,11 @@
                 uptimeEl.textContent = h > 0 ? `${h}h${m}` : `${m}min`;
             }, 1000);
             
-            // Tenta iniciar a reprodução automaticamente
             if(playlist.length) {
                 musicPlayer.play().then(() => {
                     isPlaying = true;
                     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                 }).catch(() => {
-                    // Em dispositivos móveis, aguarda um toque do usuário
                     document.addEventListener('touchstart', () => {
                         musicPlayer.play().then(() => {
                             isPlaying = true;
@@ -1455,11 +1427,6 @@
                     }, { once: true });
                 });
             }
-            
-            // Garante que o vídeo tenha o tamanho correto
-            bgVideo.addEventListener('loadedmetadata', () => {
-                console.log('Vídeo carregado em 16:9');
-            });
         });
     </script>
 </body>
