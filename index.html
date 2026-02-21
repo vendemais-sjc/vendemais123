@@ -470,7 +470,7 @@
             min-width: 35px;
         }
 
-        /* PLAYLIST ÚNICA */
+        /* PLAYLIST COM SCROLL SUAVE PARA MUITAS MÚSICAS */
         .playlist-card {
             padding: 16px;
         }
@@ -492,18 +492,19 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
             padding-right: 4px;
+            scrollbar-width: thin;
         }
 
         .playlist-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px;
+            padding: 8px 10px;
             background: rgba(255, 180, 80, 0.08);
-            border-radius: 14px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 200, 120, 0.2);
             cursor: pointer;
             transition: all 0.2s;
@@ -525,23 +526,32 @@
             justify-content: center;
             font-size: 0.7rem;
             font-weight: 600;
+            flex-shrink: 0;
         }
         
         .item-info {
             flex: 1;
+            min-width: 0;
         }
         .item-title {
             font-weight: 600;
             font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .item-artist {
             font-size: 0.7rem;
             opacity: 0.7;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .item-duration {
             font-size: 0.7rem;
             opacity: 0.7;
             margin-right: 4px;
+            flex-shrink: 0;
         }
 
         /* BOTÃO WHATSAPP MENOR */
@@ -633,7 +643,7 @@
 </head>
 <body class="theme-light">
     <div class="app-container">
-        <!-- HEADER REDUZIDO -->
+        <!-- HEADER -->
         <header class="main-header">
             <div class="logo-wrapper">
                 <div class="logo-icon"><i class="fas fa-broadcast-tower"></i></div>
@@ -642,7 +652,7 @@
             <div class="live-badge"><i class="fas fa-circle"></i> AO VIVO</div>
         </header>
 
-        <!-- MENU PRINCIPAL -->
+        <!-- MENU -->
         <nav class="main-nav">
             <div class="nav-left">
                 <a href="#" class="nav-item" onclick="window.location.reload(); return false;">
@@ -711,7 +721,7 @@
                 </div>
             </div>
             <div class="period-indicator">
-                <span><i class="fas fa-music"></i> <span id="totalCount">30</span> músicas</span>
+                <span><i class="fas fa-music"></i> <span id="totalCount">0</span> músicas</span>
                 <span class="period-badge">Automático</span>
             </div>
         </div>
@@ -763,47 +773,25 @@
             </div>
         </div>
 
-        <!-- PLAYLIST ÚNICA COM LINKS RAW GITHUB -->
+        <!-- PLAYLIST -->
         <div class="playlist-card">
             <div class="playlist-header">
                 <div class="playlist-title">
                     <i class="fas fa-music"></i>
-                    <h3>Playlist (Links Raw GitHub)</h3>
+                    <h3>Playlist <span id="playlistCount"></span></h3>
                 </div>
             </div>
             <div class="playlist-items" id="playlistContainer"></div>
         </div>
 
-        <!-- PROGRAMAÇÃO (OCULTA) -->
-        <div class="hidden-section" id="programacao-section">
-            <h3 style="margin-bottom: 10px; font-size:1rem;"><i class="fas fa-calendar-alt"></i> Programação</h3>
-            <div class="program-grid">
-                <div class="program-item"><i class="fas fa-moon"></i><h4>Madrugada</h4><div>00h-06h</div></div>
-                <div class="program-item"><i class="fas fa-sun"></i><h4>Manhã</h4><div>06h-12h</div></div>
-                <div class="program-item"><i class="fas fa-cloud-sun"></i><h4>Tarde</h4><div>12h-18h</div></div>
-                <div class="program-item"><i class="fas fa-star"></i><h4>Noite</h4><div>18h-00h</div></div>
-            </div>
-        </div>
-
-        <!-- EVENTOS (OCULTO) -->
-        <div class="hidden-section" id="eventos-section">
-            <h3 style="margin-bottom: 10px; font-size:1rem;"><i class="fas fa-star"></i> Eventos</h3>
-            <div style="background: rgba(255,180,80,0.1); border-radius: 16px; padding: 12px;">
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <div style="text-align:center; min-width:45px;"><div style="font-size:1.2rem; font-weight:700; color:#ffaa33;">15</div><div style="font-size:0.6rem;">JUN</div></div>
-                    <div><h4 style="font-size:0.9rem;">Show Ao Vivo</h4><p style="font-size:0.7rem;"><i class="fas fa-clock"></i> 20h</p></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- WHATSAPP REDUZIDO -->
+        <!-- WHATSAPP -->
         <div class="contact-mini" onclick="window.open('https://wa.me/5512988461978', '_blank')">
             <i class="fab fa-whatsapp"></i>
             <span>Fale conosco</span>
         </div>
 
         <footer class="main-footer">
-            <p>Rádio+ &copy; 2025 • Links Raw GitHub</p>
+            <p>Rádio+ &copy; 2025</p>
         </footer>
     </div>
 
@@ -813,252 +801,59 @@
 
     <script>
         (function() {
-            // ==================== CONFIGURAÇÃO DA URL BASE ====================
-            // Use esta variável para definir a URL base de onde as músicas estão hospedadas
-            // Para GitHub Raw, use: https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPOSITORIO/main/
+            // ==================== CONFIGURAÇÕES ====================
             const BASE_URL = "https://raw.githubusercontent.com/vendemais-sjc/vendemais123/main/";
-            
-            // Alternativa: Se preferir usar links completos diretamente, comente a linha acima
-            // e descomente a linha abaixo, ajustando os links manualmente na playlist
-            // const BASE_URL = ""; // Deixa vazio para usar links completos
+            const CONFIG = { 
+                musicBetweenAds: 15, 
+                defaultVolume: 80,
+                maxPlaylistDisplay: 200 // Mostra até 200 músicas na lista
+            };
 
-            // ==================== LISTA DE MÚSICAS COM LINKS ====================
-            // As músicas são montadas com BASE_URL + nome do arquivo
-            // Você só precisa garantir que os nomes dos arquivos estão corretos
-            const playlistCompleta = [
-                { 
-                    id: 1, 
-                    title: "More Than A Woman", 
-                    artist: "Bee Gees", 
-                    src: BASE_URL + "Bee_Gees_More_Than_A_Woman_muzzik.m4a", 
-                    duration: "4:31" 
-                },
-                { 
-                    id: 2, 
-                    title: "Sexual Healing", 
-                    artist: "Marvin Gaye", 
-                    src: BASE_URL + "Sexual_Healing_Sexual_Healing_muzzik.m4a", 
-                    duration: "4:00" 
-                },
-                { 
-                    id: 3, 
-                    title: "Ah Como Eu Amei", 
-                    artist: "Ivete Sangalo", 
-                    src: BASE_URL + "https://github.com/vendemais-sjc/vendemais123/blob/main/Bee_Gees_More_Than_A_Woman_muzzik.m4a", 
-                    duration: "3:45" 
-                },
-                { 
-                    id: 4, 
-                    title: "I've Had The Time Of My Life", 
-                    artist: "Mauricio Manieri", 
-                    src: BASE_URL + "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", 
-                    duration: "4:15" 
-                },
-                { 
-                    id: 5, 
-                    title: "Sunrise", 
-                    artist: "Simply Red", 
-                    src: BASE_URL + "Simply_Red_Sunrise_muzzik.m4a", 
-                    duration: "3:50" 
-                },
-                { 
-                    id: 6, 
-                    title: "Forever Young", 
-                    artist: "Alphaville", 
-                    src: BASE_URL + "Alphaville_Forever_Young_muzzik.m4a", 
-                    duration: "4:05" 
-                },
-                { 
-                    id: 7, 
-                    title: "Everybody's Changing", 
-                    artist: "Keane", 
-                    src: BASE_URL + "Keane_Everybody_s_Changing_muzzik.m4a", 
-                    duration: "3:55" 
-                },
-                { 
-                    id: 8, 
-                    title: "Everytime You Go Away", 
-                    artist: "Dino Fonseca", 
-                    src: BASE_URL + "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", 
-                    duration: "4:20" 
-                },
-                { 
-                    id: 9, 
-                    title: "A Tal Canção", 
-                    artist: "Vitor Kley & Samuel Rosa", 
-                    src: BASE_URL + "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", 
-                    duration: "3:40" 
-                },
-                { 
-                    id: 10, 
-                    title: "What's Up", 
-                    artist: "4 Non Blondes", 
-                    src: BASE_URL + "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", 
-                    duration: "4:10" 
-                },
-                { 
-                    id: 11, 
-                    title: "Thank You", 
-                    artist: "Dido", 
-                    src: BASE_URL + "Dido_Thank_You_muzzik.m4a", 
-                    duration: "3:55" 
-                },
-                { 
-                    id: 12, 
-                    title: "TRANSAS", 
-                    artist: "Belo", 
-                    src: BASE_URL + "Belo_Transas_Ao_Vivo_DVD_Belo_In_Concert_muzzik.m4a", 
-                    duration: "4:25" 
-                },
-                { 
-                    id: 13, 
-                    title: "Homem Aranha", 
-                    artist: "Jorge Vercilo", 
-                    src: BASE_URL + "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", 
-                    duration: "4:15" 
-                },
-                { 
-                    id: 14, 
-                    title: "Everybody Wants To Rule The World", 
-                    artist: "Tears For Fears", 
-                    src: BASE_URL + "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", 
-                    duration: "3:50" 
-                },
-                { 
-                    id: 15, 
-                    title: "Woman in Love", 
-                    artist: "Barbra Streisand", 
-                    src: BASE_URL + "eWoman_in_Woman_in_Love_muzzik.m4a", 
-                    duration: "3:45" 
-                },
-                { 
-                    id: 16, 
-                    title: "Mil e Uma Noites de Amor", 
-                    artist: "Pepeu Gomes", 
-                    src: BASE_URL + "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", 
-                    duration: "4:00" 
-                },
-                { 
-                    id: 17, 
-                    title: "Pedindo Amor", 
-                    artist: "Mano a Mano", 
-                    src: BASE_URL + "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", 
-                    duration: "3:50" 
-                },
-                { 
-                    id: 18, 
-                    title: "Reluz", 
-                    artist: "Marcos Sabino", 
-                    src: BASE_URL + "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", 
-                    duration: "4:15" 
-                },
-                { 
-                    id: 19, 
-                    title: "Corre Pro Meu Mar", 
-                    artist: "Maneva", 
-                    src: BASE_URL + "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", 
-                    duration: "4:25" 
-                },
-                { 
-                    id: 20, 
-                    title: "Paciência", 
-                    artist: "Ferrugem Part. Alcione", 
-                    src: BASE_URL + "Ferrugem_Paci_ncia_Part_Alcione_muzzik.m4a", 
-                    duration: "4:25" 
-                },
-                { 
-                    id: 21, 
-                    title: "Sorriso Maroto", 
-                    artist: "Sorriso Maroto", 
-                    src: BASE_URL + "soriso maroto.mp3", 
-                    duration: "3:30" 
-                },
-                { 
-                    id: 22, 
-                    title: "Lá Na Roça", 
-                    artist: "Felipe e Murillo ft Ana Castela", 
-                    src: BASE_URL + "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", 
-                    duration: "4:15" 
-                },
-                { 
-                    id: 23, 
-                    title: "Sorri Sou Rei", 
-                    artist: "Natiruts", 
-                    src: BASE_URL + "Natiruts_Sorri_Sou_Rei_muzzik.m4a", 
-                    duration: "3:45" 
-                },
-                { 
-                    id: 24, 
-                    title: "Ainda bem", 
-                    artist: "Xande de Pilares", 
-                    src: BASE_URL + "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", 
-                    duration: "4:00" 
-                },
-                { 
-                    id: 25, 
-                    title: "Boa Sorte", 
-                    artist: "Vanessa da Mata", 
-                    src: BASE_URL + "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", 
-                    duration: "3:55" 
-                },
-                { 
-                    id: 26, 
-                    title: "Garota Nacional", 
-                    artist: "Skank", 
-                    src: BASE_URL + "Skank_Garota_Nacional_muzzik.m4a", 
-                    duration: "4:00" 
-                },
-                { 
-                    id: 27, 
-                    title: "OPA KD EU!", 
-                    artist: "Cleito & romário", 
-                    src: BASE_URL + "Clayton_Rom_rio_Opa_Cad_Eu_muzzik.m4a", 
-                    duration: "3:45" 
-                },
-                { 
-                    id: 28, 
-                    title: "MINA DO CONDOMINIO", 
-                    artist: "Seu Jorge", 
-                    src: BASE_URL + "Mina_do_Mina_do_Condom_nio_muzzik.m4a", 
-                    duration: "4:15" 
-                },
-                { 
-                    id: 29, 
-                    title: "Epitáfio", 
-                    artist: "Titãs", 
-                    src: BASE_URL + "Epit_fio_Epit_fio_muzzik.m4a", 
-                    duration: "4:10" 
-                },
-                { 
-                    id: 30, 
-                    title: "Lanterna dos Afogados", 
-                    artist: "Paralamas", 
-                    src: BASE_URL + "Lanterna_Dos_Lanterna_Dos_Afogados_muzzik.m4a", 
-                    duration: "4:05" 
-                },
-                { 
-                    id: 31, 
-                    title: "Apaguei Pra Todos", 
-                    artist: "Ferrugem & Sorriso Maroto", 
-                    src: BASE_URL + "7Apaguei_Pra_Todos_Ferrugem_part_Sorriso_Maroto_muzzik.m4a", 
-                    duration: "4:30" 
-                },
-                   { 
-                    id: 32, 
-                    title: "Eu esqueci vc", 
-                    artist: "BRUNO & MARONE ", 
-                    src: BASE_URL + "Bruno_Marrone_e_Henrique_Diego_Esqueci_Voc__muzzik.m4a", 
-                    duration: "4:30" 
-                },
-                
-             { 
-                    id: 33, 
-                    title: "Andorinha Machucada", 
-                    artist: "LAUANA PRADO ", 
-                    src: BASE_URL + "Andorinha_Machucada_Andorinha_Machucada_Voc__muzzik.m4a", 
-                    duration: "4:30" 
-                },
+            // ==================== LISTA DE MÚSICAS (FÁCIL DE ADICIONAR) ====================
+            // Formato: { id, title, artist, filename, duration }
+            // O src é montado automaticamente com BASE_URL + filename
+            const musicasRaw = [
+                { id: 1, title: "More Than A Woman", artist: "Bee Gees", filename: "Bee_Gees_More_Than_A_Woman_muzzik.m4a", duration: "4:31" },
+                { id: 2, title: "Sexual Healing", artist: "Marvin Gaye", filename: "Sexual_Healing_Sexual_Healing_muzzik.m4a", duration: "4:00" },
+                { id: 3, title: "Ah Como Eu Amei", artist: "Ivete Sangalo", filename: "Ivete Sangalo - Ah_ Como Eu Amei (Benito di Paula)(MP3_160K).mp3", duration: "3:45" },
+                { id: 4, title: "I've Had The Time Of My Life", artist: "Mauricio Manieri", filename: "Mauricio_Manieri_I_ve_Had_The_Time_Of_My_Life_muzzik.m4a", duration: "4:15" },
+                { id: 5, title: "Sunrise", artist: "Simply Red", filename: "Simply_Red_Sunrise_muzzik.m4a", duration: "3:50" },
+                { id: 6, title: "Forever Young", artist: "Alphaville", filename: "Alphaville_Forever_Young_muzzik.m4a", duration: "4:05" },
+                { id: 7, title: "Everybody's Changing", artist: "Keane", filename: "Keane_Everybody_s_Changing_muzzik.m4a", duration: "3:55" },
+                { id: 8, title: "Everytime You Go Away", artist: "Dino Fonseca", filename: "Dino_Fonseca_Everytime_You_Go_Away_Back_To_The_s_muzzik.m4a", duration: "4:20" },
+                { id: 9, title: "A Tal Canção", artist: "Vitor Kley & Samuel Rosa", filename: "Vitor_Kley_Samuel_Rosa_A_Tal_Can_o_Pra_Lua_muzzik.m4a", duration: "3:40" },
+                { id: 10, title: "What's Up", artist: "4 Non Blondes", filename: "WHAT_S_UP_Non_Blondes_Subt_tulos_ingl_s_y_espa_ol_muzzik.m4a", duration: "4:10" },
+                { id: 11, title: "Thank You", artist: "Dido", filename: "Dido_Thank_You_muzzik.m4a", duration: "3:55" },
+                { id: 12, title: "TRANSAS", artist: "Belo", filename: "Belo_Transas_Ao_Vivo_DVD_Belo_In_Concert_muzzik.m4a", duration: "4:25" },
+                { id: 13, title: "Homem Aranha", artist: "Jorge Vercilo", filename: "Jorge_Vercilo_Homem_Aranha_muzzik.m4a", duration: "4:15" },
+                { id: 14, title: "Everybody Wants To Rule The World", artist: "Tears For Fears", filename: "Tears_For_Fears_Everybody_Wants_To_Rule_The_World_roger.m4a", duration: "3:50" },
+                { id: 15, title: "Woman in Love", artist: "Barbra Streisand", filename: "eWoman_in_Woman_in_Love_muzzik.m4a", duration: "3:45" },
+                { id: 16, title: "Mil e Uma Noites de Amor", artist: "Pepeu Gomes", filename: "Pepeu_Gomes_Mil_e_uma_noites_de_amor_muzzik.m4a", duration: "4:00" },
+                { id: 17, title: "Pedindo Amor", artist: "Mano a Mano", filename: "MANO_A_MANO_Pedindo_Amor_Video_Clipe_Oficial_muzzik.m4a", duration: "3:50" },
+                { id: 18, title: "Reluz", artist: "Marcos Sabino", filename: "MARCOS_SABINO_MARCOS_SABINO_reluz_muzzik.m4a", duration: "4:15" },
+                { id: 19, title: "Corre Pro Meu Mar", artist: "Maneva", filename: "Corre_Pro_Corre_Pro_Meu_Mar_Radio_Edit__muzzik.m4a", duration: "4:25" },
+                { id: 20, title: "Paciência", artist: "Ferrugem Part. Alcione", filename: "Ferrugem_Paci_ncia_Part_Alcione_muzzik.m4a", duration: "4:25" },
+                { id: 21, title: "Sorriso Maroto", artist: "Sorriso Maroto", filename: "soriso maroto.mp3", duration: "3:30" },
+                { id: 22, title: "Lá Na Roça", artist: "Felipe e Murillo ft Ana Castela", filename: "Felipe_e_Murillo_ft_Ana_Castela_L_Na_Ro_a_muzzik.m4a", duration: "4:15" },
+                { id: 23, title: "Sorri Sou Rei", artist: "Natiruts", filename: "Natiruts_Sorri_Sou_Rei_muzzik.m4a", duration: "3:45" },
+                { id: 24, title: "Ainda bem", artist: "Xande de Pilares", filename: "Xande_de_Pilares_Ainda_Bem_muzzik.m4a", duration: "4:00" },
+                { id: 25, title: "Boa Sorte", artist: "Vanessa da Mata", filename: "aVanessa_da_Mata_Boa_Sorte_muzzik.m4a", duration: "3:55" },
+                { id: 26, title: "Garota Nacional", artist: "Skank", filename: "Skank_Garota_Nacional_muzzik.m4a", duration: "4:00" },
+                { id: 27, title: "OPA KD EU!", artist: "Cleito & romário", filename: "Clayton_Rom_rio_Opa_Cad_Eu_muzzik.m4a", duration: "3:45" },
+                { id: 28, title: "MINA DO CONDOMINIO", artist: "Seu Jorge", filename: "Mina_do_Mina_do_Condom_nio_muzzik.m4a", duration: "4:15" },
+                { id: 29, title: "Epitáfio", artist: "Titãs", filename: "Epit_fio_Epit_fio_muzzik.m4a", duration: "4:10" },
+                { id: 30, title: "Lanterna dos Afogados", artist: "Paralamas", filename: "Lanterna_Dos_Lanterna_Dos_Afogados_muzzik.m4a", duration: "4:05" },
+                { id: 31, title: "Apaguei Pra Todos", artist: "Ferrugem & Sorriso Maroto", filename: "7Apaguei_Pra_Todos_Ferrugem_part_Sorriso_Maroto_muzzik.m4a", duration: "4:30" },
+                { id: 32, title: "Eu Esqueci Você", artist: "Bruno & Marrone", filename: "Bruno_Marrone_e_Henrique_Diego_Esqueci_Voc__muzzik.m4a", duration: "4:30" },
+                { id: 33, title: "Andorinha Machucada", artist: "Lauana Prado", filename: "Andorinha_Machucada_Andorinha_Machucada_Voc__muzzik.m4a", duration: "4:30" }
             ];
+
+            // ==================== GERAR PLAYLIST COMPLETA ====================
+            // Monta o src automaticamente com BASE_URL + filename
+            const playlistCompleta = musicasRaw.map(musica => ({
+                ...musica,
+                src: BASE_URL + musica.filename
+            }));
 
             // ==================== ANÚNCIOS ====================
             const advertisements = [
@@ -1067,8 +862,6 @@
                 { id: 3, title: "Lançamento Exclusivo", artist: "Comercial", src: "zzcv.mp3", duration: "0:25" },
                 { id: 4, title: "Parceiro Oficial", artist: "Comercial", src: "zzcv.mp3", duration: "0:40" }
             ];
-
-            const CONFIG = { musicBetweenAds: 15, defaultVolume: 80 };
 
             // ==================== ESTADO ====================
             let playlistAtual = [];
@@ -1117,9 +910,8 @@
             const uptimeEl = document.getElementById('uptime');
             const menuToggle = document.getElementById('menuToggle');
             const dropdownMenu = document.getElementById('dropdownMenu');
-            const programacaoSection = document.getElementById('programacao-section');
-            const eventosSection = document.getElementById('eventos-section');
             const totalCountEl = document.getElementById('totalCount');
+            const playlistCountEl = document.getElementById('playlistCount');
             const fullscreenBtn = document.getElementById('fullscreenBtn');
 
             // ==================== FUNÇÕES DE TEMA ====================
@@ -1157,8 +949,12 @@
 
             function inicializarPlaylist() {
                 playlistAtual = shuffleArray([...playlistCompleta]);
-                totalCountEl.textContent = playlistAtual.length;
+                const totalMusicas = playlistAtual.length;
+                totalCountEl.textContent = totalMusicas;
+                if (playlistCountEl) playlistCountEl.textContent = `(${totalMusicas})`;
+                
                 mostrarPlaylist();
+                
                 if (playlistAtual.length > 0) {
                     currentIndex = 0;
                     loadTrack(currentIndex);
@@ -1166,20 +962,30 @@
             }
 
             function mostrarPlaylist() {
+                if (!playlistContainer) return;
+                
+                // Mostra apenas as primeiras CONFIG.maxPlaylistDisplay músicas para performance
+                const musicasParaMostrar = playlistAtual.slice(0, CONFIG.maxPlaylistDisplay);
                 let html = '';
-                playlistAtual.forEach((musica, index) => {
+                
+                musicasParaMostrar.forEach((musica, index) => {
                     const isPlaying = (index === currentIndex && !isAdPlaying);
                     html += `
                         <div class="playlist-item ${isPlaying ? 'playing' : ''}" onclick="selectSong(${index})">
                             <div class="item-number">${index + 1}</div>
                             <div class="item-info">
-                                <div class="item-title">${musica.title}</div>
-                                <div class="item-artist">${musica.artist}</div>
+                                <div class="item-title" title="${musica.title}">${musica.title}</div>
+                                <div class="item-artist" title="${musica.artist}">${musica.artist}</div>
                             </div>
                             <div class="item-duration">${musica.duration}</div>
                         </div>
                     `;
                 });
+                
+                if (playlistAtual.length > CONFIG.maxPlaylistDisplay) {
+                    html += `<div style="text-align:center; padding:12px; opacity:0.7; font-size:0.8rem;">+ ${playlistAtual.length - CONFIG.maxPlaylistDisplay} músicas não listadas</div>`;
+                }
+                
                 playlistContainer.innerHTML = html || '<div style="padding:1rem; text-align:center;">Nenhuma música</div>';
             }
 
@@ -1204,8 +1010,7 @@
                 currentIndex = index;
                 const track = playlistAtual[currentIndex];
                 
-                // Log para debug (remover em produção)
-                console.log('Carregando música:', track.title, 'URL:', track.src);
+                console.log('🎵 Tocando:', track.title, '-', track.artist);
                 
                 musicPlayer.src = track.src;
                 musicPlayer.load();
@@ -1252,8 +1057,9 @@
                 
                 if (shuffleMode && playlistAtual.length > 1) {
                     let newIndex;
-                    do { newIndex = Math.floor(Math.random() * playlistAtual.length); } 
-                    while (newIndex === currentIndex && playlistAtual.length > 1);
+                    do { 
+                        newIndex = Math.floor(Math.random() * playlistAtual.length); 
+                    } while (newIndex === currentIndex && playlistAtual.length > 1);
                     currentIndex = newIndex;
                 } else {
                     currentIndex = (currentIndex + 1) % playlistAtual.length;
@@ -1288,6 +1094,7 @@
             }
 
             function updateAdTimer() {
+                if (!adTimerDropdown) return;
                 if (adsEnabled) {
                     const songsUntilAd = CONFIG.musicBetweenAds - (musicPlayedCount % CONFIG.musicBetweenAds);
                     adTimerDropdown.textContent = songsUntilAd === CONFIG.musicBetweenAds ? 0 : songsUntilAd;
@@ -1312,8 +1119,8 @@
                 adPlayer.src = ad.src;
                 adPlayer.load();
                 isAdPlaying = true;
-                adStatusDropdown.innerHTML = `<i class="fas fa-volume-up"></i> ${ad.title} (${ad.duration})`;
-                skipAdBtnDropdown.style.display = "inline-flex";
+                if (adStatusDropdown) adStatusDropdown.innerHTML = `<i class="fas fa-volume-up"></i> ${ad.title} (${ad.duration})`;
+                if (skipAdBtnDropdown) skipAdBtnDropdown.style.display = "inline-flex";
                 showNotification(`📢 ${ad.title}`);
                 adPlayer.play().catch(() => finishAd());
                 adPlayer.onended = finishAd;
@@ -1322,8 +1129,8 @@
             function finishAd() {
                 isAdPlaying = false;
                 updateAdTimer();
-                adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
-                skipAdBtnDropdown.style.display = "none";
+                if (adStatusDropdown) adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
+                if (skipAdBtnDropdown) skipAdBtnDropdown.style.display = "none";
                 if (shouldResumeMusic && playlistAtual.length) {
                     musicPlayer.currentTime = musicPausedTime;
                     playMusic();
@@ -1333,14 +1140,16 @@
 
             function toggleAds() {
                 adsEnabled = !adsEnabled;
-                toggleAdsBtnDropdown.innerHTML = adsEnabled ? '<i class="fas fa-toggle-on"></i> Ativo' : '<i class="fas fa-toggle-off"></i> Inativo';
+                if (toggleAdsBtnDropdown) {
+                    toggleAdsBtnDropdown.innerHTML = adsEnabled ? '<i class="fas fa-toggle-on"></i> Ativo' : '<i class="fas fa-toggle-off"></i> Inativo';
+                }
                 if (!adsEnabled) {
-                    adTimerDropdown.textContent = "OFF";
-                    adStatusDropdown.innerHTML = '<i class="fas fa-ban"></i> Desativados';
+                    if (adTimerDropdown) adTimerDropdown.textContent = "OFF";
+                    if (adStatusDropdown) adStatusDropdown.innerHTML = '<i class="fas fa-ban"></i> Desativados';
                     if (isAdPlaying) { adPlayer.pause(); finishAd(); }
                 } else {
                     updateAdTimer();
-                    adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
+                    if (adStatusDropdown) adStatusDropdown.innerHTML = '<i class="fas fa-compact-disc"></i> Aguardando...';
                 }
             }
 
@@ -1356,25 +1165,22 @@
             }
 
             function showNotification(msg) {
+                if (!notification || !notificationText) return;
                 notificationText.textContent = msg;
                 notification.classList.add('show');
                 setTimeout(() => notification.classList.remove('show'), 2000);
             }
 
             window.toggleSection = function(section) {
-                dropdownMenu.classList.remove('show');
-                if (section === 'programacao') {
-                    programacaoSection.classList.toggle('show');
-                    eventosSection.classList.remove('show');
-                } else if (section === 'eventos') {
-                    eventosSection.classList.toggle('show');
-                    programacaoSection.classList.remove('show');
-                }
+                if (dropdownMenu) dropdownMenu.classList.remove('show');
+                // Seções ocultas foram removidas para simplificar
             };
 
             window.editTicker = () => {
-                const newText = prompt("Editar mensagem:", document.querySelector('#ticker marquee').textContent);
-                if (newText) document.querySelector('#ticker marquee').textContent = newText;
+                const tickerElem = document.querySelector('#ticker marquee');
+                if (!tickerElem) return;
+                const newText = prompt("Editar mensagem:", tickerElem.textContent);
+                if (newText) tickerElem.textContent = newText;
             };
 
             // ==================== EVENT LISTENERS ====================
@@ -1387,14 +1193,14 @@
                     shuffleMode = !shuffleMode;
                     shuffleBtn.style.background = shuffleMode ? 'linear-gradient(135deg, #ffaa33, #ff8800)' : '';
                     shuffleBtn.style.color = shuffleMode ? 'white' : '';
-                    showNotification(shuffleMode ? '🔀 Modo aleatório ativado' : '➡️ Modo sequencial ativado');
+                    showNotification(shuffleMode ? '🔀 Modo aleatório' : '➡️ Modo sequencial');
                 });
                 
                 repeatBtn.addEventListener('click', () => {
                     repeatMode = !repeatMode;
                     repeatBtn.style.background = repeatMode ? 'linear-gradient(135deg, #ffaa33, #ff8800)' : '';
                     repeatBtn.style.color = repeatMode ? 'white' : '';
-                    showNotification(repeatMode ? '🔁 Repetição ativada' : '➡️ Repetição desativada');
+                    showNotification(repeatMode ? '🔁 Repetir' : '➡️ Repetir desligado');
                 });
 
                 musicPlayer.addEventListener('timeupdate', () => {
@@ -1423,16 +1229,16 @@
 
                 shareBtnNav.addEventListener('click', () => {
                     if (navigator.share) {
-                        navigator.share({ title: 'Rádio+', text: 'Música automática com links Raw GitHub', url: window.location.href });
+                        navigator.share({ title: 'Rádio+', text: 'Música automática', url: window.location.href });
                     } else {
                         navigator.clipboard.writeText(window.location.href);
                         showNotification('📋 Link copiado!');
                     }
                 });
 
-                toggleAdsBtnDropdown.addEventListener('click', toggleAds);
-                testAdBtnDropdown.addEventListener('click', testAd);
-                skipAdBtnDropdown.addEventListener('click', skipAd);
+                if (toggleAdsBtnDropdown) toggleAdsBtnDropdown.addEventListener('click', toggleAds);
+                if (testAdBtnDropdown) testAdBtnDropdown.addEventListener('click', testAd);
+                if (skipAdBtnDropdown) skipAdBtnDropdown.addEventListener('click', skipAd);
                 
                 menuToggle.addEventListener('click', () => dropdownMenu.classList.toggle('show'));
                 
@@ -1486,7 +1292,3 @@
     </script>
 </body>
 </html>
-
-
-
-
